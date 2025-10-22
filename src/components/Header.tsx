@@ -6,7 +6,7 @@ import { gsapInit, gsap, ScrollTrigger } from "@/lib/gsap";
 const items = [
   { id: "home", label: "Home" },
   { id: "projects", label: "Portfolio" },
-  { id: "journey", label: "Journey" },
+  { id: "experience", label: "Experience" },
   { id: "skills", label: "Skills" },
   { id: "contact", label: "Contact" },
 ];

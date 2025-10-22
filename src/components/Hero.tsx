@@ -64,7 +64,7 @@ export default function Hero() {
         <div className="hero-content">
           <h1 className="hero-title">
             <span className="hero-line">
-              Hi, I’m a <span className="accent">Web Developer</span>.
+              Hi, I’m <span className="accent">Risanggalih</span>, a <span className="accent">Web Developer</span>.
             </span>
             <span className="hero-line">I craft web experiences that are</span>
             <span className="hero-line">

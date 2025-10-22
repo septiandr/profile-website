@@ -25,14 +25,14 @@ const steps = [
   },
 ];
 
-export default function Journey() {
+export default function Experience() {
   const root = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const g = gsapInit();
     const ctx = gsap.context(() => {
       const el = root.current!;
-      const stepEls = gsap.utils.toArray<HTMLElement>(".journey .step");
+      const stepEls = gsap.utils.toArray<HTMLElement>(".experience .step");
 
       const tl = g.timeline({
         scrollTrigger: {
@@ -59,7 +59,7 @@ export default function Journey() {
         end: `+=${stepEls.length * 600}`,
         onUpdate: (self) => {
           const w = Math.round(self.progress * 100);
-          g.set(".journey-progress .bar", { width: `${w}%` });
+          g.set(".experience-progress .bar", { width: `${w}%` });
         },
       });
     }, root);
@@ -68,11 +68,11 @@ export default function Journey() {
   }, []);
 
   return (
-    <section ref={root} className="section journey" id="journey">
+    <section ref={root} className="section experience" id="experience">
       <div className="container">
-        <div className="journey-header flex items-center gap-4">
-          <h2 className="section-title">Journey</h2>
-          <div className="journey-progress flex-1 h-1.5 bg-[rgba(255,255,255,.06)] rounded-full overflow-hidden"><div className="bar" /></div>
+        <div className="experience-header flex items-center gap-4">
+          <h2 className="section-title">Experience</h2>
+          <div className="experience-progress flex-1 h-1.5 bg-[rgba(255,255,255,.06)] rounded-full overflow-hidden"><div className="bar" /></div>
         </div>
         <ul className="steps grid gap-6 mt-7">
           {steps.map((s, i) => (
