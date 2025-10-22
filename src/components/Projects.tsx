@@ -233,51 +233,30 @@ export default function Projects() {
         delay: 1,
       });
 
-      // Parallax scroll untuk ornamen
+      // Tambahkan float Y agar ornament selalu bergerak tanpa scroll
       g.to(ornament1, {
-        y: -60,
-        scrollTrigger: {
-          trigger: projectsSection,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: true,
-        },
+        y: 14,
+        duration: 3.2,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
       });
-
       g.to(ornament2, {
-        y: 80,
-        scrollTrigger: {
-          trigger: projectsSection,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: true,
-        },
+        y: -18,
+        duration: 3.8,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
       });
-
       g.to(ornament3, {
-        y: -120,
-        scrollTrigger: {
-          trigger: projectsSection,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: true,
-        },
+        y: 22,
+        duration: 4.4,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
       });
 
-      // Parallax scroll untuk thumbnail kartu
-      const thumbs = Array.from(projectsSection.querySelectorAll(".thumb"));
-      thumbs.forEach((el, idx) => {
-        g.to(el, {
-          y: -100 - idx * 12,
-          scrollTrigger: {
-            trigger: projectsSection,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-          },
-        });
-      });
-
+      // Nonaktifkan parallax ScrollTrigger untuk ornament Projects (gerak mandiri)
       // Parallax scroll untuk kartu project (menggunakan yPercent agar tidak bentrok dengan hover y)
       const cards = Array.from(projectsSection.querySelectorAll(".card"));
       cards.forEach((el, idx) => {
@@ -293,33 +272,33 @@ export default function Projects() {
         });
       });
 
-      // Parallax tambahan untuk judul dan grid agar efek makin terasa
-      g.to(".projects .section-title", {
-        y: -30,
-        scrollTrigger: {
-          trigger: projectsSection,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: true,
-        },
+      // Reveal per baris seperti di Experience
+      const rowMap = new Map<number, HTMLElement[]>();
+      cards.forEach((el) => {
+        const top = Math.round((el as HTMLElement).offsetTop);
+        const group = rowMap.get(top);
+        if (group) group.push(el as HTMLElement);
+        else rowMap.set(top, [el as HTMLElement]);
       });
-      g.to(".projects .muted-count", {
-        y: -15,
-        scrollTrigger: {
-          trigger: projectsSection,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: true,
-        },
-      });
-      g.to(".projects .cards-grid", {
-        y: -20,
-        scrollTrigger: {
-          trigger: projectsSection,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: true,
-        },
+
+      rowMap.forEach((group) => {
+        g.set(group, { autoAlpha: 0, y: 24 });
+        g.fromTo(
+          group,
+          { autoAlpha: 0, y: 24 },
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.7,
+            ease: "power2.out",
+            stagger: 0.06,
+            scrollTrigger: {
+              trigger: group[0],
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
       });
 
       // Simple hover effect for cards
@@ -349,11 +328,11 @@ export default function Projects() {
           <div className="muted-count text-[var(--muted)]">{filtered.length} works</div>
         </div>
         
-        <div className=" flex flex-wrap gap-4">
+        <div className=" flex flex-wrap gap-4 justify-center items-center">
           {visibleProjects.map((p, i) => (
             <div
               key={`${p.title}-${i}`}
-              className="cursor-pointer rounded-lg bg-[rgba(255,255,255,.03)] hover:bg-[rgba(255,255,255,.05)] transition-all duration-300 overflow-hidden shrink-0 w-[220px] sm:w-[260px] md:w-[300px] mx-1 my-1"
+              className="card cursor-pointer h-[380px] rounded-lg bg-[rgba(255,255,255,.03)] hover:bg-[rgba(255,255,255,.05)] transition-all duration-300 overflow-hidden shrink-0 w-[220px] sm:w-[260px] md:w-[300px] mx-1 my-1"
               onClick={() => router.push(p.href ?? "#contact")}
             >
               {p.thumb && (
@@ -389,7 +368,3 @@ export default function Projects() {
     </section>
   );
 }
-
-// Enhance filter handler to animate out cards before switching
-
-// Replace filter button onClick: from setFilter(cat) to changeFilter(cat)

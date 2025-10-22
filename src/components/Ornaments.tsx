@@ -11,19 +11,58 @@ export default function Ornaments() {
       const orns = gsap.utils.toArray<HTMLElement>(".orn");
       const isMobile = () => window.matchMedia("(max-width: 768px)").matches;
       orns.forEach((o, i) => {
-        const ampY = isMobile() ? 120 : 260;
-        const ampX = isMobile() ? 70 : 140;
+        // Hapus parallax ScrollTrigger: gerak harus mandiri tanpa trigger
+        // Continuous micro motion (always moving)
+        // Float Y (px)
         g.to(o, {
-          y: () => (i % 2 === 0 ? ampY : -ampY),
-          x: () => (i % 3 === 0 ? -ampX : ampX),
-          rotate: () => (i % 2 === 0 ? 30 : -30),
+          y: `+=${gsap.utils.random(isMobile() ? 20 : 26, isMobile() ? 32 : 42)}`,
+          duration: gsap.utils.random(2.4, 3.6),
+          ease: "sine.inOut",
+          yoyo: true,
+          repeat: -1,
+          repeatRefresh: true,
+          overwrite: false,
+          force3D: true,
+        });
+        // Float X (px)
+        g.to(o, {
+          x: `+=${gsap.utils.random(isMobile() ? 16 : 18, isMobile() ? 24 : 32)}`,
+          duration: gsap.utils.random(3.2, 4.8),
+          ease: "sine.inOut",
+          yoyo: true,
+          repeat: -1,
+          repeatRefresh: true,
+          overwrite: false,
+          force3D: true,
+        });
+        // Slow rotation
+        g.to(o, {
+          rotate: i % 2 === 0 ? "+=24" : "-=24",
+          duration: gsap.utils.random(36, 54),
           ease: "none",
-          scrollTrigger: {
-            trigger: document.body,
-            start: "top top",
-            end: "bottom bottom",
-            scrub: true,
-          },
+          repeat: -1,
+          overwrite: false,
+          force3D: true,
+        });
+        // Gentle pulsing
+        g.to(o, {
+          scale: () => gsap.utils.random(0.96, 1.1),
+          duration: gsap.utils.random(4.5, 7.0),
+          ease: "sine.inOut",
+          yoyo: true,
+          repeat: -1,
+          repeatRefresh: true,
+          overwrite: false,
+          force3D: true,
+        });
+        g.to(o, {
+          opacity: () => gsap.utils.random(0.28, 0.42),
+          duration: gsap.utils.random(4.5, 7.0),
+          ease: "sine.inOut",
+          yoyo: true,
+          repeat: -1,
+          repeatRefresh: true,
+          overwrite: false,
         });
       });
     }, root);

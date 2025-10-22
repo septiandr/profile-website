@@ -7,7 +7,9 @@ html { scroll-behavior: smooth; }
   --text: #eaeef4;
   --muted: #a0a8b8;
   --primary: #00e5ff;
+  --primary-rgb: 0, 229, 255;
   --accent: #7c4dff;
+  --accent-rgb: 124, 77, 255;
   --surface: #121822;
   --border: rgba(255, 255, 255, 0.08);
 }
@@ -56,7 +58,7 @@ body {
 
 /* Ornaments */
 .ornaments { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
-.orn { position: absolute; width: 220px; height: 220px; border-radius: 50%; filter: blur(40px); opacity: .28; }
+.orn { position: absolute; width: 220px; height: 220px; border-radius: 50%; filter: blur(40px); opacity: .28; will-change: transform, opacity; }
 .orn.o1 { left: 5%; top: 12%; background: radial-gradient(circle, var(--accent), transparent 60%); }
 .orn.o2 { right: 10%; top: 24%; background: radial-gradient(circle, var(--primary), transparent 60%); }
 .orn.o3 { left: 12%; bottom: 20%; background: radial-gradient(circle, #ff6ee7, transparent 60%); }
