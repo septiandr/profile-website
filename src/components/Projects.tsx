@@ -200,7 +200,7 @@ export default function Projects() {
              <div
                key={`${p.title}-${i}`}
                className="card glass group cursor-pointer rounded-lg transition-all duration-300 overflow-hidden w-[220px] sm:w-[260px] md:w-[300px] mx-1 my-1 min-h-[420px]"
-               onClick={() => router.push(p.href ?? "#contact")}
+              //  onClick={() => router.push(p.href ?? "#contact")}
              >
               {p.thumb && (
                 <div className="thumb relative overflow-hidden">
