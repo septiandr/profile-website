@@ -5,9 +5,7 @@ import { gsapInit, gsap } from "@/lib/gsap";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-
-// Import projects data
-import { projects } from "@/components/Projects";
+import { projects } from "@/constant/portolio";
 
 export default function ProjectDetail() {
   const { id } = useParams();
@@ -111,7 +109,7 @@ export default function ProjectDetail() {
           </div>
           
           {project.thumb && (
-            <div className="rounded-xl overflow-hidden border border-[var(--border)] bg-[rgba(255,255,255,.03)] mb-8">
+            <div className="rounded-xl overflow-hidden glass mb-8">
               <div className="aspect-[16/9] relative">
                 <Image 
                   src={project.thumb} 
@@ -158,7 +156,7 @@ export default function ProjectDetail() {
           </div>
           
           <div className="md:col-span-1">
-            <div className="sticky top-32 border border-[var(--border)] rounded-xl p-6 bg-[rgba(255,255,255,.02)]">
+            <div className="sticky top-32 glass rounded-xl p-6">
               <h3 className="text-xl font-semibold mb-4">Project Details</h3>
               
               <div className="mb-4">

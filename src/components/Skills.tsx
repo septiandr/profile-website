@@ -3,8 +3,33 @@ import React, { useEffect, useRef } from "react";
 import { gsapInit, gsap } from "@/lib/gsap";
 
 const skills = [
-  "Next.js", "React", "TypeScript", "GSAP", "CSS", "Node.js",
-  "Testing", "Accessibility", "Performance", "DX/Tooling",
+  "Next.js",
+  "React",
+  "TypeScript",
+  "GSAP",
+  "CSS",
+  "Node.js",
+  "Jest",
+  "Performance",
+  "Framer Motion",
+  "Bootstrap",
+  "React Native",
+  "Tailwind CSS",
+  "HTML",
+  "JavaScript",
+  "React Testing Library",
+  "Git",
+  "RESTful API",
+  "Express.js",
+  "PostgreSQL",
+  "MySQL",
+  "JSON",
+  "Flutter",
+  "Dart",
+  "Firebase",
+  "GraphQL",
+  "Socket.io",
+  "Python",
 ];
 
 export default function Skills() {
@@ -36,7 +61,10 @@ export default function Skills() {
         <h2 className="section-title">Skills</h2>
         <div className="chips flex flex-wrap gap-2">
           {skills.map((s, i) => (
-            <span key={i} className="chip px-3 py-2 rounded-full border border-[var(--border)] bg-[rgba(255,255,255,.03)] text-[var(--text)] text-sm">
+            <span
+              key={i}
+              className="chip px-3 py-2 rounded-full border border-[var(--border)] bg-[rgba(255,255,255,.03)] text-[var(--text)] text-sm"
+            >
               {s}
             </span>
           ))}

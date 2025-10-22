@@ -19,6 +19,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Ornaments />
         <Header />
         {children}
+        {/* Floating Contact button */}
+        <a
+          href="#contact"
+          aria-label="Go to Contact"
+          className="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full bg-[var(--primary)] text-black flex items-center justify-center shadow-lg hover:scale-105 transition-transform"
+        >
+          C
+        </a>
       </body>
     </html>
   );

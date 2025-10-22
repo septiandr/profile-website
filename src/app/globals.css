@@ -105,3 +105,16 @@ body {
 
 /* Spacing utilities */
 .section + .section { border-top: 1px solid var(--border); }
+
+/* Glassmorphism utility */
+.glass {
+  background: rgba(255,255,255,.06);
+  backdrop-filter: saturate(180%) blur(16px);
+  -webkit-backdrop-filter: saturate(180%) blur(16px);
+  border: 1px solid rgba(255,255,255,.18);
+  box-shadow: 0 8px 30px rgba(0,0,0,.25);
+}
+.glass:hover {
+  background: rgba(255,255,255,.1);
+  border-color: rgba(255,255,255,.24);
+}

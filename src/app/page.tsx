@@ -8,7 +8,6 @@ export default function Home() {
   return (
     <>
       <Hero />
-      {/* Narrative focus: highlight portfolio first */}
       <Projects />
       <Experience />
       <Skills />

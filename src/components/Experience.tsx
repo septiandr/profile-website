@@ -1,29 +1,7 @@
 "use client";
 import React, { useEffect, useRef } from "react";
 import { gsapInit, gsap, ScrollTrigger } from "@/lib/gsap";
-
-const steps = [
-  {
-    title: "The Early Days",
-    desc: "Experimenting with HTML/CSS, learning UX foundations and accessibility.",
-  },
-  {
-    title: "First Client",
-    desc: "Turning needs into real products, version discipline and QA.",
-  },
-  {
-    title: "Craft Deeper",
-    desc: "Performance, state management, animation, and architecture patterns.",
-  },
-  {
-    title: "Collaboration & Mentoring",
-    desc: "Code reviews, documentation, design systems, and team culture.",
-  },
-  {
-    title: "Continuous Learning",
-    desc: "Staying curious: tooling, DX, automation, and best practices.",
-  },
-];
+import { experience } from "@/constant/experience";
 
 export default function Experience() {
   const root = useRef<HTMLDivElement>(null);
@@ -75,10 +53,44 @@ export default function Experience() {
           <div className="experience-progress flex-1 h-1.5 bg-[rgba(255,255,255,.06)] rounded-full overflow-hidden"><div className="bar" /></div>
         </div>
         <ul className="steps grid gap-6 mt-7">
-          {steps.map((s, i) => (
+          {experience.map((s, i) => (
             <li key={i} className="step p-4 border border-[var(--border)] bg-[var(--surface)] rounded-lg">
-              <h3 className="step-title text-lg font-semibold mb-1">{s.title}</h3>
-              <p className="step-desc text-[var(--muted)]">{s.desc}</p>
+              <div className="flex items-start justify-between gap-3">
+                <h3 className="step-title text-base sm:text-lg font-semibold">
+                  {s.role} <span className="text-white/70">@ {s.company}</span>
+                </h3>
+                {s.period && (
+                  <span className="text-xs text-white/60 shrink-0">{s.period}</span>
+                )}
+              </div>
+              {s.location && (
+                <div className="text-[10px] text-white/50 mt-0.5">{s.location}</div>
+              )}
+              {s.title && (
+                <div className="text-[11px] text-white/70 mt-1">{s.title}</div>
+              )}
+              {s.desc && (
+                <p className="step-desc text-[var(--muted)] mt-2">{s.desc}</p>
+              )}
+              {s.highlights && (
+                <ul className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-1">
+                  {s.highlights.map((point, idx) => (
+                    <li key={`hl-${i}-${idx}`} className="flex items-start gap-1.5 text-[11px] text-white/80">
+                      <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-white/10 text-white/80 text-[10px] shrink-0">✓</span>
+                      <span className="line-clamp-1">{point}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {s.tech && (
+                <div className="mt-2 flex flex-wrap gap-1">
+                  {s.tech.map((t, idx) => (
+                    <span key={`tech-${i}-${idx}`} className="text-[10px] text-white/80 bg-white/5 px-1.5 py-0.5 rounded">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              )}
             </li>
           ))}
         </ul>
