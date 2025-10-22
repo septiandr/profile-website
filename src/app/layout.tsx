@@ -7,7 +7,7 @@ import Ornaments from "@/components/Ornaments";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Web Developer Portfolio — GSAP Storytelling",
+  title: "Risanggalih | Profile",
   description:
     "Portfolio with Next.js & GSAP: high performance, smooth animations, meaningful storytelling.",
 };

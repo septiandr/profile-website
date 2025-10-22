@@ -5,8 +5,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { projects } from "@/constant/portolio";
 
-
-
 export default function Projects() {
   const router = useRouter();
   const root = useRef<HTMLDivElement>(null);
@@ -177,7 +175,8 @@ export default function Projects() {
       ctx.revert();
       if (projectsSection) {
         projectsSection.querySelectorAll(".project-orn").forEach((el) => {
-          if (el.parentNode === projectsSection) projectsSection.removeChild(el);
+          if (el.parentNode === projectsSection)
+            projectsSection.removeChild(el);
         });
       }
     };
@@ -192,20 +191,28 @@ export default function Projects() {
       <div className="container relative z-10">
         <div className="mb-6 flex items-end justify-between gap-4">
           <h2 className="section-title">Portfolio</h2>
-          <div className="muted-count text-[var(--muted)]">{filtered.length} works</div>
+          <div className="muted-count text-[var(--muted)]">
+            {filtered.length} works
+          </div>
         </div>
-        
-        <div className="cards">
-           {visibleProjects.map((p, i) => (
-             <div
-               key={`${p.title}-${i}`}
-               className="card glass group cursor-pointer rounded-lg transition-all duration-300 overflow-hidden w-[220px] sm:w-[260px] md:w-[300px] mx-1 my-1 min-h-[420px]"
+
+        <div className="cards flex flex-wrap justify-center items-center gap-10">
+          {visibleProjects.map((p, i) => (
+            <div
+              key={`${p.title}-${i}`}
+              className="card glass group cursor-pointer rounded-lg transition-all duration-300 overflow-hidden w-full sm:w-[260px] md:w-[300px] mx-1 my-1 h-[500px]"
               //  onClick={() => router.push(p.href ?? "#contact")}
-             >
+            >
               {p.thumb && (
                 <div className="thumb relative overflow-hidden">
                   <div className="aspect-[16/9] relative">
-                    <Image src={`/porto/${p.thumb}`} alt="Thumbnail" fill sizes="(max-width: 640px) 100vw, (max-width: 900px) 50vw, 33vw" className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-110" />
+                    <Image
+                      src={`/porto/${p.thumb}`}
+                      alt="Thumbnail"
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 900px) 50vw, 33vw"
+                      className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-110"
+                    />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent opacity-60"></div>
                   </div>
                 </div>
@@ -213,7 +220,9 @@ export default function Projects() {
 
               <div className="p-3">
                 <div className="flex items-center justify-between">
-                  <h3 className="card-title text-[12px] font-medium text-white leading-tight line-clamp-1">{p.title}</h3>
+                  <h3 className="card-title text-[12px] font-medium text-white leading-tight line-clamp-1">
+                    {p.title}
+                  </h3>
                   {p.year && (
                     <span className="text-[10px] text-white/60">{p.year}</span>
                   )}
@@ -226,14 +235,21 @@ export default function Projects() {
                 )}
 
                 {p.desc && (
-                  <p className="mt-2 text-[11px] text-white/80 leading-snug line-clamp-3">{p.desc}</p>
+                  <p className="mt-2 text-[11px] text-white/80 leading-snug line-clamp-3">
+                    {p.desc}
+                  </p>
                 )}
 
                 {p.points && (
                   <ul className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-1">
                     {p.points.map((point, idx) => (
-                      <li key={`${p.title}-pt-${idx}`} className="flex items-start gap-1.5 text-[11px] text-white/80">
-                        <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-white/10 text-white/80 text-[10px] shrink-0">✓</span>
+                      <li
+                        key={`${p.title}-pt-${idx}`}
+                        className="flex items-start gap-1.5 text-[11px] text-white/80"
+                      >
+                        <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-white/10 text-white/80 text-[10px] shrink-0">
+                          ✓
+                        </span>
                         <span className="line-clamp-1">{point}</span>
                       </li>
                     ))}
@@ -243,7 +259,10 @@ export default function Projects() {
                 {p.stack && (
                   <div className="mt-2 flex flex-wrap gap-1">
                     {p.stack.map((tech, idx) => (
-                      <span key={`${p.title}-tech-${idx}`} className="text-[10px] text-white/80 bg-white/5 px-1.5 py-0.5 rounded">
+                      <span
+                        key={`${p.title}-tech-${idx}`}
+                        className="text-[10px] text-white/80 bg-white/5 px-1.5 py-0.5 rounded"
+                      >
                         {tech}
                       </span>
                     ))}
@@ -251,10 +270,12 @@ export default function Projects() {
                 )}
 
                 {p.id && (
-                  <div className="mt-2 text-[10px] text-white/50">ID: {p.id}</div>
+                  <div className="mt-2 text-[10px] text-white/50">
+                    ID: {p.id}
+                  </div>
                 )}
               </div>
-              
+
               <div className="absolute inset-0 border-2 border-transparent group-hover:border-[var(--primary)] rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none"></div>
             </div>
           ))}
