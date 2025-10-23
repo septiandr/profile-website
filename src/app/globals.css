@@ -120,3 +120,11 @@ body {
   background: rgba(255,255,255,.1);
   border-color: rgba(255,255,255,.24);
 }
+@media (max-width: 767px) {
+  /* Kurangi biaya render di mobile */
+  .orn { filter: blur(24px); opacity: .20; }
+  .orn.o3, .orn.o4, .orn.o5 { display: none; }
+  .hero-orb { filter: blur(24px); opacity: .28; }
+  .glass { backdrop-filter: none; -webkit-backdrop-filter: none; box-shadow: 0 4px 16px rgba(0,0,0,.2); }
+  .header { backdrop-filter: none; }
+}

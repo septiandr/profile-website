@@ -25,8 +25,9 @@ export default function Projects() {
     });
 
     const g = gsapInit();
+    const isMobile = () => window.matchMedia("(max-width: 768px)").matches;
     const ctx = gsap.context(() => {
-      // Animate project cards
+      // Animate project cards (tetap untuk semua layar)
       g.fromTo(
         ".card",
         { opacity: 0, y: 30 },
@@ -39,98 +40,99 @@ export default function Projects() {
         }
       );
 
-      // Add ornaments with animation
+      // Ornaments & parallax hanya di desktop untuk performa mobile
+      if (!isMobile()) {
+        // Create and append ornaments
+        const ornament1 = document.createElement("div");
+        ornament1.className =
+          "project-orn absolute top-20 right-10 w-24 h-24 rounded-full bg-[rgba(var(--primary-rgb),0.08)] blur-md z-0";
+        projectsSection.appendChild(ornament1);
 
-      // Create and append ornaments
-      const ornament1 = document.createElement("div");
-      ornament1.className =
-        "project-orn absolute top-20 right-10 w-24 h-24 rounded-full bg-[rgba(var(--primary-rgb),0.08)] blur-md z-0";
-      projectsSection.appendChild(ornament1);
+        const ornament2 = document.createElement("div");
+        ornament2.className =
+          "project-orn absolute bottom-40 left-10 w-32 h-32 rounded-full bg-[rgba(var(--primary-rgb),0.05)] blur-md z-0";
+        projectsSection.appendChild(ornament2);
 
-      const ornament2 = document.createElement("div");
-      ornament2.className =
-        "project-orn absolute bottom-40 left-10 w-32 h-32 rounded-full bg-[rgba(var(--primary-rgb),0.05)] blur-md z-0";
-      projectsSection.appendChild(ornament2);
+        const ornament3 = document.createElement("div");
+        ornament3.className =
+          "project-orn absolute top-1/2 left-1/4 w-16 h-16 rounded-full bg-[rgba(var(--primary-rgb),0.07)] blur-md z-0";
+        projectsSection.appendChild(ornament3);
 
-      const ornament3 = document.createElement("div");
-      ornament3.className =
-        "project-orn absolute top-1/2 left-1/4 w-16 h-16 rounded-full bg-[rgba(var(--primary-rgb),0.07)] blur-md z-0";
-      projectsSection.appendChild(ornament3);
+        // Animate ornaments
+        g.fromTo(
+          [ornament1, ornament2, ornament3],
+          { opacity: 0, scale: 0 },
+          { opacity: 1, scale: 1, duration: 1, stagger: 0.2, ease: "power2.out" }
+        );
 
-      // Animate ornaments
-      g.fromTo(
-        [ornament1, ornament2, ornament3],
-        { opacity: 0, scale: 0 },
-        { opacity: 1, scale: 1, duration: 1, stagger: 0.2, ease: "power2.out" }
-      );
-
-      // Floating animation for ornaments
-      g.to(ornament1, {
-        x: 5,
-        duration: 3,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-      });
-
-      g.to(ornament2, {
-        x: -8,
-        duration: 4,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-        delay: 0.5,
-      });
-
-      g.to(ornament3, {
-        x: 10,
-        duration: 5,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-        delay: 1,
-      });
-
-      // Tambahkan float Y agar ornament selalu bergerak tanpa scroll
-      g.to(ornament1, {
-        y: 14,
-        duration: 3.2,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-      });
-      g.to(ornament2, {
-        y: -18,
-        duration: 3.8,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-      });
-      g.to(ornament3, {
-        y: 22,
-        duration: 4.4,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-      });
-
-      // Nonaktifkan parallax ScrollTrigger untuk ornament Projects (gerak mandiri)
-      // Parallax scroll untuk kartu project (menggunakan yPercent agar tidak bentrok dengan hover y)
-      const cards = Array.from(projectsSection.querySelectorAll(".card"));
-      cards.forEach((el, idx) => {
-        const laneAmount = [-8, -14, -20][idx % 3];
-        g.to(el, {
-          yPercent: laneAmount,
-          scrollTrigger: {
-            trigger: projectsSection,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-          },
+        // Floating animation for ornaments
+        g.to(ornament1, {
+          x: 5,
+          duration: 3,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
         });
-      });
 
-      // Reveal per baris seperti di Experience
+        g.to(ornament2, {
+          x: -8,
+          duration: 4,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+          delay: 0.5,
+        });
+
+        g.to(ornament3, {
+          x: 10,
+          duration: 5,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+          delay: 1,
+        });
+
+        // Float Y
+        g.to(ornament1, {
+          y: 14,
+          duration: 3.2,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+        });
+        g.to(ornament2, {
+          y: -18,
+          duration: 3.8,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+        });
+        g.to(ornament3, {
+          y: 22,
+          duration: 4.4,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+        });
+
+        // Parallax scroll untuk kartu project (desktop saja)
+        const cards = Array.from(projectsSection.querySelectorAll(".card"));
+        cards.forEach((el, idx) => {
+          const laneAmount = [-8, -14, -20][idx % 3];
+          g.to(el, {
+            yPercent: laneAmount,
+            scrollTrigger: {
+              trigger: projectsSection,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+            },
+          });
+        });
+      }
+
+      // Reveal per baris seperti di Experience (tetap)
+      const cards = Array.from(projectsSection.querySelectorAll(".card"));
       const rowMap = new Map<number, HTMLElement[]>();
       cards.forEach((el) => {
         const top = Math.round((el as HTMLElement).offsetTop);
@@ -196,12 +198,11 @@ export default function Projects() {
           </div>
         </div>
 
-        <div className="cards flex flex-wrap justify-center items-center gap-10">
+        <div className="cards">
           {visibleProjects.map((p, i) => (
             <div
               key={`${p.title}-${i}`}
-              className="card glass group cursor-pointer rounded-lg transition-all duration-300 overflow-hidden w-full sm:w-[260px] md:w-[300px] mx-1 my-1 h-[500px]"
-              //  onClick={() => router.push(p.href ?? "#contact")}
+              className="card glass group cursor-pointer rounded-lg transition-all duration-300 overflow-hidden min-h-[420px]"
             >
               {p.thumb && (
                 <div className="thumb relative overflow-hidden">

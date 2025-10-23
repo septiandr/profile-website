@@ -11,59 +11,78 @@ export default function Ornaments() {
       const orns = gsap.utils.toArray<HTMLElement>(".orn");
       const isMobile = () => window.matchMedia("(max-width: 768px)").matches;
       orns.forEach((o, i) => {
-        // Hapus parallax ScrollTrigger: gerak harus mandiri tanpa trigger
-        // Continuous micro motion (always moving)
-        // Float Y (px)
-        g.to(o, {
-          y: `+=${gsap.utils.random(isMobile() ? 20 : 26, isMobile() ? 32 : 42)}`,
-          duration: gsap.utils.random(2.4, 3.6),
-          ease: "sine.inOut",
-          yoyo: true,
-          repeat: -1,
-          repeatRefresh: true,
-          overwrite: false,
-          force3D: true,
-        });
-        // Float X (px)
-        g.to(o, {
-          x: `+=${gsap.utils.random(isMobile() ? 16 : 18, isMobile() ? 24 : 32)}`,
-          duration: gsap.utils.random(3.2, 4.8),
-          ease: "sine.inOut",
-          yoyo: true,
-          repeat: -1,
-          repeatRefresh: true,
-          overwrite: false,
-          force3D: true,
-        });
-        // Slow rotation
-        g.to(o, {
-          rotate: i % 2 === 0 ? "+=24" : "-=24",
-          duration: gsap.utils.random(36, 54),
-          ease: "none",
-          repeat: -1,
-          overwrite: false,
-          force3D: true,
-        });
-        // Gentle pulsing
-        g.to(o, {
-          scale: () => gsap.utils.random(0.96, 1.1),
-          duration: gsap.utils.random(4.5, 7.0),
-          ease: "sine.inOut",
-          yoyo: true,
-          repeat: -1,
-          repeatRefresh: true,
-          overwrite: false,
-          force3D: true,
-        });
-        g.to(o, {
-          opacity: () => gsap.utils.random(0.28, 0.42),
-          duration: gsap.utils.random(4.5, 7.0),
-          ease: "sine.inOut",
-          yoyo: true,
-          repeat: -1,
-          repeatRefresh: true,
-          overwrite: false,
-        });
+        if (isMobile()) {
+          // Mobile: hanya float ringan, tanpa rotasi/scale/opacity untuk kinerja
+          g.to(o, {
+            y: `+=${gsap.utils.random(12, 18)}`,
+            duration: gsap.utils.random(3.8, 5.2),
+            ease: "sine.inOut",
+            yoyo: true,
+            repeat: -1,
+            repeatRefresh: true,
+            overwrite: false,
+            force3D: true,
+          });
+          g.to(o, {
+            x: `+=${gsap.utils.random(8, 14)}`,
+            duration: gsap.utils.random(4.2, 5.8),
+            ease: "sine.inOut",
+            yoyo: true,
+            repeat: -1,
+            repeatRefresh: true,
+            overwrite: false,
+            force3D: true,
+          });
+        } else {
+          // Desktop: animasi lengkap
+          g.to(o, {
+            y: `+=${gsap.utils.random(26, 42)}`,
+            duration: gsap.utils.random(2.4, 3.6),
+            ease: "sine.inOut",
+            yoyo: true,
+            repeat: -1,
+            repeatRefresh: true,
+            overwrite: false,
+            force3D: true,
+          });
+          g.to(o, {
+            x: `+=${gsap.utils.random(18, 32)}`,
+            duration: gsap.utils.random(3.2, 4.8),
+            ease: "sine.inOut",
+            yoyo: true,
+            repeat: -1,
+            repeatRefresh: true,
+            overwrite: false,
+            force3D: true,
+          });
+          g.to(o, {
+            rotate: i % 2 === 0 ? "+=24" : "-=24",
+            duration: gsap.utils.random(36, 54),
+            ease: "none",
+            repeat: -1,
+            overwrite: false,
+            force3D: true,
+          });
+          g.to(o, {
+            scale: () => gsap.utils.random(0.96, 1.1),
+            duration: gsap.utils.random(4.5, 7.0),
+            ease: "sine.inOut",
+            yoyo: true,
+            repeat: -1,
+            repeatRefresh: true,
+            overwrite: false,
+            force3D: true,
+          });
+          g.to(o, {
+            opacity: () => gsap.utils.random(0.28, 0.42),
+            duration: gsap.utils.random(4.5, 7.0),
+            ease: "sine.inOut",
+            yoyo: true,
+            repeat: -1,
+            repeatRefresh: true,
+            overwrite: false,
+          });
+        }
       });
     }, root);
 
