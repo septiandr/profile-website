@@ -203,6 +203,18 @@ export default function Projects() {
             <div
               key={`${p.title}-${i}`}
               className="card glass group cursor-pointer rounded-lg transition-all duration-300 overflow-hidden min-h-[420px]"
+              role="link"
+              tabIndex={0}
+              onClick={() => {
+                const href = p.href || `/projects/${p.id ?? ''}`;
+                if (href) router.push(href);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  const href = p.href || `/projects/${p.id ?? ''}`;
+                  if (href) router.push(href);
+                }
+              }}
             >
               {p.thumb && (
                 <div className="thumb relative overflow-hidden">

@@ -58,8 +58,9 @@ export default function Skills() {
   return (
     <section ref={root} className="section skills" id="skills">
       <div className="container">
-        <h2 className="section-title">Skills</h2>
-        <div className="chips flex flex-wrap gap-2">
+        <div className="skills-panel glass rounded-xl p-6">
+          <h2 className="section-title text-center">Skills</h2>
+          <div className="chips flex flex-wrap gap-2 justify-center">
           {skills.map((s, i) => (
             <span
               key={i}
@@ -68,6 +69,7 @@ export default function Skills() {
               {s}
             </span>
           ))}
+          </div>
         </div>
       </div>
     </section>

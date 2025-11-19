@@ -26,48 +26,75 @@ export default function Contact() {
   return (
     <section ref={root} className="section contact" id="contact">
       <div className="container">
-        <div className="contact-card group relative mt-2 p-6 rounded-xl border border-[var(--border)] bg-[var(--surface)] overflow-hidden">
+        <div className="contact-panel glass group relative mt-2 p-6 rounded-xl border overflow-hidden">
           {/* Decorative glow */}
-          <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full bg-[rgba(var(--primary-rgb),0.08)] blur-2xl pointer-events-none" />
-          <div className="absolute -bottom-16 -left-16 w-56 h-56 rounded-full bg-[rgba(255,255,255,0.04)] blur-2xl pointer-events-none" />
+          <span className="abs-glow g1" />
+          <span className="abs-glow g2" />
+          <span className="abs-glow g3" />
 
-          <h2 className="section-title">Let’s Collaborate</h2>
-          <p className="muted">I love building products with impactful experiences.</p>
-          <div className="cta mt-3 flex gap-2 flex-wrap">
-            <a className="btn hover:scale-105 transition-transform" href="mailto:sdwirisanggalih@gmail.com" aria-label="Email">
-              Email
-            </a>
-            <a
-              className="btn hover:scale-105 transition-transform"
-              href="https://wa.me/6285646444805"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="WhatsApp"
-            >
-              WhatsApp
-            </a>
-            <a
-              className="btn hover:scale-105 transition-transform"
-              href="https://www.linkedin.com/in/septiandr/"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="LinkedIn"
-            >
-              LinkedIn
-            </a>
-            <a
-              className="btn hover:scale-105 transition-transform"
-              href="https://github.com/septiandr"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Github"
-            >
-              Github
-            </a>
+          <div className="contact-grid">
+            {/* Left: Title & CTA */}
+            <div>
+              <h2 className="section-title">Let’s Collaborate</h2>
+              <p className="muted">I love building products with impactful experiences.</p>
+              <div className="cta mt-3 flex gap-2 flex-wrap">
+                <a className="btn primary" href="mailto:sdwirisanggalih@gmail.com" aria-label="Email">
+                  Email Me
+                </a>
+                <a
+                  className="btn"
+                  href="https://wa.me/6285646444805"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="WhatsApp"
+                >
+                  WhatsApp
+                </a>
+              </div>
+            </div>
+
+            {/* Right: Link cards */}
+            <div className="contact-links">
+              <a
+                className="link-card glass"
+                href="mailto:sdwirisanggalih@gmail.com"
+                aria-label="Email"
+              >
+                <span className="link-label">Email</span>
+                <span className="link-value">sdwirisanggalih@gmail.com</span>
+              </a>
+              <a
+                className="link-card glass"
+                href="https://wa.me/6285646444805"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="WhatsApp"
+              >
+                <span className="link-label">WhatsApp</span>
+                <span className="link-value">+62 856-4644-4805</span>
+              </a>
+              <a
+                className="link-card glass"
+                href="https://www.linkedin.com/in/septiandr/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+              >
+                <span className="link-label">LinkedIn</span>
+                <span className="link-value">/in/septiandr</span>
+              </a>
+              <a
+                className="link-card glass"
+                href="https://github.com/septiandr"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Github"
+              >
+                <span className="link-label">GitHub</span>
+                <span className="link-value">@septiandr</span>
+              </a>
+            </div>
           </div>
-
-          {/* Hover border highlight */}
-          <div className="absolute inset-0 border-2 border-transparent group-hover:border-[var(--primary)] rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none" />
         </div>
       </div>
     </section>

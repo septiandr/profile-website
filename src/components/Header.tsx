@@ -32,9 +32,13 @@ export default function Header() {
       // Active link on section visibility
       items.forEach((item) => {
         const link = document.querySelector<HTMLAnchorElement>(`.nav a[href='#${item.id}']`);
-        if (!link) return;
+        const target = document.querySelector<HTMLElement>(`#${item.id}`);
+        if (!link || !target) {
+          console.warn(`Element not found: #${item.id}`);
+          return;
+        }
         ScrollTrigger.create({
-          trigger: `#${item.id}`,
+          trigger: target,
           start: "top center",
           end: "bottom center",
           onEnter: () => link.classList.add("active"),

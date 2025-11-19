@@ -112,7 +112,7 @@ export default function ProjectDetail() {
             <div className="rounded-xl overflow-hidden glass mb-8">
               <div className="aspect-[16/9] relative">
                 <Image 
-                  src={project.thumb} 
+                  src={`/porto/${project.thumb}`} 
                   alt={project.title} 
                   fill 
                   className="object-contain p-6" 
