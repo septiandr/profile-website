@@ -142,20 +142,22 @@ export default function Projects() {
       });
 
       rowMap.forEach((group) => {
-        g.set(group, { autoAlpha: 0, y: 24 });
+        g.set(group, { autoAlpha: 0, y: 20 });
         g.fromTo(
           group,
-          { autoAlpha: 0, y: 24 },
+          { autoAlpha: 0, y: 20 },
           {
             autoAlpha: 1,
             y: 0,
-            duration: 0.7,
+            duration: 0.6,
             ease: "power2.out",
-            stagger: 0.06,
+            stagger: 0.05,
             scrollTrigger: {
               trigger: group[0],
-              start: "top 85%",
-              toggleActions: "play none none reverse",
+              start: "top 95%",
+              toggleActions: "play none none none",
+              once: true,
+              invalidateOnRefresh: true,
             },
           }
         );

@@ -72,6 +72,15 @@ export default function Header() {
     applyTheme(theme === 'light' ? 'dark' : 'light');
   }
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (open) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => { document.body.style.overflow = prev; };
+    }
+  }, [open]);
+
   return (
     <header ref={root} className="header sticky top-0 z-50 backdrop-blur-sm bg-[rgba(9,13,18,.5)] border-b border-[var(--border)]">
       <div className="container header-inner flex items-center justify-between h-16">
@@ -90,24 +99,42 @@ export default function Header() {
             {theme === 'light' ? '🌙' : '☀️'}
           </button>
         </nav>
-        <button
-          className="menu-toggle md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-md border border-[var(--border)] text-[var(--text)] bg-[rgba(255,255,255,.04)]"
-          aria-label="Toggle navigation"
-          aria-expanded={open}
-          aria-controls="mobile-nav"
-          onClick={() => setOpen((v) => !v)}
-        >
-          Menu
-        </button>
+        <div className="md:hidden flex items-center gap-2">
+          <button
+            className="menu-toggle inline-flex items-center gap-2 px-3 py-2 rounded-md border border-[var(--border)] text-[var(--text)] bg-[rgba(255,255,255,.04)]"
+            aria-label="Toggle navigation"
+            aria-expanded={open}
+            aria-controls="mobile-nav"
+            onClick={() => setOpen((v) => !v)}
+          >
+            Menu
+          </button>
+          <button
+            onClick={toggleTheme}
+            aria-label="Toggle theme"
+            className="inline-flex items-center justify-center w-10 h-10 rounded-md border border-[var(--border)] text-[var(--text)] bg-[rgba(255,255,255,.04)]"
+          >
+            {theme === 'light' ? '🌙' : '☀️'}
+          </button>
+        </div>
       </div>
       {/* Mobile nav */}
       <div id="mobile-nav" className={`mobile-nav ${open ? "block" : "hidden"} md:hidden`}>
+        {/* Backdrop to close menu on outside click */}
+        {open && (
+          <button
+            type="button"
+            className="mobile-backdrop"
+            aria-label="Close navigation"
+            onClick={() => setOpen(false)}
+          />
+        )}
         <nav className="container px-3 py-3 border-t border-[var(--border)] bg-[rgba(9,13,18,.7)] backdrop-blur-sm rounded-b-xl">
           {items.map((i) => (
             <Link
               key={`m-${i.id}`}
               href={`#${i.id}`}
-              className="block px-2.5 py-2 rounded-md text-[var(--muted)] hover:text-[var(--text)] hover:bg-[rgba(255,255,255,.06)]"
+              className="block px-3 py-3 rounded-md text-[var(--muted)] hover:text-[var(--text)] hover:bg-[rgba(255,255,255,.06)]"
               onClick={() => setOpen(false)}
             >
               {i.label}
@@ -116,7 +143,7 @@ export default function Header() {
           <button
             onClick={() => { toggleTheme(); setOpen(false); }}
             aria-label="Toggle theme"
-            className="mt-2 w-full px-2.5 py-2 rounded-md border border-[var(--border)] text-[var(--text)] bg-[rgba(255,255,255,.04)] hover:bg-[rgba(255,255,255,.08)]"
+            className="mt-2 w-full px-3 py-3 rounded-md border border-[var(--border)] text-[var(--text)] bg-[rgba(255,255,255,.04)] hover:bg-[rgba(255,255,255,.08)]"
           >
             {theme === 'light' ? '🌙 Mode Malam' : '☀️ Mode Siang'}
           </button>

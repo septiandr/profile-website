@@ -67,6 +67,17 @@ body {
 .header-progress { height: 2px; background: rgba(255,255,255,.06); }
 .header-progress .bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--primary)); }
 
+/* Mobile nav improvements */
+.mobile-nav { position: fixed; top: 64px; left: 0; right: 0; z-index: 49; transform: translateY(-8px); opacity: 0; transition: transform .25s ease, opacity .25s ease; }
+.mobile-nav.block { transform: translateY(0); opacity: 1; }
+.mobile-backdrop { position: fixed; inset: 64px 0 0 0; background: rgba(0,0,0,.25); backdrop-filter: blur(2px); border: 0; padding: 0; margin: 0; width: 100%; height: calc(100vh - 64px); }
+:root[data-theme='light'] .mobile-backdrop { background: rgba(0,0,0,.08); }
+.mobile-nav nav { border-top: 1px solid var(--border); background: rgba(9,13,18,.85); backdrop-filter: blur(8px); transform: translateY(-6px); transition: transform .25s ease; }
+.mobile-nav.block nav { transform: translateY(0); }
+:root[data-theme='light'] .mobile-nav nav { background: rgba(255,255,255,.9); }
+.mobile-nav a { display: block; padding: 12px 14px; border-radius: 10px; color: var(--text); }
+.mobile-nav a:hover { background: rgba(255,255,255,.08); }
+
 /* Buttons */
 .btn {
   display: inline-block;

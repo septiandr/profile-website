@@ -24,18 +24,18 @@ export default function Experience() {
       stepEls.forEach((step) => {
         g.fromTo(
           step,
-          { opacity: 0, y: 40 },
+          { opacity: 0, y: 24 },
           {
             opacity: 1,
             y: 0,
-            duration: 0.6,
+            duration: 0.45,
             ease: "power3.out",
             force3D: true,
             scrollTrigger: {
               trigger: step,
-              start: "top 85%",
-              end: "top 45%",
-              toggleActions: "play none none reverse",
+              start: "top 75%",
+              toggleActions: "play none none none",
+              once: true,
               invalidateOnRefresh: true,
             },
           }
