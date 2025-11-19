@@ -233,22 +233,22 @@ export default function Projects() {
 
               <div className="p-3">
                 <div className="flex items-center justify-between">
-                  <h3 className="card-title text-[12px] font-medium text-white leading-tight line-clamp-1">
+                  <h3 className="card-title text-[12px] font-medium text-[var(--text)] leading-tight line-clamp-1">
                     {p.title}
                   </h3>
                   {p.year && (
-                    <span className="text-[10px] text-white/60">{p.year}</span>
+                    <span className="text-[10px] text-[var(--muted)]">{p.year}</span>
                   )}
                 </div>
 
                 {p.category && (
-                  <span className="mt-1 inline-block text-[10px] text-white/90 bg-white/5 px-1.5 py-0.5 rounded">
+                  <span className="mt-1 inline-block text-[10px] badge px-1.5 py-0.5 rounded">
                     {p.category}
                   </span>
                 )}
 
                 {p.desc && (
-                  <p className="mt-2 text-[11px] text-white/80 leading-snug line-clamp-3">
+                  <p className="mt-2 text-[11px] text-[var(--muted)] leading-snug line-clamp-3">
                     {p.desc}
                   </p>
                 )}
@@ -258,9 +258,9 @@ export default function Projects() {
                     {p.points.map((point, idx) => (
                       <li
                         key={`${p.title}-pt-${idx}`}
-                        className="flex items-start gap-1.5 text-[11px] text-white/80"
+                        className="flex items-start gap-1.5 text-[11px] text-[var(--text)]"
                       >
-                        <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-white/10 text-white/80 text-[10px] shrink-0">
+                        <span className="inline-flex items-center justify-center w-4 h-4 rounded-full badge text-[10px] shrink-0">
                           ✓
                         </span>
                         <span className="line-clamp-1">{point}</span>
@@ -274,7 +274,7 @@ export default function Projects() {
                     {p.stack.map((tech, idx) => (
                       <span
                         key={`${p.title}-tech-${idx}`}
-                        className="text-[10px] text-white/80 bg-white/5 px-1.5 py-0.5 rounded"
+                        className="chip text-[10px] px-1.5 py-0.5"
                       >
                         {tech}
                       </span>
@@ -283,7 +283,7 @@ export default function Projects() {
                 )}
 
                 {p.id && (
-                  <div className="mt-2 text-[10px] text-white/50">
+                  <div className="mt-2 text-[10px] text-[var(--muted)]">
                     ID: {p.id}
                   </div>
                 )}

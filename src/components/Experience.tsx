@@ -74,23 +74,23 @@ export default function Experience() {
             <li key={i} className="step">
               <div className="flex items-start justify-between gap-3">
                 <h3 className="step-title">
-                  {s.role} <span className="text-white/70">@ {s.company}</span>
+                  {s.role} <span className="text-[var(--muted)]">@ {s.company}</span>
                 </h3>
                 {s.period && (
-                  <span className="text-xs text-white/60 shrink-0">
+                  <span className="text-xs text-[var(--muted)] shrink-0">
                     {s.period}
                   </span>
                 )}
               </div>
 
               {s.location && (
-                <div className="text-[10px] text-white/50 mt-0.5">
+                <div className="text-[10px] text-[var(--muted)] mt-0.5">
                   {s.location}
                 </div>
               )}
 
               {s.title && (
-                <div className="text-[11px] text-white/70 mt-1">{s.title}</div>
+                <div className="text-[11px] text-[var(--text)] mt-1">{s.title}</div>
               )}
 
               {s.desc && (
@@ -102,9 +102,9 @@ export default function Experience() {
                   {s.highlights.map((point, idx) => (
                     <li
                       key={`hl-${i}-${idx}`}
-                      className="flex items-start gap-1.5 text-[11px] text-white/80"
+                      className="flex items-start gap-1.5 text-[11px] text-[var(--text)]"
                     >
-                      <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-white/10 text-white/80 text-[10px] shrink-0">
+                      <span className="inline-flex items-center justify-center w-4 h-4 rounded-full badge text-[10px] shrink-0">
                         ✓
                       </span>
                       <span className="line-clamp-1">{point}</span>
@@ -118,7 +118,7 @@ export default function Experience() {
                   {s.tech.map((t, idx) => (
                     <span
                       key={`tech-${i}-${idx}`}
-                      className="text-[10px] text-white/80 bg-white/5 px-1.5 py-0.5 rounded"
+                      className="chip text-[10px] px-1.5 py-0.5"
                     >
                       {t}
                     </span>

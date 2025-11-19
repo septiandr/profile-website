@@ -14,9 +14,19 @@ const items = [
 export default function Header() {
   const root = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
+  const [theme, setTheme] = useState<'light' | 'dark'>('dark');
 
   useEffect(() => {
     const g = gsapInit();
+    // Theme init
+    try {
+      const stored = localStorage.getItem('theme') as 'light' | 'dark' | null;
+      const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+      const initial = stored ?? (prefersLight ? 'light' : 'dark');
+      document.documentElement.setAttribute('data-theme', initial);
+      setTheme(initial);
+    } catch {}
+
     const ctx = gsap.context(() => {
       // Header entrance
       g.from(".header-inner", { y: -20, opacity: 0, duration: 0.6, ease: "power3.out" });
@@ -52,16 +62,33 @@ export default function Header() {
     return () => ctx.revert();
   }, []);
 
+  function applyTheme(next: 'light' | 'dark') {
+    document.documentElement.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch {}
+    setTheme(next);
+  }
+
+  function toggleTheme() {
+    applyTheme(theme === 'light' ? 'dark' : 'light');
+  }
+
   return (
     <header ref={root} className="header sticky top-0 z-50 backdrop-blur-sm bg-[rgba(9,13,18,.5)] border-b border-[var(--border)]">
       <div className="container header-inner flex items-center justify-between h-16">
         <div className="brand font-semibold tracking-wide">Software Engineer</div>
-        <nav className="nav hidden md:flex gap-3">
+        <nav className="nav hidden md:flex gap-3 items-center">
           {items.map((i) => (
             <Link key={i.id} href={`#${i.id}`} className="px-2.5 py-2 rounded-md text-[var(--muted)] hover:text-[var(--text)] hover:bg-[rgba(255,255,255,.06)]">
               {i.label}
             </Link>
           ))}
+          <button
+            onClick={toggleTheme}
+            aria-label="Toggle theme"
+            className="px-2.5 py-2 rounded-md border border-[var(--border)] text-[var(--text)] bg-[rgba(255,255,255,.04)] hover:bg-[rgba(255,255,255,.08)]"
+          >
+            {theme === 'light' ? '🌙' : '☀️'}
+          </button>
         </nav>
         <button
           className="menu-toggle md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-md border border-[var(--border)] text-[var(--text)] bg-[rgba(255,255,255,.04)]"
@@ -86,6 +113,13 @@ export default function Header() {
               {i.label}
             </Link>
           ))}
+          <button
+            onClick={() => { toggleTheme(); setOpen(false); }}
+            aria-label="Toggle theme"
+            className="mt-2 w-full px-2.5 py-2 rounded-md border border-[var(--border)] text-[var(--text)] bg-[rgba(255,255,255,.04)] hover:bg-[rgba(255,255,255,.08)]"
+          >
+            {theme === 'light' ? '🌙 Mode Malam' : '☀️ Mode Siang'}
+          </button>
         </nav>
       </div>
       <div className="header-progress"><div className="bar" /></div>

@@ -4,8 +4,11 @@
 html { scroll-behavior: smooth; }
 :root {
   --bg: #0a0f13;
+  --bg-1: #151a20;
   --text: #eaeef4;
   --muted: #a0a8b8;
+  --chip-bg: rgba(255,255,255,.05);
+  --badge-bg: rgba(255,255,255,.1);
   /* Monochrome with red → warm orange accent */
   --primary: #ff3b30;           /* strong red */
   --primary-rgb: 255, 59, 48;
@@ -15,14 +18,30 @@ html { scroll-behavior: smooth; }
   --border: rgba(255, 255, 255, 0.08);
 }
 
+/* Light theme overrides */
+:root[data-theme='light'] {
+  --bg: #f7f9fc;
+  --bg-1: #eef2f7;
+  --text: #0b1117;
+  --muted: #44515f;
+  --chip-bg: rgba(0,0,0,.06);
+  --badge-bg: rgba(0,0,0,.06);
+  --primary: #ff3b30;
+  --primary-rgb: 255, 59, 48;
+  --accent: #ff7a18;
+  --accent-rgb: 255, 122, 24;
+  --surface: #ffffff;
+  --border: rgba(0, 0, 0, 0.08);
+}
+
 * { box-sizing: border-box; }
 html, body { height: 100%; }
 /* Hindari scroll horizontal tak sengaja (mobile-safe) */
 html, body { overflow-x: hidden; }
 body {
   margin: 0;
-  /* Monochrome gradient: grey → black → grey */
-  background: linear-gradient(180deg, #151a20 0%, #0a0f13 50%, #151a20 100%);
+  /* Gradient uses theme variables for day/night */
+  background: linear-gradient(180deg, var(--bg-1) 0%, var(--bg) 50%, var(--bg-1) 100%);
   color: var(--text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -36,6 +55,7 @@ body {
 
 /* Header */
 .header { position: sticky; top: 0; z-index: 50; backdrop-filter: blur(10px); background: rgba(10, 14, 19, .45); border-bottom: 1px solid var(--border); }
+:root[data-theme='light'] .header { background: rgba(255, 255, 255, .65); }
 .header-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; }
 .brand { font-weight: 600; letter-spacing: .2px; }
 .nav { gap: 14px; }
@@ -106,8 +126,12 @@ body {
 /* Skills */
 .skills .chips { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
 .skills .skills-panel { background: rgba(255,255,255,.06); backdrop-filter: saturate(200%) blur(18px); -webkit-backdrop-filter: saturate(200%) blur(18px); border: 1px solid rgba(255,255,255,.22); box-shadow: 0 10px 28px rgba(0,0,0,.22); contain: layout paint; }
-.chip { padding: 8px 12px; border-radius: 999px; border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.05); color: var(--text); font-size: .95rem; transition: transform .2s ease, background .2s ease, border-color .2s ease; }
+:root[data-theme='light'] .skills .skills-panel { background: rgba(255,255,255,.9); border-color: rgba(0,0,0,.08); box-shadow: 0 6px 18px rgba(0,0,0,.08); }
+.chip { padding: 8px 12px; border-radius: 999px; border: 1px solid var(--border); background: var(--chip-bg); color: var(--text); font-size: .95rem; transition: transform .2s ease, background .2s ease, border-color .2s ease; }
 .chip:hover { transform: translateY(-1px); background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.24); }
+
+/* Generic badge that adapts to theme */
+.badge { background: var(--badge-bg); color: var(--text); }
 
 /* Contact */
 .contact .cta { margin-top: 8px; }
@@ -134,6 +158,7 @@ body {
   .hero-orb { filter: blur(24px); opacity: .28; }
   .glass { backdrop-filter: none; -webkit-backdrop-filter: none; box-shadow: 0 4px 16px rgba(0,0,0,.2); }
   .header { backdrop-filter: none; }
+  :root[data-theme='light'] .header { background: rgba(255,255,255,.8); }
   /* Skills: matikan backdrop-filter panel demi performa */
   .skills .skills-panel { backdrop-filter: none; -webkit-backdrop-filter: none; background: rgba(255,255,255,.045); box-shadow: 0 6px 18px rgba(0,0,0,.2); }
 }
