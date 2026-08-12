@@ -1,31 +1,46 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Press_Start_2P, VT323 } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Ornaments from "@/components/Ornaments";
+import Sfx from "@/components/Sfx";
 
-const inter = Inter({ subsets: ["latin"] });
+const pixelFont = Press_Start_2P({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-pixel",
+  display: "swap",
+});
+
+const bodyFont = VT323({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-body",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
-  title: "Risanggalih | Profile",
+  title: "RISANGALIH | PRESS START",
   description:
-    "Portfolio with Next.js & GSAP: high performance, smooth animations, meaningful storytelling.",
+    "A personal profile powered by Next.js — reborn as an 8-bit arcade game. Press start to explore quests, skills and projects.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" className={`${pixelFont.variable} ${bodyFont.variable}`}>
+      <body>
+        <Sfx />
+        <div className="scanlines" aria-hidden />
         <Ornaments />
         <Header />
         {children}
-        {/* Floating Contact button */}
+        {/* Floating contact button */}
         <a
           href="#contact"
           aria-label="Go to Contact"
-          className="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full bg-[var(--primary)] text-black flex items-center justify-center shadow-lg hover:scale-105 transition-transform"
+          className="btn btn-red btn-fab fixed bottom-6 right-6 z-50"
         >
-          C
+          ▶
         </a>
       </body>
     </html>

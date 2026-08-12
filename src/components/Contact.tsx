@@ -8,15 +8,12 @@ export default function Contact() {
   useEffect(() => {
     const g = gsapInit();
     const ctx = gsap.context(() => {
-      g.from(".contact .cta", {
-        y: 24,
+      g.from(".gameover-panel", {
+        y: 30,
         opacity: 0,
         duration: 0.6,
         ease: "power3.out",
-        scrollTrigger: {
-          trigger: root.current,
-          start: "top 80%",
-        },
+        scrollTrigger: { trigger: root.current, start: "top 80%" },
       });
     }, root);
 
@@ -26,71 +23,76 @@ export default function Contact() {
   return (
     <section ref={root} className="section contact" id="contact">
       <div className="container">
-        <div className="contact-panel glass group relative mt-2 p-6 rounded-xl border overflow-hidden">
-          {/* Decorative glow */}
-          <span className="abs-glow g1" />
-          <span className="abs-glow g2" />
-          <span className="abs-glow g3" />
-
+        <div className="gameover-panel">
           <div className="contact-grid">
-            {/* Left: Title & CTA */}
+            {/* Left: title & CTA */}
             <div>
-              <h2 className="section-title">Let’s Collaborate</h2>
-              <p className="muted">I love building products with impactful experiences.</p>
-              <div className="cta mt-3 flex gap-2 flex-wrap">
-                <a className="btn primary" href="mailto:sdwirisanggalih@gmail.com" aria-label="Email">
-                  Email Me
+              <h2 className="go-title pixel">LEVEL COMPLETE!</h2>
+              <p className="go-sub">
+                Thanks for playing through my quest log. Want to team up on a
+                new adventure?
+              </p>
+              <a
+                className="go-hint blink pixel"
+                href="mailto:sdwirisanggalih@gmail.com"
+                style={{ display: "inline-block" }}
+              >
+                ▶ PRESS START TO START A NEW GAME
+              </a>
+              <div className="contact-cta">
+                <a
+                  className="btn btn-red"
+                  href="mailto:sdwirisanggalih@gmail.com"
+                  aria-label="Email"
+                >
+                  EMAIL ME
                 </a>
                 <a
-                  className="btn"
+                  className="btn btn-green"
                   href="https://wa.me/6285646444805"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="WhatsApp"
                 >
-                  WhatsApp
+                  WHATSAPP
                 </a>
               </div>
             </div>
 
-            {/* Right: Link cards */}
-            <div className="contact-links">
-              <a
-                className="link-card glass"
-                href="mailto:sdwirisanggalih@gmail.com"
-                aria-label="Email"
-              >
-                <span className="link-label">Email</span>
+            {/* Right: link cards */}
+            <div className="dark-links">
+              <a className="dark-link" href="mailto:sdwirisanggalih@gmail.com" aria-label="Email">
+                <span className="link-label pixel">EMAIL</span>
                 <span className="link-value">sdwirisanggalih@gmail.com</span>
               </a>
               <a
-                className="link-card glass"
+                className="dark-link"
                 href="https://wa.me/6285646444805"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="WhatsApp"
               >
-                <span className="link-label">WhatsApp</span>
+                <span className="link-label pixel">WHATSAPP</span>
                 <span className="link-value">+62 856-4644-4805</span>
               </a>
               <a
-                className="link-card glass"
+                className="dark-link"
                 href="https://www.linkedin.com/in/septiandr/"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="LinkedIn"
               >
-                <span className="link-label">LinkedIn</span>
+                <span className="link-label pixel">LINKEDIN</span>
                 <span className="link-value">/in/septiandr</span>
               </a>
               <a
-                className="link-card glass"
+                className="dark-link"
                 href="https://github.com/septiandr"
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Github"
+                aria-label="GitHub"
               >
-                <span className="link-label">GitHub</span>
+                <span className="link-label pixel">GITHUB</span>
                 <span className="link-value">@septiandr</span>
               </a>
             </div>

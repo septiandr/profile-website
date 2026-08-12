@@ -10,18 +10,9 @@ export default function Experience() {
     const g = gsapInit();
     const ctx = gsap.context(() => {
       const el = root.current!;
-      const stepEls = gsap.utils.toArray<HTMLElement>(".experience .step");
+      const steps = gsap.utils.toArray<HTMLElement>(".quest");
 
-      const isMobile =
-        typeof window !== "undefined" &&
-        window.matchMedia("(max-width: 767px)").matches;
-
-      // Hitung panjang animasi berdasarkan jumlah item (paling stabil)
-      const perItem = isMobile ? 350 : 580;
-      const endLen = stepEls.length * perItem;
-
-      // ==== Per-card ScrollTrigger: tampil 3+ card di viewport, tanpa timeline global ====
-      stepEls.forEach((step) => {
+      steps.forEach((step) => {
         g.fromTo(
           step,
           { opacity: 0, y: 24 },
@@ -30,10 +21,9 @@ export default function Experience() {
             y: 0,
             duration: 0.45,
             ease: "power3.out",
-            force3D: true,
             scrollTrigger: {
               trigger: step,
-              start: "top 75%",
+              start: "top 82%",
               toggleActions: "play none none none",
               once: true,
               invalidateOnRefresh: true,
@@ -42,84 +32,70 @@ export default function Experience() {
         );
       });
 
-      // ==== Progress bar berdasarkan progres section ====
+      // Quest progress bar (scoped to this section)
       ScrollTrigger.create({
         trigger: el,
         start: "top top",
         end: "bottom bottom",
         onUpdate: (self) => {
-          g.set(".experience-progress .bar", { scaleX: self.progress });
+          g.set(".experience .section-progress .bar", { scaleX: self.progress });
         },
       });
     }, root);
 
-    // Fix layout shift / hydration Next.js
     setTimeout(() => ScrollTrigger.refresh(), 50);
-
     return () => ctx.revert();
   }, []);
 
   return (
     <section ref={root} className="section experience" id="experience">
       <div className="container">
-        <div className="experience-header">
-          <h2 className="section-title">Experience</h2>
-          <div className="experience-progress">
+        <div className="section-head">
+          <h2 className="section-title">QUESTS</h2>
+          <div className="section-progress">
             <div className="bar" />
           </div>
         </div>
+        <p className="muted" style={{ marginTop: -18 }}>
+          QUEST LOG — completed missions from my career journey.
+        </p>
 
-        <ul className="steps">
+        <ul className="quests" style={{ marginTop: 22 }}>
           {experience.map((s, i) => (
-            <li key={i} className="step">
-              <div className="flex items-start justify-between gap-3">
-                <h3 className="step-title">
-                  {s.role} <span className="text-[var(--muted)]">@ {s.company}</span>
-                </h3>
-                {s.period && (
-                  <span className="text-xs text-[var(--muted)] shrink-0">
-                    {s.period}
-                  </span>
-                )}
+            <li key={i} className="quest">
+              <div className="quest-head">
+                <span className="quest-icon">⭐</span>
+                <div style={{ minWidth: 0 }}>
+                  <h3 className="quest-role">
+                    {s.role} <span style={{ color: "var(--muted)" }}>@ {s.company}</span>
+                  </h3>
+                  {s.title && <p className="quest-company">{s.title}</p>}
+                </div>
+                <span className="quest-no">QUEST {String(i + 1).padStart(2, "0")}</span>
               </div>
 
-              {s.location && (
-                <div className="text-[10px] text-[var(--muted)] mt-0.5">
-                  {s.location}
+              <div className="quest-meta">
+                <span>📅 {s.period}</span>
+                {s.location && <span>📍 {s.location}</span>}
+              </div>
+
+              {s.desc && <p className="quest-desc">{s.desc}</p>}
+
+              {s.highlights && (
+                <div className="quest-rewards">
+                  <span className="reward-label pixel">REWARDS</span>
+                  <ul>
+                    {s.highlights.map((point, idx) => (
+                      <li key={`hl-${i}-${idx}`}>{point}</li>
+                    ))}
+                  </ul>
                 </div>
               )}
 
-              {s.title && (
-                <div className="text-[11px] text-[var(--text)] mt-1">{s.title}</div>
-              )}
-
-              {s.desc && (
-                <p className="step-desc text-[var(--muted)] mt-2">{s.desc}</p>
-              )}
-
-              {s.highlights && (
-                <ul className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-1">
-                  {s.highlights.map((point, idx) => (
-                    <li
-                      key={`hl-${i}-${idx}`}
-                      className="flex items-start gap-1.5 text-[11px] text-[var(--text)]"
-                    >
-                      <span className="inline-flex items-center justify-center w-4 h-4 rounded-full badge text-[10px] shrink-0">
-                        ✓
-                      </span>
-                      <span className="line-clamp-1">{point}</span>
-                    </li>
-                  ))}
-                </ul>
-              )}
-
               {s.tech && (
-                <div className="mt-2 flex flex-wrap gap-1">
+                <div className="quest-stack">
                   {s.tech.map((t, idx) => (
-                    <span
-                      key={`tech-${i}-${idx}`}
-                      className="chip text-[10px] px-1.5 py-0.5"
-                    >
+                    <span key={`tech-${i}-${idx}`} className="chip">
                       {t}
                     </span>
                   ))}

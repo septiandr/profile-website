@@ -4,11 +4,15 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#00e5ff",
-        accent: "#7c4dff",
+        primary: "#e52521",
+        accent: "#fbd000",
+        retroDark: "#1c1c3c",
+        retroSky: "#5c94fc",
+        retroGreen: "#3aa43a",
       },
       boxShadow: {
-        glow: "0 0 40px rgba(124,77,255,0.35)",
+        pixel: "4px 4px 0 rgba(28,28,60,.85)",
+        "pixel-lg": "8px 8px 0 rgba(28,28,60,.85)",
       },
     },
   },

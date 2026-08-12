@@ -1,130 +1,106 @@
 "use client";
 import React, { useEffect, useRef } from "react";
-import { gsapInit, gsap } from "@/lib/gsap";
 import Image from "next/image";
+import { gsapInit, gsap } from "@/lib/gsap";
+
+const LETTER_COLORS = [
+  "#e52521", // R
+  "#fbd000", // I
+  "#3aa43a", // S
+  "#2456d0", // A
+  "#e52521", // N
+  "#fbd000", // G
+  "#3aa43a", // A
+  "#2456d0", // L
+  "#e52521", // I
+  "#fbd000", // H
+];
 
 export default function Hero() {
-  const root = useRef<HTMLDivElement>(null);
+  const root = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const g = gsapInit();
     const ctx = gsap.context(() => {
       g.from(".hero-line", {
-        y: 40,
+        y: 24,
         opacity: 0,
-        duration: 0.8,
+        duration: 0.5,
         ease: "power3.out",
-        stagger: 0.12,
+        stagger: 0.15,
       });
-      g.from(".hero-cta", {
-        y: 20,
+      g.from(".hero-avatar-wrap", {
+        scale: 0.7,
         opacity: 0,
-        duration: 0.8,
-        ease: "power3.out",
-        delay: 0.3,
+        duration: 0.5,
+        ease: "back.out(2)",
+        delay: 0.25,
       });
-      g.to(".hero-orb", {
-        rotate: 360,
-        duration: 30,
-        repeat: -1,
-        ease: "linear",
+      g.from(".press-start", {
+        opacity: 0,
+        scale: 0.9,
+        duration: 0.4,
+        delay: 0.9,
       });
-
-      // Magnetic CTA and photo hover parallax
-      const cta = document.querySelector<HTMLElement>(".hero-cta .btn.primary");
-      const photo = document.querySelector<HTMLElement>(".hero-photo");
-      if (cta) {
-        const onMove = (e: PointerEvent) => {
-          const rect = cta.getBoundingClientRect();
-          const mx = e.clientX - rect.left - rect.width / 2;
-          const my = e.clientY - rect.top - rect.height / 2;
-          g.to(cta, {
-            x: mx * 0.15,
-            y: my * 0.15,
-            scale: 1.03,
-            duration: 0.2,
-            ease: "power2.out",
-          });
-        };
-        const onLeave = () =>
-          g.to(cta, {
-            x: 0,
-            y: 0,
-            scale: 1,
-            duration: 0.25,
-            ease: "power3.out",
-          });
-        cta.addEventListener("pointermove", onMove);
-        cta.addEventListener("pointerleave", onLeave);
-      }
-      if (photo) {
-        const onMoveP = (e: PointerEvent) => {
-          const rect = photo.getBoundingClientRect();
-          const mx = e.clientX - rect.left - rect.width / 2;
-          const my = e.clientY - rect.top - rect.height / 2;
-          g.to(photo, {
-            x: mx * 0.05,
-            y: my * 0.05,
-            scale: 1.02,
-            duration: 0.3,
-            ease: "power2.out",
-          });
-        };
-        const onLeaveP = () =>
-          g.to(photo, {
-            x: 0,
-            y: 0,
-            scale: 1,
-            duration: 0.3,
-            ease: "power3.out",
-          });
-        photo.addEventListener("pointermove", onMoveP);
-        photo.addEventListener("pointerleave", onLeaveP);
-      }
     }, root);
 
     return () => ctx.revert();
   }, []);
 
   return (
-    <section ref={root} className="section hero" id="home">
-      <div className="hero-bg">
-        <div className="hero-orb orb-1" />
-        <div className="hero-orb orb-2" />
-      </div>
-      <div className="container hero-grid grid md:grid-cols-[1.4fr_1fr] gap-7 items-center">
-        <div className="hero-content">
+    <section ref={root} className="hero" id="home">
+      <div className="container hero-inner">
+        <div>
+          <p className="hero-tag hero-line pixel">★ 8-BIT WEB DEVELOPER ★</p>
+
           <h1 className="hero-title">
-            <span className="hero-line">
-              Hi, I’m <span className="accent">Risanggalih</span>, a{" "}
-              <span className="accent">Web Developer</span>.
-            </span>
-            <span className="hero-line">I craft web experiences that are </span>
-            <span className="hero-line">
-              <span className="accent">fast</span>,{" "}
-              <span className="accent">smooth</span>, and
-              <span className="accent"> meaningful</span>.
-            </span>
+            {"RISANGALIH".split("").map((ch, i) => (
+              <span
+                key={i}
+                className="hero-letter"
+                style={{
+                  color: LETTER_COLORS[i % LETTER_COLORS.length],
+                  animationDelay: `${(i % 5) * 0.12}s`,
+                }}
+              >
+                {ch}
+              </span>
+            ))}
           </h1>
-          <p className="hero-subtitle">
-            A narrative portfolio powered by Tailwind & GSAP — explore my work.
+
+          <p className="hero-sub hero-line pixel">
+            HI! I’M SEPTIAN D RISANGALIH — I CRAFT <span className="hl">WEB EXPERIENCES</span>
+            <br />
+            THAT ARE <span className="hl">FAST</span> · <span className="hl">SMOOTH</span> ·{" "}
+            <span className="hl">MEANINGFUL</span>
           </p>
-          <div className="hero-cta">
-            <a href="#projects" className="btn primary">
-              Explore portfolio
-            </a>
+
+          <div className="hero-info hero-line pixel">
+            <span>1UP 000000</span>
+            <span>HI-SCORE 000100</span>
+            <span className="coin-text">COINS 99</span>
           </div>
+
+          <a href="#projects" className="btn press-start">
+            <span className="blink">▶ PRESS START</span>
+          </a>
         </div>
-        <div className="hero-photo" aria-label="Profile photo placeholder">
-          <Image
-            width={400}
-            height={400}
-            src="/profile.jpg"
-            alt="Profile"
-            className="w-full h-full object-cover rounded-lg"
-          />
+
+        <div className="hero-avatar-wrap">
+          <div className="hero-avatar nes-frame">
+            <Image
+              src="/profile.jpg"
+              alt="Pixel portrait of Risanggalih"
+              width={96}
+              height={96}
+              priority
+            />
+          </div>
+          <span className="avatar-label pixel">PLAYER 1</span>
         </div>
       </div>
+
+      <div className="ground-strip" aria-hidden />
     </section>
   );
 }

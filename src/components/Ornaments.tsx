@@ -1,101 +1,19 @@
-"use client";
-import React, { useEffect, useRef } from "react";
-import { gsapInit, gsap } from "@/lib/gsap";
-
+/**
+ * Floating retro world props: clouds, sun, coins and ? blocks.
+ * Pure CSS animations — no JS needed.
+ */
 export default function Ornaments() {
-  const root = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const g = gsapInit();
-    const ctx = gsap.context(() => {
-      const orns = gsap.utils.toArray<HTMLElement>(".orn");
-      const isMobile = () => window.matchMedia("(max-width: 768px)").matches;
-      orns.forEach((o, i) => {
-        if (isMobile()) {
-          // Mobile: hanya float ringan, tanpa rotasi/scale/opacity untuk kinerja
-          g.to(o, {
-            y: `+=${gsap.utils.random(12, 18)}`,
-            duration: gsap.utils.random(3.8, 5.2),
-            ease: "sine.inOut",
-            yoyo: true,
-            repeat: -1,
-            repeatRefresh: true,
-            overwrite: false,
-            force3D: true,
-          });
-          g.to(o, {
-            x: `+=${gsap.utils.random(8, 14)}`,
-            duration: gsap.utils.random(4.2, 5.8),
-            ease: "sine.inOut",
-            yoyo: true,
-            repeat: -1,
-            repeatRefresh: true,
-            overwrite: false,
-            force3D: true,
-          });
-        } else {
-          // Desktop: animasi lengkap
-          g.to(o, {
-            y: `+=${gsap.utils.random(26, 42)}`,
-            duration: gsap.utils.random(2.4, 3.6),
-            ease: "sine.inOut",
-            yoyo: true,
-            repeat: -1,
-            repeatRefresh: true,
-            overwrite: false,
-            force3D: true,
-          });
-          g.to(o, {
-            x: `+=${gsap.utils.random(18, 32)}`,
-            duration: gsap.utils.random(3.2, 4.8),
-            ease: "sine.inOut",
-            yoyo: true,
-            repeat: -1,
-            repeatRefresh: true,
-            overwrite: false,
-            force3D: true,
-          });
-          g.to(o, {
-            rotate: i % 2 === 0 ? "+=24" : "-=24",
-            duration: gsap.utils.random(36, 54),
-            ease: "none",
-            repeat: -1,
-            overwrite: false,
-            force3D: true,
-          });
-          g.to(o, {
-            scale: () => gsap.utils.random(0.96, 1.1),
-            duration: gsap.utils.random(4.5, 7.0),
-            ease: "sine.inOut",
-            yoyo: true,
-            repeat: -1,
-            repeatRefresh: true,
-            overwrite: false,
-            force3D: true,
-          });
-          g.to(o, {
-            opacity: () => gsap.utils.random(0.28, 0.42),
-            duration: gsap.utils.random(4.5, 7.0),
-            ease: "sine.inOut",
-            yoyo: true,
-            repeat: -1,
-            repeatRefresh: true,
-            overwrite: false,
-          });
-        }
-      });
-    }, root);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
-    <div ref={root} className="ornaments" aria-hidden>
-      <span className="orn o1" />
-      <span className="orn o2" />
-      <span className="orn o3" />
-      <span className="orn o4" />
-      <span className="orn o5" />
+    <div className="ornaments" aria-hidden>
+      <span className="orn pixel-sun sun" />
+      <span className="orn pixel-cloud cloud c1" />
+      <span className="orn pixel-cloud cloud c2" />
+      <span className="orn pixel-cloud cloud c3" />
+      <span className="orn pixel-coin coin k1" />
+      <span className="orn pixel-coin coin k2" />
+      <span className="orn pixel-coin coin k3" />
+      <span className="orn pixel-block block b1" />
+      <span className="orn pixel-block block b2" />
     </div>
   );
 }
