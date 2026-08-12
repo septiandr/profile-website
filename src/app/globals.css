@@ -182,6 +182,30 @@ body {
 .nav a:hover { color: var(--dark); background: var(--yellow); border-color: var(--dark); }
 .nav a.active { color: var(--dark); background: var(--yellow); border-color: var(--dark); box-shadow: 3px 3px 0 rgba(0,0,0,.4); }
 .header-coin { font-family: var(--font-pixel, "Press Start 2P", monospace); font-size: 10px; color: #fff; text-shadow: 2px 2px 0 rgba(0,0,0,.6); white-space: nowrap; }
+.header-actions { display: flex; align-items: center; gap: 10px; }
+
+/* Music toggle (HUD) */
+.music-toggle {
+  font-family: var(--font-pixel, "Press Start 2P", monospace);
+  font-size: 10px;
+  line-height: 1;
+  color: var(--yellow);
+  background: transparent;
+  border: 3px solid rgba(255, 255, 255, 0.6);
+  padding: 11px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  transition: background 0.08s steps(2), color 0.08s steps(2), border-color 0.08s steps(2);
+}
+.music-toggle:hover { background: var(--yellow); color: var(--dark); border-color: var(--dark); }
+.music-toggle.is-off { color: rgba(255, 255, 255, 0.5); }
+.music-toggle.is-off:hover { color: var(--dark); }
+.music-toggle .note { display: inline-block; }
+.music-toggle .note.playing { animation: note-pulse 0.7s steps(2, jump-none) infinite; }
+
 .header-progress { height: 6px; background: rgba(255, 255, 255, 0.15); }
 .header-progress .bar { height: 100%; width: 0%; background: var(--yellow); }
 
@@ -590,6 +614,10 @@ body {
 @keyframes coin-spin {
   0%, 100% { transform: scaleX(1); }
   50% { transform: scaleX(0.15); }
+}
+@keyframes note-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.85); }
 }
 @keyframes cloud-float {
   0%, 100% { transform: translateX(0); }

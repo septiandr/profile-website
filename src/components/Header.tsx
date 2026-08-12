@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { music } from "@/lib/sound";
 import { gsapInit, gsap, ScrollTrigger } from "@/lib/gsap";
 
 const items = [
@@ -14,6 +15,32 @@ const items = [
 export default function Header() {
   const root = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
+  const [musicOn, setMusicOn] = useState(true);
+  const [musicPlaying, setMusicPlaying] = useState(false);
+
+  // Sync the HUD with the saved music preference once mounted, then keep
+  // listening — the music engine broadcasts state changes (e.g. it may be
+  // started by the first user gesture via Sfx).
+  useEffect(() => {
+    const sync = () => {
+      setMusicOn(music.isEnabled());
+      setMusicPlaying(music.isPlaying());
+    };
+    sync();
+    const onChange = (e: Event) => {
+      const detail = (e as CustomEvent<{ enabled: boolean; playing: boolean }>).detail;
+      setMusicOn(detail.enabled);
+      setMusicPlaying(detail.playing);
+    };
+    window.addEventListener("pixel:music", onChange);
+    return () => window.removeEventListener("pixel:music", onChange);
+  }, []);
+
+  const toggleMusic = () => {
+    const on = music.toggle();
+    setMusicOn(on);
+    setMusicPlaying(music.isPlaying());
+  };
 
   useEffect(() => {
     const g = gsapInit();
@@ -73,7 +100,21 @@ export default function Header() {
             </Link>
           ))}
         </nav>
-        <div className="header-coin hidden md:block">COINS 99</div>
+        <div className="header-actions">
+          <button
+            type="button"
+            className={`music-toggle ${musicOn ? "is-on" : "is-off"}`}
+            aria-pressed={musicOn}
+            aria-label={musicOn ? "Turn background music off" : "Turn background music on"}
+            onClick={toggleMusic}
+          >
+            <span className={`note ${musicOn && musicPlaying ? "playing" : ""}`} aria-hidden>
+              ♪
+            </span>
+            {musicOn ? "ON" : "OFF"}
+          </button>
+          <div className="header-coin hidden md:block">COINS 99</div>
+        </div>
         <button
           className="menu-toggle md:hidden"
           aria-label="Toggle navigation"
