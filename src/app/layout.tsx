@@ -26,9 +26,22 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  // suppressHydrationWarning on <html>: the pre-paint theme script below sets
+  // data-theme before React hydrates, so attribute diffing on this element
+  // must be skipped (standard next-themes pattern).
   return (
-    <html lang="en" className={`${pixelFont.variable} ${bodyFont.variable}`}>
+    <html
+      lang="en"
+      className={`${pixelFont.variable} ${bodyFont.variable}`}
+      suppressHydrationWarning
+    >
       <body>
+        {/* Apply the saved (or system) theme before paint to avoid a flash */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem("pixel-theme");if(t!=="day"&&t!=="night"){t=(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)?"night":"day";}document.documentElement.setAttribute("data-theme",t);}catch(e){document.documentElement.setAttribute("data-theme","day");}})();`,
+          }}
+        />
         <Sfx />
         <div className="scanlines" aria-hidden />
         <Ornaments />

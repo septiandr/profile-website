@@ -3,7 +3,8 @@
 
 /* ============================================================
    RETRO PIXEL THEME — BRIGHT ARCADE (Mario / Kirby style)
-   Single fixed theme (no light/dark toggle).
+   Day mode by default, with an optional night mode
+   ([data-theme="night"] on <html>).
    ============================================================ */
 
 :root {
@@ -11,7 +12,8 @@
   --sky-2: #5c94fc;
   --sky-3: #3f7fe8;
   --dark: #1c1c3c;          /* ink / outline color */
-  --ink: #1c1c3c;
+  --ink: #1c1c3c;           /* text on bright accents (buttons) */
+  --text: #1c1c3c;          /* text on sky / panels */
   --cream: #fdf6d8;         /* panel background */
   --red: #e52521;
   --red-dark: #8a1613;
@@ -37,7 +39,7 @@ body {
   font-family: var(--font-body, "VT323", "Courier New", monospace);
   font-size: 21px;
   line-height: 1.45;
-  color: var(--ink);
+  color: var(--text);
   background: linear-gradient(180deg, var(--sky-1) 0%, var(--sky-2) 45%, var(--sky-3) 100%);
   background-attachment: fixed;
   -webkit-font-smoothing: none;
@@ -205,6 +207,29 @@ body {
 .music-toggle.is-off:hover { color: var(--dark); }
 .music-toggle .note { display: inline-block; }
 .music-toggle .note.playing { animation: note-pulse 0.7s steps(2, jump-none) infinite; }
+.music-toggle .music-label { display: inline-block; }
+
+/* Theme toggle (day / night) */
+.theme-toggle {
+  font-family: var(--font-pixel, "Press Start 2P", monospace);
+  font-size: 10px;
+  line-height: 1;
+  color: #7fd4ff;
+  background: transparent;
+  border: 3px solid rgba(255, 255, 255, 0.6);
+  padding: 11px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  transition: background 0.08s steps(2), color 0.08s steps(2), border-color 0.08s steps(2);
+}
+.theme-toggle:hover { background: #7fd4ff; color: var(--dark); border-color: var(--dark); }
+.theme-toggle.is-night { color: #f4c15d; }
+.theme-toggle.is-night:hover { background: #f4c15d; color: var(--dark); }
+.theme-toggle .theme-icon { display: inline-block; }
+.theme-toggle .theme-label { display: inline-block; }
 
 .header-progress { height: 6px; background: rgba(255, 255, 255, 0.15); }
 .header-progress .bar { height: 100%; width: 0%; background: var(--yellow); }
@@ -369,7 +394,7 @@ body {
 .avatar-label {
   font-family: var(--font-pixel, "Press Start 2P", monospace);
   font-size: 11px;
-  color: var(--dark);
+  color: var(--text);
   background: var(--cream);
   border: 3px solid var(--dark);
   box-shadow: 3px 3px 0 rgba(28, 28, 60, 0.6);
@@ -442,7 +467,7 @@ body {
 .cart-thumb img { image-rendering: pixelated; }
 .cart-body { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 10px; flex: 1; min-width: 0; }
 .cart-cat { align-self: flex-start; }
-.cart-desc { margin: 0; font-size: 19px; line-height: 1.35; color: var(--ink); overflow-wrap: anywhere; }
+.cart-desc { margin: 0; font-size: 19px; line-height: 1.35; color: var(--text); overflow-wrap: anywhere; }
 .cart-stack { display: flex; flex-wrap: wrap; gap: 6px; }
 .cart-stack .chip { font-size: 7px; padding: 5px 7px; box-shadow: 2px 2px 0 rgba(28, 28, 60, 0.9); }
 .cart-play {
@@ -484,7 +509,7 @@ body {
   font-size: 13px;
   line-height: 1.6;
   margin: 0 0 4px;
-  color: var(--ink);
+  color: var(--text);
   overflow-wrap: anywhere;
 }
 .quest-company { margin: 0; font-size: 20px; color: var(--muted); }
@@ -500,7 +525,7 @@ body {
   white-space: nowrap;
 }
 .quest-meta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 12px; font-size: 19px; color: var(--muted); }
-.quest-desc { margin: 12px 0 0; color: var(--ink); }
+.quest-desc { margin: 12px 0 0; color: var(--text); }
 .quest-rewards { margin-top: 12px; }
 .reward-label { display: inline-block; font-size: 10px; color: #fff; background: var(--green); border: 3px solid var(--dark); box-shadow: 3px 3px 0 var(--green-dark); padding: 5px 8px; margin-bottom: 8px; }
 .quest-rewards ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 14px; }
@@ -538,7 +563,7 @@ body {
   font-family: var(--font-pixel, "Press Start 2P", monospace);
   font-size: 8px;
   line-height: 1.6;
-  color: var(--ink);
+  color: var(--text);
   overflow-wrap: anywhere;
 }
 .item-kind {
@@ -590,7 +615,7 @@ body {
   flex-wrap: wrap;
   padding: 12px 14px;
   background: var(--cream);
-  color: var(--ink);
+  color: var(--text);
   border: 3px solid var(--dark);
   box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.4);
   text-decoration: none;
@@ -601,6 +626,96 @@ body {
 .dark-link .link-label { font-family: var(--font-pixel, "Press Start 2P", monospace); font-size: 10px; }
 .dark-link .link-value { color: var(--muted); overflow-wrap: anywhere; text-align: right; }
 .dark-link:hover .link-value { color: var(--ink); }
+
+/* ============================================================
+   NIGHT MODE — midnight stage select palette
+   Activated by data-theme="night" on <html>.
+   ============================================================ */
+html[data-theme="night"] {
+  --sky-1: #0d1030;
+  --sky-2: #191c4e;
+  --sky-3: #2a1f63;
+  --dark: #070718;
+  --ink: #1c1c3c;       /* unchanged: text on bright accents */
+  --text: #fdf6d8;      /* light text on sky / dark panels */
+  --cream: #252a54;     /* dark stage-select panel */
+  --muted: rgba(253, 246, 216, 0.62);
+}
+
+/* Starfield sky */
+html[data-theme="night"] body {
+  background:
+    radial-gradient(2px 2px at 18% 12%, rgba(255, 255, 255, 0.9), transparent 100%),
+    radial-gradient(2px 2px at 32% 28%, rgba(255, 255, 255, 0.55), transparent 100%),
+    radial-gradient(1.5px 1.5px at 47% 8%, rgba(255, 255, 255, 0.8), transparent 100%),
+    radial-gradient(2px 2px at 63% 22%, rgba(255, 255, 255, 0.6), transparent 100%),
+    radial-gradient(1.5px 1.5px at 78% 12%, rgba(255, 255, 255, 0.85), transparent 100%),
+    radial-gradient(2px 2px at 88% 32%, rgba(255, 255, 255, 0.5), transparent 100%),
+    radial-gradient(1.5px 1.5px at 12% 44%, rgba(255, 255, 255, 0.4), transparent 100%),
+    radial-gradient(2px 2px at 92% 58%, rgba(255, 255, 255, 0.35), transparent 100%),
+    radial-gradient(1.5px 1.5px at 55% 48%, rgba(255, 255, 255, 0.3), transparent 100%),
+    linear-gradient(180deg, var(--sky-1) 0%, var(--sky-2) 45%, var(--sky-3) 100%);
+}
+
+/* Sun becomes the moon (craters, no spinning rays) */
+html[data-theme="night"] .pixel-sun {
+  background:
+    radial-gradient(circle at 32% 36%, rgba(20, 20, 50, 0.28) 4px, transparent 5px),
+    radial-gradient(circle at 64% 60%, rgba(20, 20, 50, 0.2) 3px, transparent 4px),
+    radial-gradient(circle at 72% 28%, rgba(20, 20, 50, 0.16) 2px, transparent 3px),
+    #f4f4ee;
+  box-shadow: none;
+  animation: none;
+}
+
+/* Night clouds */
+html[data-theme="night"] .pixel-cloud {
+  background: #3b4178;
+  box-shadow:
+    22px 0 0 -3px #3b4178, 22px 0 0 0 var(--dark),
+    -22px 0 0 -3px #3b4178, -22px 0 0 0 var(--dark),
+    0 -18px 0 -3px #3b4178, 0 -18px 0 0 var(--dark),
+    11px -18px 0 -3px #3b4178, 11px -18px 0 0 var(--dark),
+    -11px -18px 0 -3px #3b4178, -11px -18px 0 0 var(--dark);
+}
+
+/* Grass under moonlight */
+html[data-theme="night"] .ground-strip {
+  background:
+    linear-gradient(180deg, #2f5c3a 0 12px, #1f4028 12px 18px),
+    repeating-linear-gradient(45deg, #43301f 0 10px, #2c2018 10px 20px),
+    repeating-linear-gradient(135deg, rgba(0, 0, 0, 0.25) 0 10px, transparent 10px 20px);
+  background-size: 100% 18px, auto, auto;
+  background-position: 0 0, 0 18px, 0 18px;
+  background-repeat: no-repeat, repeat, repeat;
+}
+
+/* Chips flip to dark */
+html[data-theme="night"] .chip {
+  background: #343a72;
+  color: var(--text);
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.6);
+}
+
+/* Progress track blends into the dark panel */
+html[data-theme="night"] .section-progress {
+  background: #343a72;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* Link cards: light text on dark card, dark text on yellow hover */
+html[data-theme="night"] .dark-link:hover { color: var(--ink); }
+
+/* Deeper level-complete panel at night */
+html[data-theme="night"] .gameover-panel {
+  border-color: #050512;
+  box-shadow: inset 0 0 0 4px #202552, 10px 10px 0 rgba(0, 0, 0, 0.5);
+}
+
+/* Softer header divider at night */
+html[data-theme="night"] .header {
+  box-shadow: 0 4px 0 rgba(120, 140, 255, 0.22);
+}
 
 /* ---------- Keyframes ---------- */
 @keyframes bob {
@@ -645,4 +760,18 @@ a:focus-visible, button:focus-visible, [role="link"]:focus-visible {
   .section-title { text-shadow: 2px 2px 0 var(--dark); }
   .hero-info { font-size: 8px; gap: 10px; }
   .cart-title { font-size: 9px; }
+}
+@media (max-width: 540px) {
+  /* Keep the header HUD compact — icon-only toggles */
+  .theme-toggle .theme-label, .music-toggle .music-label { display: none; }
+  .theme-toggle, .music-toggle { padding: 11px 9px; }
+  .header-actions { gap: 6px; }
+}
+@media (max-width: 400px) {
+  .brand { font-size: 10px; letter-spacing: 0; }
+  .header-inner { gap: 8px; }
+}
+@media (max-width: 350px) {
+  /* Tiny screens: drop the brand so the controls never overflow */
+  .brand { display: none; }
 }

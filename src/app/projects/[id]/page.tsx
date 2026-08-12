@@ -59,7 +59,7 @@ export default function ProjectDetail() {
         <Link
           href="/#projects"
           className="inline-flex items-center gap-2 mb-8 pixel"
-          style={{ fontSize: 11, color: "var(--dark)", background: "var(--cream)", border: "3px solid var(--dark)", boxShadow: "4px 4px 0 rgba(28,28,60,.6)", padding: "10px 14px" }}
+          style={{ fontSize: 11, color: "var(--text)", background: "var(--cream)", border: "3px solid var(--dark)", boxShadow: "4px 4px 0 rgba(28,28,60,.6)", padding: "10px 14px" }}
         >
           ◀ BACK TO GAME SELECT
         </Link>

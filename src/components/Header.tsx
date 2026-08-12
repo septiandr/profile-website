@@ -17,6 +17,25 @@ export default function Header() {
   const [open, setOpen] = useState(false);
   const [musicOn, setMusicOn] = useState(true);
   const [musicPlaying, setMusicPlaying] = useState(false);
+  const [night, setNight] = useState(false);
+
+  // Sync the theme button with the attribute set by the layout's pre-paint
+  // script. Server and client render the same initial state (no hydration
+  // mismatch), then this effect updates the label after mount.
+  useEffect(() => {
+    setNight(document.documentElement.getAttribute("data-theme") === "night");
+  }, []);
+
+  const toggleTheme = () => {
+    const next = !night;
+    setNight(next);
+    document.documentElement.setAttribute("data-theme", next ? "night" : "day");
+    try {
+      localStorage.setItem("pixel-theme", next ? "night" : "day");
+    } catch {
+      /* storage unavailable */
+    }
+  };
 
   // Sync the HUD with the saved music preference once mounted, then keep
   // listening — the music engine broadcasts state changes (e.g. it may be
@@ -103,6 +122,18 @@ export default function Header() {
         <div className="header-actions">
           <button
             type="button"
+            className={`theme-toggle ${night ? "is-night" : "is-day"}`}
+            aria-pressed={night}
+            aria-label={night ? "Switch to day mode" : "Switch to night mode"}
+            onClick={toggleTheme}
+          >
+            <span className="theme-icon" aria-hidden>
+              {night ? "🌙" : "☀️"}
+            </span>
+            <span className="theme-label">{night ? "NIGHT" : "DAY"}</span>
+          </button>
+          <button
+            type="button"
             className={`music-toggle ${musicOn ? "is-on" : "is-off"}`}
             aria-pressed={musicOn}
             aria-label={musicOn ? "Turn background music off" : "Turn background music on"}
@@ -111,7 +142,7 @@ export default function Header() {
             <span className={`note ${musicOn && musicPlaying ? "playing" : ""}`} aria-hidden>
               ♪
             </span>
-            {musicOn ? "ON" : "OFF"}
+            <span className="music-label">{musicOn ? "ON" : "OFF"}</span>
           </button>
           <div className="header-coin hidden md:block">COINS 99</div>
         </div>
