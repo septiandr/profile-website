@@ -1,51 +1,13 @@
 "use client";
-import React, { useEffect, useRef } from "react";
-import { gsapInit, gsap, ScrollTrigger } from "@/lib/gsap";
+import React, { useRef } from "react";
+import { motion, useScroll, useSpring } from "framer-motion";
 import { experience } from "@/constant/experience";
 
 export default function Experience() {
   const root = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const g = gsapInit();
-    const ctx = gsap.context(() => {
-      const el = root.current!;
-      const steps = gsap.utils.toArray<HTMLElement>(".quest");
-
-      steps.forEach((step) => {
-        g.fromTo(
-          step,
-          { opacity: 0, y: 24 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.45,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: step,
-              start: "top 82%",
-              toggleActions: "play none none none",
-              once: true,
-              invalidateOnRefresh: true,
-            },
-          }
-        );
-      });
-
-      // Quest progress bar (scoped to this section)
-      ScrollTrigger.create({
-        trigger: el,
-        start: "top top",
-        end: "bottom bottom",
-        onUpdate: (self) => {
-          g.set(".experience .section-progress .bar", { scaleX: self.progress });
-        },
-      });
-    }, root);
-
-    setTimeout(() => ScrollTrigger.refresh(), 50);
-    return () => ctx.revert();
-  }, []);
+  const { scrollYProgress } = useScroll({ target: root, offset: ["start end", "end start"] });
+  const progress = useSpring(scrollYProgress, { stiffness: 100, damping: 30, mass: 0.2 });
 
   return (
     <section ref={root} className="section experience" id="experience">
@@ -53,7 +15,7 @@ export default function Experience() {
         <div className="section-head">
           <h2 className="section-title">QUESTS</h2>
           <div className="section-progress">
-            <div className="bar" />
+            <motion.div className="bar" style={{ scaleX: progress, transformOrigin: "left" }} />
           </div>
         </div>
         <p className="muted" style={{ marginTop: -18 }}>
@@ -62,7 +24,7 @@ export default function Experience() {
 
         <ul className="quests" style={{ marginTop: 22 }}>
           {experience.map((s, i) => (
-            <li key={i} className="quest">
+            <motion.li key={i} className="quest" initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.45, delay: i * 0.06 }}>
               <div className="quest-head">
                 <span className="quest-icon">⭐</span>
                 <div style={{ minWidth: 0 }}>
@@ -82,26 +44,26 @@ export default function Experience() {
               {s.desc && <p className="quest-desc">{s.desc}</p>}
 
               {s.highlights && (
-                <div className="quest-rewards">
+                <motion.div className="quest-rewards" initial="hidden" whileInView="visible" viewport={{ once: true }}>
                   <span className="reward-label pixel">REWARDS</span>
                   <ul>
                     {s.highlights.map((point, idx) => (
-                      <li key={`hl-${i}-${idx}`}>{point}</li>
+                      <motion.li key={`hl-${i}-${idx}`} variants={{ hidden: { opacity: 0, x: -12 }, visible: { opacity: 1, x: 0 } }} transition={{ delay: idx * 0.05 }}>{point}</motion.li>
                     ))}
                   </ul>
-                </div>
+                </motion.div>
               )}
 
               {s.tech && (
-                <div className="quest-stack">
+                <motion.div className="quest-stack" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.06 } } }}>
                   {s.tech.map((t, idx) => (
-                    <span key={`tech-${i}-${idx}`} className="chip">
+                    <motion.span key={`tech-${i}-${idx}`} className="chip" variants={{ hidden: { opacity: 0, scale: 0.8 }, visible: { opacity: 1, scale: 1 } }}>
                       {t}
-                    </span>
+                    </motion.span>
                   ))}
-                </div>
+                </motion.div>
               )}
-            </li>
+            </motion.li>
           ))}
         </ul>
       </div>

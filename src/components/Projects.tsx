@@ -1,6 +1,6 @@
 "use client";
-import React, { useEffect, useRef } from "react";
-import { gsapInit, gsap } from "@/lib/gsap";
+import React, { useRef } from "react";
+import { motion, useInView } from "framer-motion";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { projects } from "@/constant/portolio";
@@ -10,27 +10,7 @@ const RIBBON_COLORS = ["#e52521", "#2456d0", "#3aa43a", "#b8860b", "#8e44ad", "#
 export default function Projects() {
   const router = useRouter();
   const root = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!root.current) return;
-    const g = gsapInit();
-    const ctx = gsap.context(() => {
-      g.fromTo(
-        ".cartridge",
-        { opacity: 0, y: 28 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.5,
-          stagger: 0.08,
-          ease: "power3.out",
-          scrollTrigger: { trigger: root.current, start: "top 78%" },
-        }
-      );
-    }, root.current!);
-
-    return () => ctx.revert();
-  }, []);
+  const inView = useInView(root, { once: true, amount: 0.15 });
 
   return (
     <section ref={root} className="section projects" id="projects">
@@ -47,9 +27,14 @@ export default function Projects() {
 
         <div className="cards" style={{ marginTop: 24 }}>
           {projects.map((p, i) => (
-            <article
+            <motion.article
               key={`${p.title}-${i}`}
               className="cartridge"
+              initial={{ opacity: 0, y: 28, rotateX: -8 }}
+              animate={inView ? { opacity: 1, y: 0, rotateX: 0 } : undefined}
+              transition={{ duration: 0.5, delay: i * 0.08, ease: "easeOut" }}
+              whileHover={{ y: -8, rotate: 1, scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               role="link"
               tabIndex={0}
               aria-label={`Open project ${p.title}`}
@@ -95,7 +80,7 @@ export default function Projects() {
                 )}
                 <span className="cart-play pixel">▶ PLAY</span>
               </div>
-            </article>
+            </motion.article>
           ))}
         </div>
       </div>

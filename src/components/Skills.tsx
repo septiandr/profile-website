@@ -1,6 +1,6 @@
 "use client";
-import React, { useEffect, useRef } from "react";
-import { gsapInit, gsap, ScrollTrigger } from "@/lib/gsap";
+import React, { useRef } from "react";
+import { motion, useScroll, useSpring } from "framer-motion";
 
 type Kind = "front" | "back" | "mobile" | "tool";
 
@@ -22,12 +22,11 @@ const skills: { name: string; icon: string; kind: Kind }[] = [
   { name: "Next.js", icon: "🚀", kind: "front" },
   { name: "React", icon: "⚛️", kind: "front" },
   { name: "TypeScript", icon: "🟦", kind: "front" },
-  { name: "GSAP", icon: "🎬", kind: "front" },
+  { name: "Framer Motion", icon: "✨", kind: "front" },
   { name: "CSS", icon: "🎨", kind: "front" },
   { name: "JavaScript", icon: "🟨", kind: "front" },
   { name: "Tailwind CSS", icon: "🌊", kind: "front" },
   { name: "HTML", icon: "📄", kind: "front" },
-  { name: "Framer Motion", icon: "✨", kind: "front" },
   { name: "Bootstrap", icon: "🅱️", kind: "front" },
   { name: "Node.js", icon: "🟢", kind: "back" },
   { name: "Express.js", icon: "🚂", kind: "back" },
@@ -51,32 +50,8 @@ const skills: { name: string; icon: string; kind: Kind }[] = [
 export default function Skills() {
   const root = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const g = gsapInit();
-    const ctx = gsap.context(() => {
-      const boxes = gsap.utils.toArray<HTMLElement>(".item-box");
-      g.from(boxes, {
-        y: 14,
-        opacity: 0,
-        duration: 0.35,
-        ease: "power2.out",
-        stagger: { each: 0.03, from: "random" },
-        scrollTrigger: { trigger: root.current, start: "top 80%" },
-      });
-
-      // Inventory progress bar (scoped to this section)
-      ScrollTrigger.create({
-        trigger: root.current,
-        start: "top top",
-        end: "bottom bottom",
-        onUpdate: (self) => {
-          g.set(".skills .section-progress .bar", { scaleX: self.progress });
-        },
-      });
-    }, root);
-
-    return () => ctx.revert();
-  }, []);
+  const { scrollYProgress } = useScroll({ target: root, offset: ["start end", "end start"] });
+  const progress = useSpring(scrollYProgress, { stiffness: 100, damping: 30, mass: 0.2 });
 
   return (
     <section ref={root} className="section skills" id="skills">
@@ -84,7 +59,7 @@ export default function Skills() {
         <div className="section-head">
           <h2 className="section-title">SKILLS</h2>
           <div className="section-progress">
-            <div className="bar" />
+            <motion.div className="bar" style={{ scaleX: progress, transformOrigin: "left" }} />
           </div>
         </div>
         <p className="muted" style={{ marginTop: -18 }}>
@@ -93,7 +68,7 @@ export default function Skills() {
 
         <div className="inventory" style={{ marginTop: 22 }}>
           {skills.map((s, i) => (
-            <div key={`${s.name}-${i}`} className="item-box">
+            <motion.div key={`${s.name}-${i}`} className="item-box" initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.15 }} transition={{ duration: 0.35, delay: i * 0.03 }} whileHover={{ y: -5, scale: 1.04 }}>
               <span
                 className="item-icon"
                 style={{ background: KIND_COLORS[s.kind] }}
@@ -102,7 +77,7 @@ export default function Skills() {
               </span>
               <span className="item-name">{s.name}</span>
               <span className="item-kind">{KIND_LABEL[s.kind]}</span>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

@@ -1,27 +1,9 @@
 "use client";
-import React, { useEffect, useRef } from "react";
-import { gsapInit, gsap } from "@/lib/gsap";
+import { motion } from "framer-motion";
 
 export default function Contact() {
-  const root = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const g = gsapInit();
-    const ctx = gsap.context(() => {
-      g.from(".gameover-panel", {
-        y: 30,
-        opacity: 0,
-        duration: 0.6,
-        ease: "power3.out",
-        scrollTrigger: { trigger: root.current, start: "top 80%" },
-      });
-    }, root);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
-    <section ref={root} className="section contact" id="contact">
+    <motion.section className="section contact" id="contact" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.25 }} transition={{ duration: 0.6 }}>
       <div className="container">
         <div className="gameover-panel">
           <div className="contact-grid">
@@ -99,6 +81,6 @@ export default function Contact() {
           </div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }

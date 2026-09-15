@@ -28,11 +28,22 @@
   --muted: rgba(28, 28, 60, 0.72);
 }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 76px;
+  overscroll-behavior-y: none;
+}
 * { box-sizing: border-box; }
 html, body { height: 100%; }
 /* Hindari scroll horizontal tak sengaja */
-html, body { overflow-x: hidden; }
+html, body {
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
 
 body {
   margin: 0;
@@ -46,6 +57,43 @@ body {
   -moz-osx-font-smoothing: unset;
   image-rendering: pixelated;
 }
+
+@media (pointer: fine) {
+  body, a, button, [role="link"] { cursor: none; }
+}
+
+.custom-cursor {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 10001;
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
+  border: 3px solid var(--yellow);
+  background: rgba(28, 28, 60, 0.18);
+  box-shadow: 3px 3px 0 var(--dark);
+  transform: translate(-50%, -50%);
+  mix-blend-mode: normal;
+}
+
+.custom-cursor::before,
+.custom-cursor::after,
+.custom-cursor span::before,
+.custom-cursor span::after {
+  content: "";
+  position: absolute;
+  background: var(--yellow);
+}
+
+.custom-cursor::before,
+.custom-cursor::after { left: 50%; width: 3px; height: 7px; transform: translateX(-50%); }
+.custom-cursor::before { top: -9px; }
+.custom-cursor::after { bottom: -9px; }
+.custom-cursor span::before,
+.custom-cursor span::after { top: 50%; width: 7px; height: 3px; transform: translateY(-50%); }
+.custom-cursor span::before { left: -9px; }
+.custom-cursor span::after { right: -9px; }
 
 /* ---------- CRT scanline overlay ---------- */
 .scanlines {

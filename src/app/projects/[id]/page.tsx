@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
-import { gsapInit, gsap } from "@/lib/gsap";
+import React, { useRef } from "react";
+import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -12,31 +12,6 @@ export default function ProjectDetail() {
   const root = useRef<HTMLElement>(null);
 
   const project = projects.find((p) => p?.id === id);
-
-  useEffect(() => {
-    if (!root.current) return;
-
-    const g = gsapInit();
-    const ctx = gsap.context(() => {
-      g.fromTo(
-        ".project-header",
-        { opacity: 0, y: 24 },
-        { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }
-      );
-      g.fromTo(
-        ".project-content",
-        { opacity: 0, y: 40 },
-        { opacity: 1, y: 0, duration: 0.6, delay: 0.25, ease: "power3.out" }
-      );
-      g.fromTo(
-        ".tech-tag",
-        { opacity: 0, scale: 0.8 },
-        { opacity: 1, scale: 1, duration: 0.4, stagger: 0.08, delay: 0.5, ease: "back.out(2)" }
-      );
-    }, root.current!);
-
-    return () => ctx.revert();
-  }, []);
 
   if (!project) {
     return (
@@ -64,7 +39,7 @@ export default function ProjectDetail() {
           ◀ BACK TO GAME SELECT
         </Link>
 
-        <div className="project-header mb-10">
+        <motion.div className="project-header mb-10" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
           <div className="flex flex-wrap items-end justify-between gap-4 mb-4">
             <h1 className="pixel" style={{ fontSize: "clamp(1.4rem, 4vw, 2.2rem)", color: "#fff", textShadow: "4px 4px 0 var(--dark)", margin: 0 }}>
               {project.title}
@@ -74,16 +49,16 @@ export default function ProjectDetail() {
             )}
           </div>
 
-          <div className="flex flex-wrap gap-2 mb-8">
+          <motion.div className="flex flex-wrap gap-2 mb-8" initial="hidden" animate="visible" variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.08, delayChildren: 0.3 } } }}>
             {project.stack?.map((tech: string, idx: number) => (
-              <span key={idx} className="chip tech-tag">
+              <motion.span key={idx} className="chip tech-tag" variants={{ hidden: { opacity: 0, scale: 0.8 }, visible: { opacity: 1, scale: 1 } }}>
                 {tech}
-              </span>
+              </motion.span>
             ))}
-          </div>
+          </motion.div>
 
           {project.thumb && (
-            <div className="nes-frame mb-8" style={{ padding: 12 }}>
+            <motion.div className="nes-frame mb-8" style={{ padding: 12 }} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.45 }}>
               <div className="aspect-[16/9] relative overflow-hidden" style={{ border: "3px solid var(--dark)" }}>
                 <Image
                   src={`/porto/${project.thumb}`}
@@ -93,11 +68,11 @@ export default function ProjectDetail() {
                   style={{ imageRendering: "pixelated", padding: 8 }}
                 />
               </div>
-            </div>
+            </motion.div>
           )}
-        </div>
+        </motion.div>
 
-        <div className="project-content grid grid-cols-1 md:grid-cols-3 gap-8">
+        <motion.div className="project-content grid grid-cols-1 md:grid-cols-3 gap-8" initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.1 }} transition={{ duration: 0.6 }}>
           <div className="md:col-span-2" style={{ display: "grid", gap: 20 }}>
             <div className="pixel-card">
               <h2 className="pixel" style={{ fontSize: 13, margin: "0 0 10px", color: "var(--red)" }}>
@@ -176,7 +151,7 @@ export default function ProjectDetail() {
               </Link>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

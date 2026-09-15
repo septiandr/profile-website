@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Ornaments from "@/components/Ornaments";
 import Sfx from "@/components/Sfx";
+import CustomCursor from "@/components/CustomCursor";
 
 const pixelFont = Press_Start_2P({
   subsets: ["latin"],
@@ -43,6 +44,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
         <Sfx />
+        <CustomCursor />
         <div className="scanlines" aria-hidden />
         <Ornaments />
         <Header />

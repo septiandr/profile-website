@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { music } from "@/lib/sound";
-import { gsapInit, gsap, ScrollTrigger } from "@/lib/gsap";
+import { AnimatePresence, motion, useScroll, useSpring } from "framer-motion";
 
 const items = [
   { id: "home", label: "HOME" },
@@ -13,11 +13,13 @@ const items = [
 ];
 
 export default function Header() {
-  const root = useRef<HTMLDivElement>(null);
+  const root = useRef<HTMLElement>(null);
   const [open, setOpen] = useState(false);
   const [musicOn, setMusicOn] = useState(true);
   const [musicPlaying, setMusicPlaying] = useState(false);
   const [night, setNight] = useState(false);
+  const { scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, { stiffness: 100, damping: 30, mass: 0.2 });
 
   // Sync the theme button with the attribute set by the layout's pre-paint
   // script. Server and client render the same initial state (no hydration
@@ -62,39 +64,20 @@ export default function Header() {
   };
 
   useEffect(() => {
-    const g = gsapInit();
-
-    const ctx = gsap.context(() => {
-      // Header entrance
-      g.from(".header-inner", { y: -16, opacity: 0, duration: 0.4, ease: "power3.out" });
-
-      // Scroll progress (pixel HUD bar)
-      ScrollTrigger.create({
-        trigger: document.body,
-        start: "top top",
-        end: "bottom bottom",
-        onUpdate: (self) =>
-          g.set(".header-progress .bar", { width: `${Math.round(self.progress * 100)}%` }),
-      });
-
-      // Active link on section visibility
-      items.forEach((item) => {
-        const link = document.querySelector<HTMLAnchorElement>(`.nav a[href='#${item.id}']`);
-        const target = document.querySelector<HTMLElement>(`#${item.id}`);
-        if (!link || !target) return;
-        ScrollTrigger.create({
-          trigger: target,
-          start: "top center",
-          end: "bottom center",
-          onEnter: () => link.classList.add("active"),
-          onEnterBack: () => link.classList.add("active"),
-          onLeave: () => link.classList.remove("active"),
-          onLeaveBack: () => link.classList.remove("active"),
-        });
-      });
-    }, root);
-
-    return () => ctx.revert();
+    const sections = items
+      .map((item) => document.getElementById(item.id))
+      .filter((section): section is HTMLElement => Boolean(section));
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          document.querySelectorAll(".nav a").forEach((link) => link.classList.remove("active"));
+          document.querySelector(`.nav a[href='#${entry.target.id}']`)?.classList.add("active");
+        }
+      }),
+      { rootMargin: "-45% 0px -45% 0px" }
+    );
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
   }, []);
 
   // Lock body scroll when mobile menu is open
@@ -109,8 +92,8 @@ export default function Header() {
   }, [open]);
 
   return (
-    <header ref={root} className="header sticky top-0 z-50">
-      <div className="container header-inner">
+    <motion.header ref={root} className="header sticky top-0 z-50" initial={{ y: -16, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.4 }}>
+      <motion.div className="container header-inner">
         <div className="brand">★ SEPTIANDR</div>
         <nav className="nav hidden md:flex">
           {items.map((i) => (
@@ -155,11 +138,12 @@ export default function Header() {
         >
           ☰ MENU
         </button>
-      </div>
+      </motion.div>
 
       {/* Mobile nav */}
+      <AnimatePresence>
       {open && (
-        <div id="mobile-nav" className="mobile-nav md:hidden">
+        <motion.div id="mobile-nav" className="mobile-nav md:hidden" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}>
           <button
             type="button"
             className="mobile-backdrop"
@@ -177,12 +161,13 @@ export default function Header() {
               </Link>
             ))}
           </nav>
-        </div>
+        </motion.div>
       )}
+      </AnimatePresence>
 
       <div className="header-progress">
-        <div className="bar" />
+        <motion.div className="bar" style={{ scaleX: progress, transformOrigin: "left" }} />
       </div>
-    </header>
+    </motion.header>
   );
 }
