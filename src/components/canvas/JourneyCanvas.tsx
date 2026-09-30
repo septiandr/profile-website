@@ -77,10 +77,16 @@ export default function JourneyCanvas({
 
   // Rock-solid Animation Switcher with smooth crossFade
   const switchRobotAction = useCallback((newActionName: string) => {
-    if (newActionName === currentActionNameRef.current) return;
     const actions = robotActionsRef.current;
     const next = actions[newActionName];
     if (!next) return;
+
+    if (newActionName === currentActionNameRef.current) {
+      // Re-trigger if same action (e.g. user re-clicked to wave)
+      next.reset();
+      next.play();
+      return;
+    }
 
     const prev = actions[currentActionNameRef.current];
     currentActionNameRef.current = newActionName;
@@ -283,6 +289,13 @@ export default function JourneyCanvas({
           }
         }
 
+        // Invisible hitbox cylinder to make clicking and hovering on the robot effortless
+        const hitBoxGeo = new THREE.CylinderGeometry(0.75, 0.75, 2.2, 12);
+        const hitBoxMat = new THREE.MeshBasicMaterial({ visible: false });
+        const hitBoxMesh = new THREE.Mesh(hitBoxGeo, hitBoxMat);
+        hitBoxMesh.name = "robot_hitbox";
+        robotGroup.add(hitBoxMesh);
+
         robotGroup.add(root);
       },
       undefined,
@@ -292,14 +305,90 @@ export default function JourneyCanvas({
     // Setup Discrete Scroll Choreography (No continuous state loops)
     setupDiscreteScrollChoreography(techLab.group);
 
-    // 9. MOUSE TRACKING FOR PARALLAX
+    // 9. RAYCASTER & INTERACTION: ROBOT CLICK TO WAVE ("jika robot di klik dia melambai")
+    const raycaster = new THREE.Raycaster();
+    const pointerVector = new THREE.Vector2();
+
+    const triggerRobotWaveClick = () => {
+      const actions = robotActionsRef.current;
+      const waveAction = actions["Wave"];
+      if (!waveAction) return;
+
+      const prev = actions[currentActionNameRef.current];
+      currentActionNameRef.current = "Wave";
+
+      waveAction.reset();
+      waveAction.enabled = true;
+      waveAction.setEffectiveTimeScale(1.25);
+      waveAction.setEffectiveWeight(1);
+
+      if (prev && prev !== waveAction) {
+        prev.crossFadeTo(waveAction, 0.25, true);
+      } else {
+        waveAction.play();
+      }
+
+      // Fun tactile bounce response on click
+      gsap.killTweensOf(robotGroup.position, "y");
+      const currentY = robotGroup.position.y;
+      gsap.to(robotGroup.position, {
+        y: currentY + 0.16,
+        duration: 0.16,
+        yoyo: true,
+        repeat: 1,
+        ease: "power2.out",
+        onComplete: () => {
+          robotGroup.position.y = currentY;
+        },
+      });
+
+      onRobotActionChangeRef.current?.("Wave");
+    };
+
+    const onWindowClick = (e: MouseEvent) => {
+      // Ignore clicks on interactive UI elements (buttons, inputs, cards, links)
+      const target = e.target as HTMLElement | null;
+      if (
+        target?.closest(
+          "button, a, input, select, textarea, [role='button'], .exp-card, .tech-card, .project-card"
+        )
+      ) {
+        return;
+      }
+
+      pointerVector.x = (e.clientX / window.innerWidth) * 2 - 1;
+      pointerVector.y = -(e.clientY / window.innerHeight) * 2 + 1;
+
+      raycaster.setFromCamera(pointerVector, camera);
+      const intersects = raycaster.intersectObjects(robotGroup.children, true);
+      if (intersects.length > 0) {
+        triggerRobotWaveClick();
+      }
+    };
+    window.addEventListener("click", onWindowClick);
+
+    // 10. MOUSE TRACKING FOR PARALLAX & ROBOT HOVER CURSOR
     const onMouseMove = (e: MouseEvent) => {
       mouse.current.targetX = (e.clientX / window.innerWidth - 0.5) * 2;
       mouse.current.targetY = -(e.clientY / window.innerHeight - 0.5) * 2;
+
+      // Check if mouse is hovering over the 3D robot
+      pointerVector.x = (e.clientX / window.innerWidth) * 2 - 1;
+      pointerVector.y = -(e.clientY / window.innerHeight) * 2 + 1;
+      raycaster.setFromCamera(pointerVector, camera);
+      const isOver = raycaster.intersectObjects(robotGroup.children, true).length > 0;
+      if (isOver) {
+        document.body.style.cursor = "pointer";
+      } else {
+        const el = document.elementFromPoint(e.clientX, e.clientY);
+        if (!el?.closest("button, a, [role='button'], .cursor-pointer")) {
+          document.body.style.cursor = "auto";
+        }
+      }
     };
     window.addEventListener("mousemove", onMouseMove);
 
-    // 10. RESIZE LISTENER
+    // 11. RESIZE LISTENER
     const onResize = () => {
       const w = window.innerWidth;
       const h = window.innerHeight;
@@ -404,6 +493,7 @@ export default function JourneyCanvas({
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("click", onWindowClick);
       window.removeEventListener("resize", onResize);
       renderer.dispose();
       starfield.dispose();

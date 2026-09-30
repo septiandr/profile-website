@@ -10,6 +10,17 @@ interface HUDMissionControlProps {
 
 export default function HUDMissionControl({ currentStage }: HUDMissionControlProps) {
   const [timeStr, setTimeStr] = useState<string>("");
+  const [scrolledPastVoid, setScrolledPastVoid] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Show menu bar only when user has scrolled past the intro screen
+      setScrolledPastVoid(window.scrollY > window.innerHeight * 0.35);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     const updateTime = () => {
@@ -28,6 +39,8 @@ export default function HUDMissionControl({ currentStage }: HUDMissionControlPro
     const interval = setInterval(updateTime, 1000);
     return () => clearInterval(interval);
   }, []);
+
+  const isVisible = scrolledPastVoid && currentStage !== "the-void";
 
   const stageTitles: Record<JourneyStage, string> = {
     "the-void": "SECTOR 01 // ORBITAL VOID",
@@ -60,7 +73,13 @@ export default function HUDMissionControl({ currentStage }: HUDMissionControlPro
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 px-6 py-4 pointer-events-none select-none">
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 px-6 py-4 pointer-events-none select-none transition-all duration-700 ease-out ${
+        isVisible
+          ? "opacity-100 translate-y-0"
+          : "opacity-0 -translate-y-10 pointer-events-none"
+      }`}
+    >
       <div className="mx-auto flex max-w-7xl items-center justify-between pointer-events-auto border-b border-solar-500/20 pb-3 backdrop-blur-xl bg-obsidian-950/70 px-5 rounded-2xl shadow-[0_4px_25px_rgba(0,0,0,0.5)]">
         {/* Brand & Sector Status */}
         <div className="flex items-center gap-4">

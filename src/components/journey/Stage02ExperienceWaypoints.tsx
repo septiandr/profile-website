@@ -28,8 +28,11 @@ export default function Stage02ExperienceWaypoints({
       const container = containerRef.current;
       if (!track || !container) return;
 
-      // Calculate horizontal translation distance
-      const getScrollAmount = () => -(track.scrollWidth - window.innerWidth + 200);
+      // Calculate horizontal translation distance safely
+      const getScrollAmount = () => {
+        const overflow = track.scrollWidth - window.innerWidth + 140;
+        return overflow > 0 ? -overflow : 0;
+      };
 
       gsap.to(track, {
         x: getScrollAmount,
@@ -50,19 +53,23 @@ export default function Stage02ExperienceWaypoints({
         },
       });
 
-      // Entry reveal animation for the cards when reaching Sector 02
-      gsap.from(".exp-card", {
-        scrollTrigger: {
-          trigger: container,
-          start: "top 80%",
-          end: "top 30%",
-          scrub: 0.8,
-        },
-        opacity: 0,
-        y: 60,
-        stagger: 0.1,
-        ease: "power2.out",
-      });
+      // Smooth entry reveal without locking opacity to 0
+      gsap.fromTo(
+        ".exp-card",
+        { opacity: 0.3, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.7,
+          stagger: 0.08,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: container,
+            start: "top 85%",
+            once: true,
+          },
+        }
+      );
     }, containerRef);
 
     return () => ctx.revert();
@@ -93,8 +100,21 @@ export default function Stage02ExperienceWaypoints({
             {EXPERIENCE_WAYPOINTS.map((wp, idx) => (
               <button
                 key={idx}
-                onClick={() => setSelectedWaypoint(wp)}
-                className={`group flex items-center gap-1.5 transition-all duration-300 ${
+                onClick={() => {
+                  setInternalIndex(idx);
+                  const container = containerRef.current;
+                  if (container) {
+                    const st = ScrollTrigger.getAll().find(
+                      (s) => s.trigger === container
+                    );
+                    if (st) {
+                      const progress = idx / (EXPERIENCE_WAYPOINTS.length - 1);
+                      const targetY = st.start + progress * (st.end - st.start);
+                      window.scrollTo({ top: targetY, behavior: "smooth" });
+                    }
+                  }
+                }}
+                className={`group flex items-center gap-1.5 transition-all duration-300 py-1 px-1.5 rounded cursor-pointer ${
                   activeIndex === idx
                     ? "text-solar-400 font-bold scale-105"
                     : "text-zinc-500 hover:text-zinc-300"

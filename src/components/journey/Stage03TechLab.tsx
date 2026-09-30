@@ -23,20 +23,23 @@ export default function Stage03TechLab({
     gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
-      // Entry reveal animation for tech cards
-      gsap.from(".tech-card", {
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top 75%",
-          end: "top 25%",
-          scrub: 0.8,
-        },
-        opacity: 0,
-        y: 40,
-        scale: 0.96,
-        stagger: 0.05,
-        ease: "power2.out",
-      });
+      // Entry reveal animation for tech cards without disappearing risk
+      gsap.fromTo(
+        ".tech-card",
+        { opacity: 0.35, y: 25 },
+        {
+          opacity: 1,
+          y: 0,
+          stagger: 0.04,
+          duration: 0.6,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top 85%",
+            once: true,
+          },
+        }
+      );
     }, containerRef);
 
     return () => ctx.revert();

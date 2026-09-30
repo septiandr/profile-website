@@ -113,27 +113,21 @@ export default function Stage01VoidIntro({
           ref={headlineRef}
           className="text-center max-w-4xl mx-auto z-10 pointer-events-auto"
         >
-          <div className="void-tag inline-flex items-center gap-2 border border-solar-500/30 bg-obsidian-950/80 px-4 py-1.5 rounded-full mb-4 backdrop-blur-md shadow-[0_0_20px_rgba(245,158,11,0.15)]">
-            <Bot className="h-3.5 w-3.5 text-solar-400" />
-            <span className="font-mono text-[10px] tracking-[0.3em] text-solar-300 uppercase">
-              AUTONOMOUS TOUR INITIALIZED
-            </span>
+          <div className="font-mono text-[11px] tracking-[0.35em] text-solar-400 uppercase mb-2 font-medium">
+            WELCOME TO
           </div>
 
-          <h1 className="font-sans font-light tracking-tight text-4xl sm:text-6xl md:text-7xl lg:text-8xl text-zinc-100 uppercase leading-[0.96] mb-4">
-            <span className="kinetic-text-line block text-zinc-400 font-extralight text-xs sm:text-sm tracking-[0.4em] uppercase mb-1">
-              WELCOME TO
-            </span>
+          <h1 className="font-sans font-light tracking-tight text-4xl sm:text-6xl md:text-7xl lg:text-8xl text-zinc-100 uppercase leading-[0.96] mb-3">
             <span className="kinetic-text-line block font-black tracking-tighter text-white">
               RISANGGALIH
             </span>
-            <span className="kinetic-text-line block text-transparent bg-clip-text bg-gradient-to-r from-solar-400 via-solar-300 to-amber-200 font-extralight tracking-widest text-3xl sm:text-5xl md:text-6xl mt-1 text-glow-solar">
+            <span className="kinetic-text-line block text-transparent bg-clip-text bg-gradient-to-r from-solar-400 via-solar-300 to-amber-200 font-extralight tracking-widest text-3xl sm:text-5xl md:text-6xl mt-1">
               PORTFOLIO
             </span>
           </h1>
 
-          <p className="void-sub font-mono text-xs sm:text-sm text-solar-200 tracking-[0.25em] uppercase font-light">
-            SOFTWARE ENGINEER • SENIOR ARCHITECT
+          <p className="void-sub font-mono text-xs sm:text-sm text-zinc-400 tracking-[0.3em] uppercase font-light">
+            SOFTWARE ENGINEER
           </p>
         </div>
 
@@ -158,7 +152,7 @@ export default function Stage01VoidIntro({
 
           <div className="flex items-center gap-2 font-mono text-[10px] text-zinc-500 tracking-widest uppercase">
             <Sparkles className="h-3 w-3 text-solar-400/80" />
-            <span>SCROLL TO COMMENCE EXPEDITION</span>
+            <span>CLICK ROBOT TO WAVE • SCROLL TO ENTER</span>
           </div>
         </div>
       </div>

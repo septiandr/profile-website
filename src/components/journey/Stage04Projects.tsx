@@ -18,19 +18,22 @@ export default function Stage04Projects({ activeProjectIndex }: Stage04Props) {
     gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
-      gsap.from(".project-card", {
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top 75%",
-          end: "top 25%",
-          scrub: 0.8,
-        },
-        opacity: 0,
-        y: 60,
-        scale: 0.95,
-        stagger: 0.15,
-        ease: "power2.out",
-      });
+      gsap.fromTo(
+        ".project-card",
+        { opacity: 0.4, y: 35 },
+        {
+          opacity: 1,
+          y: 0,
+          stagger: 0.15,
+          duration: 0.8,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top 80%",
+            once: true,
+          },
+        }
+      );
     }, containerRef);
 
     return () => ctx.revert();
@@ -79,8 +82,8 @@ export default function Stage04Projects({ activeProjectIndex }: Stage04Props) {
               onClick={() => setExpandedProjectId(isExpanded ? null : proj.id)}
               className={`project-card group relative transition-all duration-500 p-8 sm:p-12 border rounded-2xl backdrop-blur-2xl cursor-pointer active:scale-[0.99] ${
                 isActive
-                  ? "opacity-100 translate-y-0 scale-100 border-solar-400/70 bg-[#0c0f17]/95 shadow-[0_25px_60px_rgba(0,0,0,0.9),0_0_35px_rgba(245,158,11,0.2)]"
-                  : "opacity-40 translate-y-6 scale-[0.97] border-zinc-800 bg-[#0c0f17]/85 hover:opacity-80 hover:border-solar-500/40"
+                  ? "opacity-100 translate-y-0 scale-100 border-solar-400/80 bg-[#0c0f17]/95 shadow-[0_25px_60px_rgba(0,0,0,0.9),0_0_35px_rgba(245,158,11,0.25)]"
+                  : "opacity-90 translate-y-2 scale-[0.98] border-zinc-800/90 bg-[#0c0f17]/90 hover:border-solar-500/50 hover:opacity-100 shadow-xl"
               }`}
             >
               {/* Top Glowing Ambient Line */}

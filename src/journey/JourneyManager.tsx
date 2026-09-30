@@ -4,7 +4,6 @@ import { useState, useCallback } from "react";
 import dynamic from "next/dynamic";
 import { JourneyStage } from "./types";
 import HUDMissionControl from "@/components/journey/HUDMissionControl";
-import RobotGuideCompanion from "@/components/journey/RobotGuideCompanion";
 import Stage01VoidIntro from "@/components/journey/Stage01VoidIntro";
 import Stage02ExperienceWaypoints from "@/components/journey/Stage02ExperienceWaypoints";
 import Stage03TechLab from "@/components/journey/Stage03TechLab";
@@ -67,15 +66,8 @@ export default function JourneyManager() {
         onRobotActionChange={handleRobotActionChange}
       />
 
-      {/* Mission Control Minimal HUD */}
+      {/* Mission Control Minimal HUD (Hidden on void/first screen, appears on scroll) */}
       <HUDMissionControl currentStage={currentStage} />
-
-      {/* Main Protagonist Robot Guide Companion (Always Explaining) */}
-      <RobotGuideCompanion
-        stage={currentStage}
-        currentAction={robotAction}
-        onActionChange={handleRobotActionChange}
-      />
 
       {/* The 6 Sequential Narrative Zones */}
       <main className="relative z-10">
