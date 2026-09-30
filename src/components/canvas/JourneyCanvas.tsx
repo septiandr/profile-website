@@ -603,7 +603,7 @@ export default function JourneyCanvas({
       },
     });
 
-    // 1. INTRO / VOID STAGE (Robot in Center Waving -> Smooth Transition to Sector 02)
+    // 1. INTRO / VOID STAGE (Robot in Center Waving -> Smooth Transition to Hero)
     addTrigger({
       trigger: "#zone-void",
       start: "top top",
@@ -615,10 +615,10 @@ export default function JourneyCanvas({
 
         // Cinematic hyperspace warp stars as user scrolls between pages
         if (starfieldRef.current) {
-          starfieldRef.current.setWarp(1 + p * 7);
+          starfieldRef.current.setWarp(1 + p * 6);
         }
 
-        if (p < 0.12) {
+        if (p < 0.25) {
           // Centered & actively showing chosen action at intro: enlarged and heroic per user request
           onStageChange?.("the-void", p);
           robotTargetPos.current = { x: 0, y: -0.40, z: 1.8 };
@@ -627,15 +627,15 @@ export default function JourneyCanvas({
           switchRobotAction(robotActionRef.current || "Wave");
         } else {
           // Page transition: robot smoothly glides from center to the RIGHT margin while WALKING
-          onStageChange?.("take-off", p);
-          const t = (p - 0.12) / 0.88;
+          onStageChange?.("the-void", p);
+          const t = (p - 0.25) / 0.75;
           robotTargetPos.current = {
-            x: isMobile ? 1.45 * t : 3.35 * t,
-            y: -0.40 - t * 0.14,
-            z: 1.8 - t * 0.45,
+            x: isMobile ? 1.35 * t : 3.30 * t,
+            y: -0.40 - t * 0.10,
+            z: 1.8 - t * 0.35,
           };
-          robotTargetScale.current = (isMobile ? 0.85 : 1.35) + t * 0.15;
-          robotTargetRotY.current = -t * 0.55; // Angled left towards the cards
+          robotTargetScale.current = (isMobile ? 0.85 : 1.35) + t * 0.10;
+          robotTargetRotY.current = -t * 0.55; // Angled left towards the hero content
           switchRobotAction("Walking");
         }
       },
@@ -657,6 +657,50 @@ export default function JourneyCanvas({
         if (starfieldRef.current) {
           starfieldRef.current.setWarp(1.0);
         }
+      },
+    });
+
+    // 1B. HERO STAGE (Page 02: Robot on the RIGHT margin, facing left towards the Hero Architect headline)
+    addTrigger({
+      trigger: "#zone-hero",
+      start: "top top",
+      end: "bottom top",
+      scrub: 1.0,
+      onUpdate: (self) => {
+        if (isModalOpenRef.current) return;
+        const p = self.progress;
+        onStageChange?.("take-off", p);
+
+        // Keep robot stationed proudly on the RIGHT margin facing left
+        robotTargetPos.current = {
+          x: isMobile ? 1.35 : 3.30,
+          y: isMobile ? -0.75 : -0.50,
+          z: 1.45,
+        };
+        robotTargetScale.current = isMobile ? 0.95 : 1.45;
+        robotTargetRotY.current = -0.55;
+
+        if (p > 0.85) {
+          switchRobotAction("Walking");
+        } else {
+          switchRobotAction(robotActionRef.current || "ThumbsUp");
+        }
+      },
+      onEnter: () => {
+        if (isModalOpenRef.current) return;
+        onStageChange?.("take-off", 0.5);
+        robotTargetPos.current = {
+          x: isMobile ? 1.35 : 3.30,
+          y: isMobile ? -0.75 : -0.50,
+          z: 1.45,
+        };
+        robotTargetScale.current = isMobile ? 0.95 : 1.45;
+        robotTargetRotY.current = -0.55;
+        switchRobotAction(robotActionRef.current || "ThumbsUp");
+      },
+      onLeaveBack: () => {
+        if (isModalOpenRef.current) return;
+        switchRobotAction("Walking");
       },
     });
 
@@ -722,6 +766,55 @@ export default function JourneyCanvas({
       },
     });
 
+    // 2B. TRANSIT CORRIDOR: Active Walking Animation & Warp between Experience and Skills
+    addTrigger({
+      trigger: "#zone-transit",
+      start: "top top",
+      end: "bottom top",
+      scrub: 1.0,
+      onUpdate: (self) => {
+        if (isModalOpenRef.current) return;
+        const p = self.progress;
+
+        // Robot walks continuously throughout this transit distance
+        switchRobotAction("Walking");
+
+        // Cinematic hyperspace warp acceleration
+        if (starfieldRef.current) {
+          starfieldRef.current.setWarp(1.0 + Math.sin(p * Math.PI) * 9.0);
+        }
+
+        // Bipedal stride bobbing in 3D space
+        const strideBob = Math.sin(p * Math.PI * 6) * 0.035;
+        if (isMobile) {
+          robotTargetPos.current = {
+            x: 1.35,
+            y: -0.75 + strideBob,
+            z: 1.35 + p * 0.1,
+          };
+          robotTargetScale.current = 0.95;
+          robotTargetRotY.current = -0.45;
+        } else {
+          robotTargetPos.current = {
+            x: 3.30,
+            y: -0.52 + strideBob,
+            z: 1.45 + p * 0.15,
+          };
+          robotTargetScale.current = 1.45;
+          robotTargetRotY.current = -0.50;
+        }
+      },
+      onEnter: () => {
+        if (!isModalOpenRef.current) switchRobotAction("Walking");
+      },
+      onLeaveBack: () => {
+        if (!isModalOpenRef.current) switchRobotAction("Walking");
+      },
+      onLeave: () => {
+        if (!isModalOpenRef.current) switchRobotAction("ThumbsUp");
+      },
+    });
+
     // 3. TECHNOLOGY LAB STAGE (Protagonist robot strictly on the RIGHT margin, looking left at skills)
     addTrigger({
       trigger: "#zone-skills",
@@ -749,22 +842,7 @@ export default function JourneyCanvas({
       },
     });
 
-    // 4. ABOUT DOSSIER STAGE (Robot strictly on the RIGHT margin, looking left at dossier!)
-    addTrigger({
-      trigger: "#zone-about",
-      start: "top center",
-      end: "bottom center",
-      onEnter: () => {
-        if (isModalOpenRef.current) return;
-        onStageChange?.("about", 0.5);
-        robotTargetPos.current = { x: isMobile ? 1.3 : 3.05, y: isMobile ? -0.75 : -0.55, z: 1.4 };
-        robotTargetScale.current = isMobile ? 0.95 : 1.45;
-        robotTargetRotY.current = -0.50; // Angled towards the dossier on the left
-        switchRobotAction("ThumbsUp");
-      },
-    });
-
-    // 6. CONTACT & VICTORY DANCE (Robot in Center, clear from top headline and bottom buttons)
+    // 4. CONTACT & VICTORY DANCE (Robot in Center, clear from top headline and bottom buttons)
     addTrigger({
       trigger: "#zone-contact",
       start: "top center",

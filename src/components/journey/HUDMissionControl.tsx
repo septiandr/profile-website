@@ -44,7 +44,7 @@ export default function HUDMissionControl({ currentStage }: HUDMissionControlPro
 
   const stageTitles: Record<JourneyStage, string> = {
     "the-void": "Prologue · Introduction",
-    "take-off": "Transition · Velocity",
+    "take-off": "The Architect · Hero",
     "experience-waypoints": "Experience & Featured Works",
     "tech-lab": "Arsenal · Capabilities",
     "project-portal": "Showcase · Enterprise",
@@ -57,9 +57,9 @@ export default function HUDMissionControl({ currentStage }: HUDMissionControlPro
 
   const navLinks = [
     { id: "zone-void", label: "Intro" },
+    { id: "zone-hero", label: "Hero" },
     { id: "zone-experience", label: "Experience" },
     { id: "zone-skills", label: "Arsenal" },
-    { id: "zone-about", label: "About" },
     { id: "zone-contact", label: "Contact" },
   ];
 

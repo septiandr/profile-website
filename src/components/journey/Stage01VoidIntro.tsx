@@ -107,7 +107,7 @@ export default function Stage01VoidIntro({
 
   const handleEnter = () => {
     onEnterJourney?.();
-    const nextSection = document.getElementById("zone-experience");
+    const nextSection = document.getElementById("zone-hero");
     if (nextSection) {
       nextSection.scrollIntoView({ behavior: "smooth" });
     }
@@ -120,28 +120,44 @@ export default function Stage01VoidIntro({
       className="relative min-h-[220vh] w-full select-none pointer-events-none"
     >
       {/* Sticky Fullscreen Frame for Discrete Page-like Experience */}
-      <div className="sticky top-0 h-screen w-full flex flex-col justify-between items-center px-6 pt-24 sm:pt-28 pb-12 sm:pb-16 overflow-hidden">
+      <div className="sticky top-0 h-screen w-full flex flex-col justify-between items-center px-6 pt-20 sm:pt-24 pb-12 sm:pb-16 overflow-hidden">
+        {/* Ambient Cosmic Halos for Color Vibrancy */}
+        <div
+          aria-hidden="true"
+          className="absolute -top-32 left-1/2 -translate-x-1/2 w-[650px] h-[350px] rounded-full bg-gradient-to-b from-amber-500/20 via-orange-500/10 to-transparent blur-3xl pointer-events-none"
+        />
+        <div
+          aria-hidden="true"
+          className="absolute top-1/3 left-10 w-[350px] h-[350px] rounded-full bg-cyan-500/10 blur-3xl pointer-events-none"
+        />
+        <div
+          aria-hidden="true"
+          className="absolute top-1/2 right-10 w-[400px] h-[400px] rounded-full bg-purple-600/10 blur-3xl pointer-events-none"
+        />
+
         {/* Editorial Headline (Framed above the center robot) */}
         <div
           ref={headlineRef}
           className="text-center max-w-4xl mx-auto z-10 pointer-events-auto"
         >
-          <div className="font-sans text-[11px] sm:text-xs tracking-[0.3em] uppercase text-zinc-400 font-medium mb-3 flex items-center justify-center gap-2.5">
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b]" />
-            <span>Interactive Portfolio · Software Engineer</span>
+          <div className="font-sans text-[11px] sm:text-xs tracking-[0.3em] uppercase text-amber-300 font-semibold mb-3 flex items-center justify-center gap-2.5">
+            <span className="inline-block w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_10px_#f59e0b] animate-ping" />
+            <span className="bg-amber-400/10 px-3 py-1 rounded-full border border-amber-400/30">
+              Interactive 3D Portfolio · Page 01: Intro
+            </span>
           </div>
 
-          <h1 className="font-display font-medium tracking-tight text-5xl sm:text-7xl md:text-8xl lg:text-[6.5rem] text-white leading-[0.92] mb-5">
-            <span className="kinetic-text-line block font-extrabold tracking-tight">
-              SEPTIAN DWI
+          <h1 className="font-display font-medium tracking-tight text-4xl sm:text-6xl md:text-7xl lg:text-[5.5rem] text-white leading-[0.94] mb-3">
+            <span className="kinetic-text-line block font-black tracking-tight">
+              WELCOME TO THE
             </span>
-            <span className="kinetic-text-line block font-serif italic font-normal text-transparent bg-clip-text bg-gradient-to-r from-champagne-200 via-amber-200 to-amber-400 mt-1">
-              Risanggalih
+            <span className="kinetic-text-line block font-serif italic font-normal text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-rose-300 via-amber-300 to-cyan-300 drop-shadow-[0_0_35px_rgba(245,158,11,0.3)] mt-1 animate-shimmer">
+              Digital Cosmos
             </span>
           </h1>
 
-          <p className="void-sub font-sans text-xs sm:text-sm text-zinc-400 font-light tracking-[0.2em] uppercase">
-            Senior Frontend & Fullstack Systems Developer
+          <p className="void-sub font-sans text-xs sm:text-sm text-zinc-300 font-light tracking-[0.2em] uppercase">
+            3D Autonomous Companion Online · Choose a Stance or Scroll to Meet the Architect
           </p>
         </div>
 
@@ -196,12 +212,12 @@ export default function Stage01VoidIntro({
             className="group relative flex items-center gap-3.5 border border-white/15 bg-white/[0.04] backdrop-blur-xl px-9 py-3.5 rounded-full font-sans text-xs tracking-[0.22em] uppercase text-zinc-200 hover:text-white hover:border-amber-400/60 hover:bg-amber-400/10 transition-all duration-500 shadow-[0_15px_35px_rgba(0,0,0,0.6)]"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-amber-400 group-hover:scale-125 transition-transform" />
-            <span>Explore Experience</span>
+            <span>Enter Portfolio · Meet The Architect</span>
             <ArrowDown className="h-3.5 w-3.5 text-amber-300 group-hover:translate-y-1 transition-transform" />
           </button>
 
-          <div className="flex items-center gap-2 font-sans text-[11px] text-zinc-500 tracking-[0.18em] uppercase">
-            <span>Choose stance or click companion · Scroll to navigate</span>
+          <div className="flex items-center gap-2 font-sans text-[11px] text-zinc-400 tracking-[0.18em] uppercase">
+            <span>Choose stance or click companion · Scroll down to Hero</span>
           </div>
         </div>
       </div>

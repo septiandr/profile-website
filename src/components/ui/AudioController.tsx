@@ -6,13 +6,16 @@ import { Volume2, VolumeX } from "lucide-react";
 class ProceduralSoundSystem {
   private ctx: AudioContext | null = null;
   private ambientGain: GainNode | null = null;
-  private osc1: OscillatorNode | null = null;
-  private osc2: OscillatorNode | null = null;
+  private voices: OscillatorNode[] = [];
+  private lfo: OscillatorNode | null = null;
   public isPlaying = false;
 
   private initContext() {
     if (!this.ctx) {
-      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      const AudioCtx =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext: typeof AudioContext })
+          .webkitAudioContext;
       this.ctx = new AudioCtx();
     }
     if (this.ctx.state === "suspended") {
@@ -27,34 +30,57 @@ class ProceduralSoundSystem {
     try {
       const now = this.ctx.currentTime;
 
-      // Master ambient gain
+      // Master ambient gain with silky smooth fade-in
       this.ambientGain = this.ctx.createGain();
-      this.ambientGain.gain.setValueAtTime(0.001, now);
-      this.ambientGain.gain.exponentialRampToValueAtTime(0.04, now + 3);
+      this.ambientGain.gain.setValueAtTime(0.0001, now);
+      this.ambientGain.gain.exponentialRampToValueAtTime(0.045, now + 3.5);
 
-      // Low pass filter to create a warm, deep cosmic space pad
+      // Resonant Lowpass Filter with gentle resonance (Q = 1.8)
       const filter = this.ctx.createBiquadFilter();
       filter.type = "lowpass";
-      filter.frequency.setValueAtTime(220, now);
+      filter.frequency.setValueAtTime(650, now);
+      filter.Q.setValueAtTime(1.8, now);
 
-      // Osc 1: Deep fundamental drone (A1 = 55Hz)
-      this.osc1 = this.ctx.createOscillator();
-      this.osc1.type = "sine";
-      this.osc1.frequency.setValueAtTime(55, now);
+      // Slow breathing LFO (0.12 Hz ~ 8.3s cycle) modulating filter frequency
+      const lfo = this.ctx.createOscillator();
+      const lfoGain = this.ctx.createGain();
+      lfo.frequency.setValueAtTime(0.12, now);
+      lfoGain.gain.setValueAtTime(380, now); // Sweeps between 270Hz and 1030Hz
+      lfo.connect(lfoGain);
+      lfoGain.connect(filter.frequency);
+      lfo.start(now);
+      this.lfo = lfo;
 
-      // Osc 2: Harmonic fifth with slow detune drift (E2 = 82.5Hz)
-      this.osc2 = this.ctx.createOscillator();
-      this.osc2.type = "triangle";
-      this.osc2.frequency.setValueAtTime(82.5, now);
+      // Celestial 4-Voice Chord (F# Minor / Astral Harmony)
+      // Voice 1: Deep warm sub (F#2 = 92.50 Hz)
+      // Voice 2: Fundamental warm pad (C#3 = 138.59 Hz)
+      // Voice 3: Luminous fifth (A3 = 220.00 Hz)
+      // Voice 4: Shimmering ninth with subtle chorusing (G#4 = 415.30 Hz)
+      const chordFrequencies = [92.5, 138.59, 220.0, 415.3];
+      const waveforms: OscillatorType[] = ["sine", "triangle", "sine", "triangle"];
+      const detunes = [-4, 3, -2, 5]; // Subtle organic chorus detune
 
-      // Connect graph
-      this.osc1.connect(filter);
-      this.osc2.connect(filter);
+      this.voices = [];
+
+      chordFrequencies.forEach((freq, idx) => {
+        if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        osc.type = waveforms[idx];
+        osc.frequency.setValueAtTime(freq, now);
+        osc.detune.setValueAtTime(detunes[idx], now);
+
+        const voiceGain = this.ctx.createGain();
+        voiceGain.gain.setValueAtTime(0.28, now);
+
+        osc.connect(voiceGain);
+        voiceGain.connect(filter);
+        osc.start(now);
+        this.voices.push(osc);
+      });
+
       filter.connect(this.ambientGain);
       this.ambientGain.connect(this.ctx.destination);
 
-      this.osc1.start(now);
-      this.osc2.start(now);
       this.isPlaying = true;
     } catch (e) {
       console.warn("Audio Context init blocked until user interaction", e);
@@ -65,20 +91,25 @@ class ProceduralSoundSystem {
     if (!this.ctx || !this.isPlaying || !this.ambientGain) return;
     const now = this.ctx.currentTime;
     this.ambientGain.gain.setValueAtTime(this.ambientGain.gain.value, now);
-    this.ambientGain.gain.exponentialRampToValueAtTime(0.0001, now + 1);
+    this.ambientGain.gain.exponentialRampToValueAtTime(0.0001, now + 1.2);
 
     setTimeout(() => {
       try {
-        this.osc1?.stop();
-        this.osc2?.stop();
-        this.osc1?.disconnect();
-        this.osc2?.disconnect();
+        this.voices.forEach((v) => {
+          v.stop();
+          v.disconnect();
+        });
+        this.voices = [];
+        this.lfo?.stop();
+        this.lfo?.disconnect();
+        this.lfo = null;
       } catch {}
       this.isPlaying = false;
-    }, 1100);
+    }, 1300);
   }
 
-  public playBlip(freq = 880, duration = 0.08) {
+  // Soft Tactile Glass Haptic Click (subtle luxury interface sound)
+  public playHaptic(freq = 587.33, duration = 0.035) {
     if (!this.isPlaying) return;
     this.initContext();
     if (!this.ctx) return;
@@ -90,9 +121,9 @@ class ProceduralSoundSystem {
 
       osc.type = "sine";
       osc.frequency.setValueAtTime(freq, now);
-      osc.frequency.exponentialRampToValueAtTime(freq * 1.5, now + duration);
+      osc.frequency.exponentialRampToValueAtTime(freq * 0.85, now + duration);
 
-      gain.gain.setValueAtTime(0.03, now);
+      gain.gain.setValueAtTime(0.018, now);
       gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
 
       osc.connect(gain);
@@ -100,6 +131,38 @@ class ProceduralSoundSystem {
 
       osc.start(now);
       osc.stop(now + duration);
+    } catch {}
+  }
+
+  // Resonant Harmonic Bell Chime on Click
+  public playChime(freq = 880, duration = 0.28) {
+    if (!this.isPlaying) return;
+    this.initContext();
+    if (!this.ctx) return;
+
+    try {
+      const now = this.ctx.currentTime;
+      const osc = this.ctx.createOscillator();
+      const osc2 = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(freq, now);
+
+      osc2.type = "triangle";
+      osc2.frequency.setValueAtTime(freq * 1.5, now); // Harmonic fifth
+
+      gain.gain.setValueAtTime(0.025, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+      osc.connect(gain);
+      osc2.connect(gain);
+      gain.connect(this.ctx.destination);
+
+      osc.start(now);
+      osc2.start(now);
+      osc.stop(now + duration);
+      osc2.stop(now + duration);
     } catch {}
   }
 }
@@ -130,16 +193,27 @@ export default function AudioController() {
   };
 
   useEffect(() => {
-    // Add hover sound to links and buttons
-    const handleInteract = (e: MouseEvent) => {
+    // Add soft tactile hover sound and resonant click sound to interactive elements
+    const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      if (target.closest("button") || target.closest("a")) {
-        getSoundSystem()?.playBlip(750, 0.05);
+      if (target.closest("button, a, .cursor-pointer, .exp-card, .tech-card")) {
+        getSoundSystem()?.playHaptic(587.33, 0.03);
       }
     };
 
-    window.addEventListener("mouseover", handleInteract);
-    return () => window.removeEventListener("mouseover", handleInteract);
+    const handleClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.closest("button, a, .cursor-pointer, .exp-card, .tech-card")) {
+        getSoundSystem()?.playChime(784, 0.22);
+      }
+    };
+
+    window.addEventListener("mouseover", handleMouseOver);
+    window.addEventListener("click", handleClick);
+    return () => {
+      window.removeEventListener("mouseover", handleMouseOver);
+      window.removeEventListener("click", handleClick);
+    };
   }, []);
 
   return (

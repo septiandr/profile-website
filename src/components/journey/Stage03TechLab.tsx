@@ -3,171 +3,222 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { TECH_NODES, TechNode } from "@/journey/types";
-import {
-  Layers,
-  Server,
-  Database,
-  Smartphone,
-  Activity,
-  Zap,
-  Sparkles,
-  CheckCircle2,
-  Cpu,
-  Radio,
-  Sliders,
-} from "lucide-react";
-import TiltSpotlightCard from "@/components/ui/TiltSpotlightCard";
+import { Cpu } from "lucide-react";
 
 interface Stage03Props {
   onHoverTechNode?: (index: number | null) => void;
   activeTechNode?: number | null;
 }
 
-interface NodeMetric {
-  benchmark: number;
-  metricLabel: string;
-  badge: string;
-  frequency: string;
+interface SkillBubbleItem {
+  id: string;
+  name: string;
+  category: "Frontend" | "Backend" | "Database" | "Mobile";
+  size: "lg" | "md" | "sm";
+  floatType: "slow" | "rev" | "diagonal";
+  floatDelay: string;
+  floatDuration: string;
+  marginTop?: string;
+  marginBottom?: string;
 }
 
-const NODE_METRICS: Record<string, NodeMetric> = {
-  "React 19": {
-    benchmark: 99,
-    metricLabel: "CONCURRENT / RSC ENGINE",
-    badge: "Production Ready",
-    frequency: "120 FPS",
+// 12 Core Production Skills with organic scattered offsets
+const SKILL_BUBBLES: SkillBubbleItem[] = [
+  {
+    id: "react",
+    name: "React",
+    category: "Frontend",
+    size: "lg",
+    floatType: "slow",
+    floatDelay: "0s",
+    floatDuration: "9.5s",
+    marginTop: "0px",
   },
-  "Next.js 15": {
-    benchmark: 98,
-    metricLabel: "TURBOPACK / SSR LATENCY",
-    badge: "100 Lighthouse",
-    frequency: "0.2ms",
+  {
+    id: "golang",
+    name: "Golang",
+    category: "Backend",
+    size: "lg",
+    floatType: "rev",
+    floatDelay: "0.8s",
+    floatDuration: "11.0s",
+    marginTop: "32px",
   },
-  TypeScript: {
-    benchmark: 100,
-    metricLabel: "STRICT CONTRACT SYSTEM",
-    badge: "Zero Any Policy",
-    frequency: "Strict",
+  {
+    id: "nextjs",
+    name: "Next.js",
+    category: "Frontend",
+    size: "lg",
+    floatType: "diagonal",
+    floatDelay: "1.6s",
+    floatDuration: "12.5s",
+    marginTop: "-24px",
   },
-  Golang: {
-    benchmark: 99,
-    metricLabel: "GOROUTINES / 25K RPS",
-    badge: "p99: 1.2ms",
-    frequency: "High Concurrency",
+  {
+    id: "postgres",
+    name: "PostgreSQL",
+    category: "Database",
+    size: "lg",
+    floatType: "slow",
+    floatDelay: "0.5s",
+    floatDuration: "10.0s",
+    marginTop: "20px",
   },
-  "Node.js": {
-    benchmark: 96,
-    metricLabel: "ASYNC EVENT PIPELINE",
-    badge: "Non-blocking",
-    frequency: "Event Bus",
+  {
+    id: "hono",
+    name: "Hono",
+    category: "Backend",
+    size: "lg",
+    floatType: "rev",
+    floatDelay: "2.2s",
+    floatDuration: "9.2s",
+    marginTop: "-16px",
   },
-  Laravel: {
-    benchmark: 94,
-    metricLabel: "ENTERPRISE MVC / REST",
-    badge: "Clean Architecture",
-    frequency: "Queued Jobs",
+  {
+    id: "typescript",
+    name: "TypeScript",
+    category: "Frontend",
+    size: "md",
+    floatType: "diagonal",
+    floatDelay: "1.1s",
+    floatDuration: "11.8s",
+    marginTop: "36px",
   },
-  PostgreSQL: {
-    benchmark: 98,
-    metricLabel: "ACID TRANSACTIONS / POOL",
-    badge: "Zero Data Loss",
-    frequency: "B-Tree Index",
+  {
+    id: "react-native",
+    name: "React Native",
+    category: "Mobile",
+    size: "lg",
+    floatType: "slow",
+    floatDelay: "1.9s",
+    floatDuration: "10.5s",
+    marginTop: "8px",
   },
-  Redis: {
-    benchmark: 99,
-    metricLabel: "IN-MEMORY CACHE / PUB-SUB",
-    badge: "99.4% Hit Rate",
-    frequency: "< 0.5ms",
+  {
+    id: "redis",
+    name: "Redis",
+    category: "Database",
+    size: "md",
+    floatType: "rev",
+    floatDelay: "2.7s",
+    floatDuration: "11.4s",
+    marginTop: "-28px",
   },
-  "React Native": {
-    benchmark: 98,
-    metricLabel: "BRIDGELESS FABRIC CORE",
-    badge: "60 FPS Native",
-    frequency: "JSI Engine",
+  {
+    id: "nodejs",
+    name: "Node.js",
+    category: "Backend",
+    size: "md",
+    floatType: "diagonal",
+    floatDelay: "0.7s",
+    floatDuration: "12.0s",
+    marginTop: "16px",
   },
-  Expo: {
-    benchmark: 96,
-    metricLabel: "EAS BUILD / OTA UPDATES",
-    badge: "Cross-Platform",
-    frequency: "Instant Sync",
+  {
+    id: "laravel",
+    name: "Laravel",
+    category: "Backend",
+    size: "md",
+    floatType: "slow",
+    floatDelay: "2.0s",
+    floatDuration: "9.8s",
+    marginTop: "-18px",
+  },
+  {
+    id: "expo",
+    name: "Expo",
+    category: "Mobile",
+    size: "md",
+    floatType: "rev",
+    floatDelay: "3.1s",
+    floatDuration: "10.8s",
+    marginTop: "26px",
+  },
+  {
+    id: "tailwind",
+    name: "Tailwind CSS",
+    category: "Frontend",
+    size: "sm",
+    floatType: "diagonal",
+    floatDelay: "1.4s",
+    floatDuration: "11.2s",
+    marginTop: "-10px",
+  },
+];
+
+const CATEGORY_STYLES = {
+  Frontend: {
+    color: "#06b6d4",
+    name: "Frontend",
+    border: "border-cyan-400/40 hover:border-cyan-300",
+    bg: "radial-gradient(circle at 32% 28%, rgba(6,182,212,0.18) 0%, rgba(6,182,212,0.04) 55%, rgba(0,0,0,0.10) 90%)",
+    shadow: "0 0 25px rgba(6,182,212,0.15), inset 0 0 22px rgba(6,182,212,0.18), inset 0 1px 2px rgba(255,255,255,0.4)",
+    hoverShadow: "0 0 45px rgba(6,182,212,0.5), inset 0 0 30px rgba(6,182,212,0.35), inset 0 1px 3px rgba(255,255,255,0.6)",
+    text: "text-white font-extrabold tracking-wider drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] drop-shadow-[0_0_16px_rgba(6,182,212,0.8)]",
+    badge: "bg-cyan-500/20 text-cyan-200 border-cyan-400/40",
+  },
+  Backend: {
+    color: "#f59e0b",
+    name: "Backend",
+    border: "border-amber-400/40 hover:border-amber-300",
+    bg: "radial-gradient(circle at 32% 28%, rgba(245,158,11,0.18) 0%, rgba(245,158,11,0.04) 55%, rgba(0,0,0,0.10) 90%)",
+    shadow: "0 0 25px rgba(245,158,11,0.15), inset 0 0 22px rgba(245,158,11,0.18), inset 0 1px 2px rgba(255,255,255,0.4)",
+    hoverShadow: "0 0 45px rgba(245,158,11,0.5), inset 0 0 30px rgba(245,158,11,0.35), inset 0 1px 3px rgba(255,255,255,0.6)",
+    text: "text-white font-extrabold tracking-wider drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] drop-shadow-[0_0_16px_rgba(245,158,11,0.8)]",
+    badge: "bg-amber-500/20 text-amber-200 border-amber-400/40",
+  },
+  Database: {
+    color: "#10b981",
+    name: "Database",
+    border: "border-emerald-400/40 hover:border-emerald-300",
+    bg: "radial-gradient(circle at 32% 28%, rgba(16,185,129,0.18) 0%, rgba(16,185,129,0.04) 55%, rgba(0,0,0,0.10) 90%)",
+    shadow: "0 0 25px rgba(16,185,129,0.15), inset 0 0 22px rgba(16,185,129,0.18), inset 0 1px 2px rgba(255,255,255,0.4)",
+    hoverShadow: "0 0 45px rgba(16,185,129,0.5), inset 0 0 30px rgba(16,185,129,0.35), inset 0 1px 3px rgba(255,255,255,0.6)",
+    text: "text-white font-extrabold tracking-wider drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] drop-shadow-[0_0_16px_rgba(16,185,129,0.8)]",
+    badge: "bg-emerald-500/20 text-emerald-200 border-emerald-400/40",
+  },
+  Mobile: {
+    color: "#a855f7",
+    name: "Mobile",
+    border: "border-purple-400/40 hover:border-purple-300",
+    bg: "radial-gradient(circle at 32% 28%, rgba(168,85,247,0.18) 0%, rgba(168,85,247,0.04) 55%, rgba(0,0,0,0.10) 90%)",
+    shadow: "0 0 25px rgba(168,85,247,0.15), inset 0 0 22px rgba(168,85,247,0.18), inset 0 1px 2px rgba(255,255,255,0.4)",
+    hoverShadow: "0 0 45px rgba(168,85,247,0.5), inset 0 0 30px rgba(168,85,247,0.35), inset 0 1px 3px rgba(255,255,255,0.6)",
+    text: "text-white font-extrabold tracking-wider drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] drop-shadow-[0_0_16px_rgba(168,85,247,0.8)]",
+    badge: "bg-purple-500/20 text-purple-200 border-purple-400/40",
   },
 };
 
-const CATEGORY_CONFIG: Record<
-  string,
-  {
-    icon: typeof Layers;
-    telemetry: string;
-    bgGradient: string;
-    spotlight: string;
-    borderGlow: string;
-    accentText: string;
-    accentBg: string;
-    barGradient: string;
-    nodeGlow: string;
-    ambientAura: string;
-    topBeam: string;
-    circuitColor: string;
-  }
-> = {
-  Frontend: {
-    icon: Layers,
-    telemetry: "CONCURRENT 120FPS · 100 LIGHTHOUSE · APP ROUTER",
-    bgGradient: "from-[#071f30]/98 via-[#041421]/98 to-[#020a10]/98",
-    spotlight: "rgba(6, 182, 212, 0.32)",
-    borderGlow: "rgba(6, 182, 212, 0.65)",
-    accentText: "text-cyan-300",
-    accentBg: "bg-cyan-400/15 border-cyan-400/40 text-cyan-200",
-    barGradient: "from-cyan-500 via-sky-400 to-cyan-200",
-    nodeGlow: "border-cyan-500/30 bg-cyan-950/25 hover:border-cyan-400/70 hover:shadow-[0_0_20px_rgba(6,182,212,0.25)]",
-    ambientAura: "radial-gradient(circle, rgba(6,182,212,0.28) 0%, transparent 70%)",
-    topBeam: "via-cyan-400",
-    circuitColor: "#06b6d4",
-  },
-  Backend: {
-    icon: Server,
-    telemetry: "CONCURRENCY 25K RPS · EVENT-DRIVEN · RESILIENT",
-    bgGradient: "from-[#291a07]/98 via-[#1b1003]/98 to-[#0c0701]/98",
-    spotlight: "rgba(245, 158, 11, 0.32)",
-    borderGlow: "rgba(245, 158, 11, 0.65)",
-    accentText: "text-amber-300",
-    accentBg: "bg-amber-400/15 border-amber-400/40 text-amber-200",
-    barGradient: "from-amber-500 via-yellow-400 to-amber-200",
-    nodeGlow: "border-amber-500/30 bg-amber-950/25 hover:border-amber-400/70 hover:shadow-[0_0_20px_rgba(245,158,11,0.25)]",
-    ambientAura: "radial-gradient(circle, rgba(245,158,11,0.28) 0%, transparent 70%)",
-    topBeam: "via-amber-400",
-    circuitColor: "#f59e0b",
-  },
-  Database: {
-    icon: Database,
-    telemetry: "CACHE HIT 99.4% · ACID COMPLIANT · REPLICATION",
-    bgGradient: "from-[#06261a]/98 via-[#041911]/98 to-[#020d08]/98",
-    spotlight: "rgba(16, 185, 129, 0.32)",
-    borderGlow: "rgba(16, 185, 129, 0.65)",
-    accentText: "text-emerald-300",
-    accentBg: "bg-emerald-400/15 border-emerald-400/40 text-emerald-200",
-    barGradient: "from-emerald-500 via-teal-400 to-emerald-200",
-    nodeGlow: "border-emerald-500/30 bg-emerald-950/25 hover:border-emerald-400/70 hover:shadow-[0_0_20px_rgba(16,185,129,0.25)]",
-    ambientAura: "radial-gradient(circle, rgba(16,185,129,0.28) 0%, transparent 70%)",
-    topBeam: "via-emerald-400",
-    circuitColor: "#10b981",
-  },
-  Mobile: {
-    icon: Smartphone,
-    telemetry: "60 FPS NATIVE · BRIDGELESS FABRIC · MULTI-OS",
-    bgGradient: "from-[#240c38]/98 via-[#170724]/98 to-[#0a0310]/98",
-    spotlight: "rgba(168, 85, 247, 0.35)",
-    borderGlow: "rgba(168, 85, 247, 0.65)",
-    accentText: "text-purple-300",
-    accentBg: "bg-purple-400/15 border-purple-400/40 text-purple-200",
-    barGradient: "from-purple-500 via-fuchsia-400 to-purple-200",
-    nodeGlow: "border-purple-500/30 bg-purple-950/25 hover:border-purple-400/70 hover:shadow-[0_0_20px_rgba(168,85,247,0.25)]",
-    ambientAura: "radial-gradient(circle, rgba(168,85,247,0.30) 0%, transparent 70%)",
-    topBeam: "via-purple-400",
-    circuitColor: "#a855f7",
-  },
-};
+// Procedural Web Audio Bubble Pop Sound
+function playBubblePopSound(freq = 440) {
+  try {
+    if (typeof window === "undefined") return;
+    const AudioCtx =
+      window.AudioContext ||
+      (window as unknown as { webkitAudioContext: typeof AudioContext })
+        .webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
+    const now = ctx.currentTime;
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(freq * 0.7, now);
+    osc.frequency.exponentialRampToValueAtTime(freq * 2.2, now + 0.04);
+    osc.frequency.exponentialRampToValueAtTime(freq * 0.9, now + 0.12);
+
+    gain.gain.setValueAtTime(0.18, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.16);
+  } catch {}
+}
 
 export default function Stage03TechLab({
   onHoverTechNode,
@@ -175,8 +226,8 @@ export default function Stage03TechLab({
 }: Stage03Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [selectedFilter, setSelectedFilter] = useState<string>("ALL");
-  const [barsAnimated, setBarsAnimated] = useState<boolean>(false);
-  const [clickedNode, setClickedNode] = useState<string | null>(null);
+  const [activeBubbleId, setActiveBubbleId] = useState<string | null>(null);
+  const [wobbleId, setWobbleId] = useState<string | null>(null);
 
   const categories = ["Frontend", "Backend", "Database", "Mobile"] as const;
 
@@ -184,300 +235,291 @@ export default function Stage03TechLab({
     gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
-      // 1. Kinetic Staggered 3D Cascade for Tech Pods
-      gsap.fromTo(
-        ".tech-pod",
+      // Master ScrollTrigger timeline for:
+      // 1. Muncul satu persatu onScroll (Entrance)
+      // 2. Mengambang perlahan (Plateau where visitor reads & interacts)
+      // 3. Pergi satu persatu setelah terlewat section nya (Exit)
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          id: "tech-bubbles-scroll",
+          trigger: containerRef.current,
+          pin: true,
+          start: "top top",
+          end: "+=2600", // Extended scroll space for slow, smooth pacing
+          scrub: 1.2,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        },
+      });
+
+      // 1. Muncul satu persatu onScroll (Entrance: Scale 0 -> 1 & Y 80 -> 0)
+      tl.fromTo(
+        ".skill-bubble-slot",
         {
+          scale: 0,
           opacity: 0,
-          y: 55,
-          rotateX: 14,
-          scale: 0.92,
+          y: 80,
         },
         {
+          scale: 1,
           opacity: 1,
           y: 0,
-          rotateX: 0,
-          scale: 1,
-          duration: 0.85,
-          stagger: 0.12,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top 75%",
-            once: true,
-            onEnter: () => setBarsAnimated(true),
+          stagger: {
+            each: 0.16,
+            from: "start",
           },
+          duration: 1.6,
+          ease: "back.out(2.0)",
         }
       );
 
-      // 2. Stagger reveal for inside items
-      gsap.fromTo(
-        ".tech-card-item",
-        {
-          opacity: 0,
-          x: -18,
+      // 2. Plateau: Semua gelembung melayang perlahan di viewport (pengunjung membaca)
+      tl.to({}, { duration: 1.4 });
+
+      // 3. Pergi satu persatu setelah terlewat section nya (Exit: Y 0 -> -90 & Scale 1 -> 0)
+      tl.to(".skill-bubble-slot", {
+        scale: 0,
+        opacity: 0,
+        y: -95,
+        stagger: {
+          each: 0.15,
+          from: "start",
         },
-        {
-          opacity: 1,
-          x: 0,
-          duration: 0.6,
-          stagger: 0.04,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top 70%",
-            once: true,
-          },
-        }
-      );
+        duration: 1.6,
+        ease: "power2.in",
+      });
+
+      // Ambient Cosmic Halos Parallax Drift on Scroll
+      gsap.to(".skills-halo-cyan", {
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1.6,
+        },
+        x: 80,
+        y: -50,
+        scale: 1.2,
+        ease: "none",
+      });
+
+      gsap.to(".skills-halo-amber", {
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1.6,
+        },
+        x: -70,
+        y: 45,
+        scale: 1.25,
+        ease: "none",
+      });
     }, containerRef);
 
     return () => ctx.revert();
   }, []);
 
-  const handleNodeClick = (index: number, node: TechNode) => {
-    setClickedNode(clickedNode === node.name ? null : node.name);
-    onHoverTechNode?.(index);
-  };
+  const handleBubbleClick = (skill: SkillBubbleItem, idx: number) => {
+    setActiveBubbleId(skill.id);
+    setWobbleId(skill.id);
+    onHoverTechNode?.(idx);
 
-  const handleNodeHover = (index: number, node: TechNode) => {
-    onHoverTechNode?.(index);
-  };
+    const pitch =
+      skill.category === "Frontend"
+        ? 520
+        : skill.category === "Backend"
+        ? 440
+        : skill.category === "Database"
+        ? 380
+        : 600;
+    playBubblePopSound(pitch);
 
-  const handleNodeLeave = () => {
-    if (!clickedNode) {
-      onHoverTechNode?.(null);
-    }
+    setTimeout(() => {
+      setWobbleId(null);
+    }, 600);
   };
-
-  const filteredCategories =
-    selectedFilter === "ALL"
-      ? categories
-      : categories.filter((c) => c.toUpperCase() === selectedFilter);
 
   return (
     <section
       id="zone-skills"
       ref={containerRef}
-      className="relative min-h-[125vh] w-full px-6 sm:px-12 py-28 sm:py-36 flex flex-col justify-center items-center select-none overflow-hidden"
+      className="relative h-screen w-full select-none overflow-hidden flex flex-col justify-center items-center"
     >
-      {/* Dynamic Background Telemetry Circuit Glow */}
+      {/* Background Ambient Cosmic Halos */}
       <div
         aria-hidden="true"
-        className="absolute top-1/3 left-1/4 w-[500px] h-[500px] rounded-full bg-cyan-500/5 blur-[120px] pointer-events-none -z-10 animate-pulse"
+        className="skills-halo-cyan absolute top-1/4 left-1/4 w-[650px] h-[650px] rounded-full bg-cyan-500/15 blur-[160px] pointer-events-none -z-10"
       />
       <div
         aria-hidden="true"
-        className="absolute bottom-1/4 left-1/3 w-[450px] h-[450px] rounded-full bg-amber-500/5 blur-[120px] pointer-events-none -z-10 animate-pulse"
+        className="skills-halo-amber absolute bottom-1/4 left-1/3 w-[600px] h-[600px] rounded-full bg-amber-500/15 blur-[160px] pointer-events-none -z-10"
+      />
+      <div
+        aria-hidden="true"
+        className="absolute top-1/2 right-1/4 w-[550px] h-[550px] rounded-full bg-purple-500/15 blur-[160px] pointer-events-none -z-10"
       />
 
-      {/* Two-Column Staging Layout: Dedicated Right Space for 3D Robot */}
-      <div className="w-full max-w-7xl flex flex-col lg:flex-row items-center lg:items-start justify-between z-20 pointer-events-auto">
-        {/* Left Skills Showcase Container (Cards live on the left, clear of robot on right) */}
-        <div className="flex-1 w-full max-w-4xl">
-          {/* Environmental Header */}
-          <div className="mb-8 text-center lg:text-left pointer-events-none">
-            <div className="font-sans text-[10px] sm:text-xs tracking-[0.25em] uppercase text-amber-300/90 font-medium mb-2 flex items-center justify-center lg:justify-start gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b] animate-ping" />
-              <span>Technical Capabilities · Systems & Engines</span>
-            </div>
-            <h2 className="font-display font-light text-3xl sm:text-5xl lg:text-6xl text-white tracking-tight uppercase">
-              Technical{" "}
-              <span className="font-serif italic font-normal text-transparent bg-clip-text bg-gradient-to-r from-champagne-300 via-amber-200 to-amber-400">
-                Arsenal
-              </span>
-            </h2>
-            <div className="flex items-center justify-center lg:justify-start gap-3 mt-2 flex-wrap">
-              <p className="font-sans text-xs text-zinc-400 tracking-[0.18em] uppercase font-light">
-                Distributed Web · Real-Time Pipelines · Cross-Platform Core
-              </p>
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border border-emerald-400/30 bg-emerald-400/10 text-emerald-300 font-mono text-[10px]">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span>10/10 PRODUCTION VALIDATED</span>
+      {/* Main Expansive Container */}
+      <div className="w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-12 flex flex-col justify-center items-center">
+        {/* Staging Layout: Bubbles Field on Left, 3D Robot Lane Clear on Right */}
+        <div className="w-full flex flex-col lg:flex-row items-center lg:items-start justify-between z-20 pointer-events-auto gap-6">
+          <div className="flex-1 w-full max-w-5xl xl:max-w-6xl">
+            {/* Minimal Environmental Header */}
+            <div className="mb-6 text-center lg:text-left">
+              <div className="font-sans text-xs sm:text-sm tracking-[0.25em] uppercase text-amber-300 font-semibold mb-2 flex items-center justify-center lg:justify-start gap-2.5">
+                <span className="h-2 w-2 rounded-full bg-amber-400 shadow-[0_0_12px_#f59e0b] animate-ping" />
+                <span className="bg-amber-400/10 px-3.5 py-1 rounded-full border border-amber-400/30 flex items-center gap-2">
+                  <Cpu className="h-4 w-4 text-amber-400" />
+                  Sector 03 · Technical Arsenal
+                </span>
               </div>
-            </div>
-          </div>
 
-          {/* High-Tech Architecture Domain Filter Tabs */}
-          <div className="flex items-center gap-2 mb-7 flex-wrap justify-center lg:justify-start">
-            {["ALL", "FRONTEND", "BACKEND", "DATABASE", "MOBILE"].map((filter) => {
-              const isActive = selectedFilter === filter;
-              return (
+              <h2 className="font-display font-light text-4xl sm:text-5xl lg:text-6xl text-white tracking-tight uppercase leading-[1.05] mb-2">
+                Technical{" "}
+                <span className="font-serif italic font-normal text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-amber-300 to-purple-400 drop-shadow-[0_0_35px_rgba(245,158,11,0.35)] animate-shimmer">
+                  Arsenal
+                </span>
+              </h2>
+
+              <p className="font-sans text-xs sm:text-sm text-zinc-300 tracking-[0.16em] uppercase font-light max-w-2xl mb-5">
+                Floating skill cosmos. Gelembung bergerak perlahan, muncul & pergi satu persatu onScroll.
+              </p>
+
+              {/* Minimal Category Color Legend & Filter Tabs */}
+              <div className="flex items-center gap-2 flex-wrap justify-center lg:justify-start font-mono text-xs">
                 <button
-                  key={filter}
-                  onClick={() => setSelectedFilter(filter)}
-                  className={`group relative flex items-center gap-2 px-3.5 py-1.5 rounded-full font-mono text-[11px] tracking-wider transition-all duration-300 border ${
-                    isActive
-                      ? "border-amber-400/80 bg-amber-400/20 text-white font-bold shadow-[0_0_15px_rgba(245,158,11,0.25)] scale-105"
-                      : "border-white/10 bg-white/[0.03] text-zinc-400 hover:text-zinc-200 hover:border-white/25"
+                  type="button"
+                  onClick={() => setSelectedFilter("ALL")}
+                  className={`flex items-center gap-2 px-3 py-1 rounded-full border transition-all duration-300 ${
+                    selectedFilter === "ALL"
+                      ? "border-white/50 bg-white/15 text-white font-bold shadow-md scale-105"
+                      : "border-white/10 bg-white/[0.04] text-zinc-400 hover:text-white"
                   }`}
                 >
-                  <span
-                    className={`h-1.5 w-1.5 rounded-full transition-all duration-300 ${
-                      isActive
-                        ? "bg-amber-400 shadow-[0_0_6px_#f59e0b] scale-125"
-                        : "bg-zinc-600 group-hover:bg-zinc-400"
-                    }`}
-                  />
-                  <span>{filter === "ALL" ? "ALL SYSTEMS" : filter}</span>
+                  <span className="h-2 w-2 rounded-full bg-white animate-pulse" />
+                  <span>ALL ({SKILL_BUBBLES.length})</span>
                 </button>
-              );
-            })}
-          </div>
 
-          {/* Spacious 2-Column Responsive Grid with High-Tech Kinetic Pods */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
-            {filteredCategories.map((cat) => {
-              const categoryNodes = TECH_NODES.filter((n) => n.category === cat);
-              const config = CATEGORY_CONFIG[cat] || CATEGORY_CONFIG.Frontend;
-              const IconComponent = config.icon;
+                {categories.map((cat) => {
+                  const style = CATEGORY_STYLES[cat];
+                  const isActive = selectedFilter === cat.toUpperCase();
+                  const count = SKILL_BUBBLES.filter((s) => s.category === cat).length;
 
-              return (
-                <div key={cat} className="tech-pod will-change-transform">
-                  <TiltSpotlightCard
-                    spotlightColor={config.spotlight}
-                    borderColor={config.borderGlow}
-                    accentGlow={config.ambientAura}
-                    className={`relative border border-white/10 bg-gradient-to-b ${config.bgGradient} backdrop-blur-2xl p-5 sm:p-6 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.85)] flex flex-col justify-between bg-cyber-grid group overflow-hidden`}
+                  return (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => setSelectedFilter(cat.toUpperCase())}
+                      className={`flex items-center gap-2 px-3 py-1 rounded-full border transition-all duration-300 ${
+                        isActive
+                          ? `${style.badge} font-bold shadow-lg scale-105`
+                          : "border-white/10 bg-white/[0.04] text-zinc-400 hover:text-zinc-200"
+                      }`}
+                    >
+                      <span
+                        className="h-2 w-2 rounded-full"
+                        style={{ backgroundColor: style.color }}
+                      />
+                      <span>{cat.toUpperCase()}</span>
+                      <span className="text-[10px] opacity-75 font-semibold">({count})</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* ========================================================================= */}
+            {/* FLOATING ORGANIC BUBBLE FIELD (Tidak terbungkus, bergerak perlahan)        */}
+            {/* ========================================================================= */}
+            <div className="relative w-full py-4 min-h-[460px] sm:min-h-[500px] flex flex-wrap items-center justify-center gap-5 sm:gap-7 md:gap-9">
+              {SKILL_BUBBLES.map((skill, idx) => {
+                const style = CATEGORY_STYLES[skill.category];
+                const isWobbling = wobbleId === skill.id;
+                const isSelected = activeBubbleId === skill.id;
+                const isDimmed =
+                  selectedFilter !== "ALL" && skill.category.toUpperCase() !== selectedFilter;
+
+                const sizeClasses =
+                  skill.size === "lg"
+                    ? "w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 text-base sm:text-lg md:text-xl font-bold"
+                    : skill.size === "md"
+                    ? "w-26 h-26 sm:w-30 sm:h-30 md:w-34 md:h-34 text-sm sm:text-base md:text-lg font-semibold"
+                    : "w-22 h-22 sm:w-26 sm:h-26 md:w-28 md:h-28 text-xs sm:text-sm md:text-base font-semibold";
+
+                // Ultra-slow, silky organic floating drift ("bergerak perlahan")
+                const driftClass =
+                  skill.floatType === "slow"
+                    ? "animate-drift-slow"
+                    : skill.floatType === "rev"
+                    ? "animate-drift-rev"
+                    : "animate-drift-diagonal";
+
+                return (
+                  // Outer wrapper: Targeted by GSAP ScrollTrigger for staggered entrance & exit onScroll
+                  <div
+                    key={skill.id}
+                    className="skill-bubble-slot transform-gpu will-change-transform"
+                    style={{
+                      marginTop: skill.marginTop || "0px",
+                      marginBottom: skill.marginBottom || "0px",
+                    }}
                   >
-                    {/* Top Animated Laser Beam */}
+                    {/* Inner Sphere: Ultra-slow zero-gravity continuous floating drift */}
                     <div
-                      className={`absolute top-0 left-8 right-8 h-0.5 bg-gradient-to-r from-transparent ${config.topBeam} to-transparent opacity-75 group-hover:opacity-100 group-hover:scale-x-110 transition-all duration-500`}
-                    />
+                      onClick={() => handleBubbleClick(skill, idx)}
+                      onMouseEnter={() => {
+                        onHoverTechNode?.(idx);
+                        playBubblePopSound(
+                          skill.category === "Frontend"
+                            ? 520
+                            : skill.category === "Backend"
+                            ? 440
+                            : skill.category === "Database"
+                            ? 380
+                            : 600
+                        );
+                      }}
+                      onMouseLeave={() => onHoverTechNode?.(null)}
+                      className={`relative rounded-full aspect-square flex items-center justify-center text-center select-none cursor-pointer backdrop-blur-[2px] border ${style.border} transition-all duration-500 group/orb transform-gpu hover:scale-125 hover:z-30 active:scale-95 ${sizeClasses} ${driftClass} ${
+                        isWobbling ? "animate-wobble" : ""
+                      } ${isDimmed ? "opacity-15 scale-90 blur-[1px]" : "opacity-100 scale-100"}`}
+                      style={{
+                        background: style.bg,
+                        boxShadow: isSelected ? style.hoverShadow : style.shadow,
+                        animationDelay: skill.floatDelay,
+                        animationDuration: skill.floatDuration,
+                      }}
+                    >
+                      {/* Glass Specular Highlight Arc (top-left glass sheen) */}
+                      <div className="absolute top-2 left-3 w-1/3 h-1/4 rounded-full bg-gradient-to-b from-white/70 via-white/15 to-transparent blur-[0.6px] -rotate-45 pointer-events-none" />
 
-                    <div>
-                      {/* Module Header with Live Icon and Audio Frequency Equalizer */}
-                      <div className="border-b border-white/[0.08] pb-3 mb-4">
-                        <div className="flex items-center justify-between font-display text-xs uppercase mb-2">
-                          <div className="flex items-center gap-2">
-                            <div className={`p-1.5 rounded-lg border ${config.accentBg} group-hover:scale-110 transition-transform`}>
-                              <IconComponent className="h-4 w-4 text-current" />
-                            </div>
-                            <span className="font-bold text-white tracking-wider text-sm sm:text-base">
-                              {cat} Architecture
-                            </span>
-                          </div>
+                      {/* Secondary Rim Bounce Highlight (bottom-right) */}
+                      <div className="absolute bottom-2.5 right-4 w-1/4 h-1/6 rounded-full bg-gradient-to-t from-white/35 to-transparent blur-[0.6px] pointer-events-none" />
 
-                          {/* Live Dynamic Equalizer Bars */}
-                          <div className="flex items-center gap-1.5 bg-black/40 px-2.5 py-1 rounded-full border border-white/10">
-                            <div className="flex items-end gap-0.5 h-3">
-                              <span className="w-0.5 bg-emerald-400 rounded-full animate-[pulse_0.6s_ease-in-out_infinite] h-1.5" />
-                              <span className="w-0.5 bg-emerald-400 rounded-full animate-[pulse_0.9s_ease-in-out_infinite] h-3" />
-                              <span className="w-0.5 bg-emerald-400 rounded-full animate-[pulse_0.4s_ease-in-out_infinite] h-1" />
-                              <span className="w-0.5 bg-emerald-400 rounded-full animate-[pulse_0.8s_ease-in-out_infinite] h-2.5" />
-                              <span className="w-0.5 bg-emerald-400 rounded-full animate-[pulse_0.5s_ease-in-out_infinite] h-2" />
-                            </div>
-                            <span className="font-mono text-[9px] text-emerald-300 font-bold">ONLINE</span>
-                          </div>
-                        </div>
+                      {/* Click Shockwave Ripple */}
+                      {isWobbling && (
+                        <div
+                          className="absolute inset-0 rounded-full border-2 animate-shockwave pointer-events-none"
+                          style={{ borderColor: style.color }}
+                        />
+                      )}
 
-                        {/* Live Module Telemetry Readout */}
-                        <div className="flex items-center gap-1.5 font-mono text-[10px] text-zinc-400 uppercase tracking-wider">
-                          <Activity className="h-3 w-3 text-emerald-400 shrink-0 animate-pulse" />
-                          <span className={`line-clamp-1 ${config.accentText}`}>{config.telemetry}</span>
-                        </div>
-                      </div>
-
-                      {/* Interactive Node Cards */}
-                      <div className="space-y-3">
-                        {categoryNodes.map((node) => {
-                          const globalIdx = TECH_NODES.findIndex((n) => n.name === node.name);
-                          const isHovered = activeTechNode === globalIdx;
-                          const isClicked = clickedNode === node.name;
-                          const metric = NODE_METRICS[node.name] || {
-                            benchmark: 95,
-                            metricLabel: "PRODUCTION PIPELINE",
-                            badge: "Verified",
-                            frequency: "High",
-                          };
-
-                          return (
-                            <div
-                              key={node.name}
-                              onClick={() => handleNodeClick(globalIdx, node)}
-                              onMouseEnter={() => handleNodeHover(globalIdx, node)}
-                              onMouseLeave={handleNodeLeave}
-                              className={`tech-card-item group/item relative p-3.5 sm:p-4 rounded-xl border transition-all duration-300 cursor-pointer overflow-hidden ${
-                                isClicked || isHovered
-                                  ? `border-white/40 bg-white/[0.09] text-white shadow-[0_10px_25px_rgba(0,0,0,0.6)] -translate-y-1 scale-[1.02]`
-                                  : `border-white/[0.06] bg-black/40 text-zinc-300 hover:border-white/25 hover:bg-black/60 hover:-translate-y-0.5`
-                              }`}
-                            >
-                              {/* Laser Scanline Beam on Hover */}
-                              <div
-                                aria-hidden="true"
-                                className="absolute inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-y-full group-hover/item:translate-y-16 transition-transform duration-700 pointer-events-none"
-                              />
-
-                              {/* Corner Reticle Brackets on Active / Hover */}
-                              {(isHovered || isClicked) && (
-                                <>
-                                  <div className="absolute top-1.5 left-1.5 w-2 h-2 border-t-2 border-l-2 border-amber-400" />
-                                  <div className="absolute top-1.5 right-1.5 w-2 h-2 border-t-2 border-r-2 border-amber-400" />
-                                  <div className="absolute bottom-1.5 left-1.5 w-2 h-2 border-b-2 border-l-2 border-amber-400" />
-                                  <div className="absolute bottom-1.5 right-1.5 w-2 h-2 border-b-2 border-r-2 border-amber-400" />
-                                </>
-                              )}
-
-                              {/* Card Header */}
-                              <div className="flex items-center justify-between font-display text-xs mb-1.5">
-                                <div className="flex items-center gap-2">
-                                  <span className="font-bold text-white tracking-wide text-sm sm:text-base group-hover/item:text-amber-200 transition-colors">
-                                    {node.name}
-                                  </span>
-                                  <span className="font-mono text-[9px] text-zinc-500 uppercase tracking-widest">
-                                    {metric.frequency}
-                                  </span>
-                                </div>
-                                <span className={`text-[10px] font-sans font-semibold uppercase tracking-wider px-2 py-0.5 rounded border ${config.accentBg}`}>
-                                  {metric.badge}
-                                </span>
-                              </div>
-
-                              {/* Node Detail */}
-                              <p className="font-sans text-xs text-zinc-300 font-light leading-relaxed mb-2.5">
-                                {node.detail}
-                              </p>
-
-                              {/* Animated Benchmark Meter Bar */}
-                              <div className="pt-2 border-t border-white/[0.06]">
-                                <div className="flex items-center justify-between font-mono text-[10px] text-zinc-400 mb-1">
-                                  <span className={`font-semibold tracking-wider ${config.accentText}`}>
-                                    {metric.metricLabel}
-                                  </span>
-                                  <span className="font-bold text-white">
-                                    {metric.benchmark}%
-                                  </span>
-                                </div>
-                                <div className="h-1.5 w-full bg-white/[0.08] rounded-full overflow-hidden p-0.5">
-                                  <div
-                                    className={`h-full rounded-full bg-gradient-to-r ${config.barGradient} transition-all duration-1000 ease-out shadow-[0_0_8px_currentColor]`}
-                                    style={{
-                                      width: barsAnimated ? `${metric.benchmark}%` : "0%",
-                                    }}
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
+                      {/* Pure Skill Text Typography - Crystal transparent bubble & razor-sharp text */}
+                      <span
+                        className={`font-display font-extrabold uppercase transition-all duration-300 px-3 leading-tight select-none ${style.text}`}
+                      >
+                        {skill.name}
+                      </span>
                     </div>
-                  </TiltSpotlightCard>
-                </div>
-              );
-            })}
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        </div>
 
-        {/* Right Column Spacer for 3D Robot (280px - 360px clear area on the right!) */}
-        <div className="hidden lg:block w-[280px] xl:w-[360px] shrink-0 pointer-events-none" />
-      </div>
-
-      {/* Subtle Navigation Prompt */}
-      <div className="mt-12 sm:mt-16 text-center z-20 pointer-events-none">
-        <div className="inline-flex items-center gap-2 font-sans text-xs text-zinc-500 tracking-[0.2em] uppercase">
-          <span>Click skills to inspect live telemetry · Scroll to explore personnel dossier</span>
+          {/* Right Column Spacer for 3D Robot Companion (kept 280px - 360px clear on desktop) */}
+          <div className="hidden lg:block w-[280px] xl:w-[360px] shrink-0 pointer-events-none" />
         </div>
       </div>
     </section>

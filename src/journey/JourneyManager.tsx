@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { JourneyStage } from "./types";
 import HUDMissionControl from "@/components/journey/HUDMissionControl";
 import Stage01VoidIntro from "@/components/journey/Stage01VoidIntro";
+import Stage01HeroPage from "@/components/journey/Stage01HeroPage";
 import Stage02ExperienceWaypoints from "@/components/journey/Stage02ExperienceWaypoints";
 import Stage03TechLab from "@/components/journey/Stage03TechLab";
 import Stage05AboutContact from "@/components/journey/Stage05AboutContact";
@@ -83,7 +84,7 @@ export default function JourneyManager() {
       {/* Mission Control Minimal HUD (Hidden on void/first screen, appears on scroll) */}
       <HUDMissionControl currentStage={currentStage} />
 
-      {/* The 6 Sequential Narrative Zones */}
+      {/* The Sequential Narrative Zones */}
       <main className="relative z-10">
         {/* Zone 1: The Void & Robot Welcome */}
         <Stage01VoidIntro
@@ -92,9 +93,11 @@ export default function JourneyManager() {
           onEngineHover={setIsEngineHot}
           onEnterJourney={() => {
             setIsEngineHot(true);
-            setRobotAction("Walking");
           }}
         />
+
+        {/* Zone 1B: Dedicated Hero Page (The Architect Identity) */}
+        <Stage01HeroPage onEngineHover={setIsEngineHot} />
 
         {/* Zone 2: Robot-guided Experience & Featured Projects Waypoints */}
         <Stage02ExperienceWaypoints

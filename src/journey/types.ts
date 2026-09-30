@@ -22,6 +22,7 @@ export interface ExperienceWaypoint {
   tech: string[];
   deliverables?: string[];
   image?: string;
+  gallery?: string[];
 }
 
 export interface TechNode {
@@ -50,9 +51,14 @@ export const EXPERIENCE_WAYPOINTS: ExperienceWaypoint[] = [
     company: "PT Infosys Solusi Terpadu",
     role: "Frontend Developer",
     description:
-      "Built enterprise digital banking portals, high-security transaction interfaces, and e-debit platforms for CIMB Niaga.",
-    tech: ["React", "TypeScript", "Redux", "REST APIs"],
-    image: "/milestones/cimb-edebit.svg",
+      "Built enterprise digital banking portals, high-security transaction interfaces, and e-debit platforms for CIMB Niaga (Octo Clicks).",
+    tech: ["React", "TypeScript", "Redux", "Material UI", "Axios", "REST APIs"],
+    deliverables: [
+      "Engineered secure cryptographic e-debit & OTP transaction flows for CIMB Niaga Octo Clicks",
+      "Optimized legacy corporate portal latency with componentized React architecture",
+      "Implemented strict banking audit logs and PCI-DSS compliance UI checks",
+    ],
+    image: "/porto/OC.jpg",
   },
   {
     type: "milestone",
@@ -62,8 +68,19 @@ export const EXPERIENCE_WAYPOINTS: ExperienceWaypoint[] = [
     role: "IT Programmer",
     description:
       "Architected course certification hubs (Luna Sinarmas) and student live learning platforms with real-time scheduling.",
-    tech: ["Next.js", "Zustand", "Tailwind CSS", "Laravel"],
-    image: "/milestones/luna-lms.svg",
+    tech: ["Next.js", "Zustand", "Tailwind CSS", "Laravel", "React Query"],
+    deliverables: [
+      "Built real-time video classroom schedule sync with Zustand state cache for Luna by MSIG Life",
+      "Developed full-stack LMS dashboards, mobile learning app, and CMS platforms for Natieva & Natieva Kids",
+      "Reduced bundle payload by 42% through lazy-loaded module federation",
+    ],
+    image: "/porto/natieva.jpeg",
+    gallery: [
+      "/porto/natieva.jpeg",
+      "/porto/luna.png",
+      "/porto/natieva-mobile.png",
+      "/porto/natieva-kids.jpg",
+    ],
   },
   {
     type: "milestone",
@@ -73,8 +90,13 @@ export const EXPERIENCE_WAYPOINTS: ExperienceWaypoint[] = [
     role: "Senior Frontend Developer",
     description:
       "Spearheaded mobile development for Casion EV, managing charging station telemetry and live driver interaction.",
-    tech: ["React Native", "Redux", "REST APIs", "IoT Telemetry"],
-    image: "/milestones/casion-ev.svg",
+    tech: ["React Native", "Redux", "REST APIs", "IoT Telemetry", "Maps"],
+    deliverables: [
+      "Integrated IoT telemetry websockets for real-time kWh and charging station status",
+      "Constructed native map navigation with geo-fenced charger reservation and barcode scanning",
+      "Deployed cross-platform React Native codebase with 99.8% crash-free sessions",
+    ],
+    image: "/porto/casion.png",
   },
   {
     type: "milestone",
@@ -85,6 +107,11 @@ export const EXPERIENCE_WAYPOINTS: ExperienceWaypoint[] = [
     description:
       "Engineered multi-tier reward engines, voucher redemption pipelines, and business analytics dashboards (DDT & Zu Point).",
     tech: ["React.js", "React Native", "TypeScript", "Zustand"],
+    deliverables: [
+      "Engineered atomic point ledger redemption across multi-merchant POS terminals",
+      "Developed high-conversion voucher scratch cards and tier progression animations",
+      "Built executive revenue analytics dashboards with sub-second chart rendering",
+    ],
     image: "/milestones/ddt-rewards.svg",
   },
   {
@@ -114,6 +141,11 @@ export const EXPERIENCE_WAYPOINTS: ExperienceWaypoint[] = [
     description:
       "Constructed a high-concurrency steak restaurant web ordering architecture with live kitchen displays via WebSockets.",
     tech: ["React.js", "Socket.IO", "Node.js", "PostgreSQL"],
+    deliverables: [
+      "Built zero-latency kitchen display system (KDS) powered by Socket.IO events",
+      "Architected table-side QR ordering pipeline with optimistic state updates",
+      "Eliminated order drop rates during peak dining rush hours through auto-retry queues",
+    ],
     image: "/milestones/steak-kds.svg",
   },
   {
@@ -143,6 +175,11 @@ export const EXPERIENCE_WAYPOINTS: ExperienceWaypoint[] = [
     description:
       "Engineered end-to-end game top-up platform with Golang microservices and automated WhatsApp notification bots.",
     tech: ["Next.js", "Golang", "PostgreSQL", "WhatsApp API"],
+    deliverables: [
+      "Architected high-throughput Golang microservice handling 1,500+ orders/min",
+      "Automated transactional WhatsApp receipt delivery using webhook dispatchers",
+      "Implemented PostgreSQL connection pooling and ACID-compliant wallet balances",
+    ],
     image: "/milestones/golang-microservices.svg",
   },
   {
@@ -173,7 +210,8 @@ export const TECH_NODES: TechNode[] = [
 
   // Backend
   { category: "Backend", name: "Golang", detail: "Concurrent Microservices & Low Latency APIs", position: [0.6, 1.3, -0.3] },
-  { category: "Backend", name: "Node.js", detail: "Event-driven Asynchronous Backend Architecture", position: [1.4, 0.5, 0.3] },
+  { category: "Backend", name: "Hono", detail: "Ultrafast Edge API Framework & TypeScript RPC", position: [1.1, 0.9, 0.1] },
+  { category: "Backend", name: "Node.js", detail: "Event-driven Asynchronous Backend Architecture", position: [1.6, 0.5, 0.3] },
   { category: "Backend", name: "Laravel", detail: "Enterprise MVC & Secure API Services", position: [2.2, 1.1, 0] },
 
   // Database

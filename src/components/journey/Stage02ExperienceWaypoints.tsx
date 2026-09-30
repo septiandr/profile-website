@@ -13,126 +13,126 @@ const WAYPOINT_THEMES = [
     themeColor: "cyan",
     badgeLabel: "FINTECH ENTERPRISE",
     telemetry: "HIGH-SECURITY E-DEBIT",
-    bgGradient: "from-[#081f33]/98 via-[#061421]/98 to-[#03090f]/98",
-    spotlight: "rgba(6, 182, 212, 0.32)",
-    borderGlow: "rgba(6, 182, 212, 0.65)",
+    bgGradient: "from-[#09253d]/85 via-[#061828]/90 to-[#020b14]/95",
+    spotlight: "rgba(6, 182, 212, 0.45)",
+    borderGlow: "rgba(6, 182, 212, 0.85)",
     accentText: "text-cyan-300",
-    accentBg: "bg-cyan-400/15 border-cyan-400/40 text-cyan-200",
-    tagStyle: "text-cyan-200 bg-cyan-950/40 border-cyan-800/40",
+    accentBg: "bg-cyan-400/20 border-cyan-400/50 text-cyan-200",
+    tagStyle: "text-cyan-200 bg-cyan-950/50 border-cyan-700/50",
     topBeam: "via-cyan-400",
-    ambientAura: "radial-gradient(circle, rgba(6,182,212,0.28) 0%, transparent 70%)",
+    ambientAura: "radial-gradient(circle, rgba(6,182,212,0.38) 0%, transparent 70%)",
   },
   // 1: 2023 Education / Luna Sinarmas
   {
     themeColor: "indigo",
     badgeLabel: "EDUTECH PLATFORM",
     telemetry: "LIVE LEARNING ENGINE",
-    bgGradient: "from-[#11173d]/98 via-[#0b0e26]/98 to-[#050714]/98",
-    spotlight: "rgba(99, 102, 241, 0.32)",
-    borderGlow: "rgba(99, 102, 241, 0.65)",
+    bgGradient: "from-[#141b4d]/85 via-[#0d1233]/90 to-[#06081a]/95",
+    spotlight: "rgba(99, 102, 241, 0.45)",
+    borderGlow: "rgba(99, 102, 241, 0.85)",
     accentText: "text-indigo-300",
-    accentBg: "bg-indigo-400/15 border-indigo-400/40 text-indigo-200",
-    tagStyle: "text-indigo-200 bg-indigo-950/40 border-indigo-800/40",
+    accentBg: "bg-indigo-400/20 border-indigo-400/50 text-indigo-200",
+    tagStyle: "text-indigo-200 bg-indigo-950/50 border-indigo-700/50",
     topBeam: "via-indigo-400",
-    ambientAura: "radial-gradient(circle, rgba(99,102,241,0.28) 0%, transparent 70%)",
+    ambientAura: "radial-gradient(circle, rgba(99,102,241,0.38) 0%, transparent 70%)",
   },
   // 2: 2024 Casion EV Charging IoT
   {
     themeColor: "emerald",
     badgeLabel: "IOT TELEMETRY",
     telemetry: "LIVE STATION PROTOCOL",
-    bgGradient: "from-[#06261c]/98 via-[#041a13]/98 to-[#020d09]/98",
-    spotlight: "rgba(16, 185, 129, 0.32)",
-    borderGlow: "rgba(16, 185, 129, 0.65)",
+    bgGradient: "from-[#083024]/85 via-[#052119]/90 to-[#02100c]/95",
+    spotlight: "rgba(16, 185, 129, 0.45)",
+    borderGlow: "rgba(16, 185, 129, 0.85)",
     accentText: "text-emerald-300",
-    accentBg: "bg-emerald-400/15 border-emerald-400/40 text-emerald-200",
-    tagStyle: "text-emerald-200 bg-emerald-950/40 border-emerald-800/40",
+    accentBg: "bg-emerald-400/20 border-emerald-400/50 text-emerald-200",
+    tagStyle: "text-emerald-200 bg-emerald-950/50 border-emerald-700/50",
     topBeam: "via-emerald-400",
-    ambientAura: "radial-gradient(circle, rgba(16,185,129,0.28) 0%, transparent 70%)",
+    ambientAura: "radial-gradient(circle, rgba(16,185,129,0.38) 0%, transparent 70%)",
   },
   // 3: 2024 Loyalty & Rewards (DDT & Zu Point)
   {
     themeColor: "amber",
     badgeLabel: "MULTI-TIER REWARDS",
     telemetry: "ATOMIC REDEMPTION",
-    bgGradient: "from-[#291b07]/98 via-[#1c1204]/98 to-[#0a0601]/98",
-    spotlight: "rgba(245, 158, 11, 0.32)",
-    borderGlow: "rgba(245, 158, 11, 0.65)",
+    bgGradient: "from-[#332209]/85 via-[#221605]/90 to-[#0d0802]/95",
+    spotlight: "rgba(245, 158, 11, 0.45)",
+    borderGlow: "rgba(245, 158, 11, 0.85)",
     accentText: "text-amber-300",
-    accentBg: "bg-amber-400/15 border-amber-400/40 text-amber-200",
-    tagStyle: "text-amber-200 bg-amber-950/40 border-amber-800/40",
+    accentBg: "bg-amber-400/20 border-amber-400/50 text-amber-200",
+    tagStyle: "text-amber-200 bg-amber-950/50 border-amber-700/50",
     topBeam: "via-amber-400",
-    ambientAura: "radial-gradient(circle, rgba(245,158,11,0.28) 0%, transparent 70%)",
+    ambientAura: "radial-gradient(circle, rgba(245,158,11,0.38) 0%, transparent 70%)",
   },
   // 4: 2024 Featured Behave.id
   {
     themeColor: "purple",
     badgeLabel: "FLAGSHIP WORK 01",
     telemetry: "ENTERPRISE LOYALTY SAAS",
-    bgGradient: "from-[#280d3d]/98 via-[#180726]/98 to-[#0a0312]/98",
-    spotlight: "rgba(168, 85, 247, 0.4)",
-    borderGlow: "rgba(168, 85, 247, 0.75)",
+    bgGradient: "from-[#32104d]/85 via-[#1f0931]/90 to-[#0c0314]/95",
+    spotlight: "rgba(168, 85, 247, 0.5)",
+    borderGlow: "rgba(168, 85, 247, 0.9)",
     accentText: "text-purple-300",
-    accentBg: "bg-purple-400/20 border-purple-400/50 text-purple-200",
-    tagStyle: "text-purple-200 bg-purple-950/45 border-purple-700/40",
+    accentBg: "bg-purple-400/25 border-purple-400/60 text-purple-200",
+    tagStyle: "text-purple-200 bg-purple-950/50 border-purple-700/50",
     topBeam: "via-purple-400",
-    ambientAura: "radial-gradient(circle, rgba(168,85,247,0.38) 0%, transparent 70%)",
+    ambientAura: "radial-gradient(circle, rgba(168,85,247,0.45) 0%, transparent 70%)",
   },
   // 5: 2025 Food Service Ecosystem
   {
     themeColor: "orange",
     badgeLabel: "WEBSOCKET STREAM",
     telemetry: "ZERO-LATENCY KITCHEN",
-    bgGradient: "from-[#2e110a]/98 via-[#1d0a06]/98 to-[#0c0402]/98",
-    spotlight: "rgba(249, 115, 22, 0.32)",
-    borderGlow: "rgba(249, 115, 22, 0.65)",
+    bgGradient: "from-[#38160d]/85 via-[#250d08]/90 to-[#100503]/95",
+    spotlight: "rgba(249, 115, 22, 0.45)",
+    borderGlow: "rgba(249, 115, 22, 0.85)",
     accentText: "text-orange-300",
-    accentBg: "bg-orange-400/15 border-orange-400/40 text-orange-200",
-    tagStyle: "text-orange-200 bg-orange-950/40 border-orange-800/40",
+    accentBg: "bg-orange-400/20 border-orange-400/50 text-orange-200",
+    tagStyle: "text-orange-200 bg-orange-950/50 border-orange-700/50",
     topBeam: "via-orange-400",
-    ambientAura: "radial-gradient(circle, rgba(249,115,22,0.28) 0%, transparent 70%)",
+    ambientAura: "radial-gradient(circle, rgba(249,115,22,0.38) 0%, transparent 70%)",
   },
   // 6: 2025 Featured Shihlin
   {
     themeColor: "gold",
     badgeLabel: "FLAGSHIP WORK 02",
     telemetry: "OMNICHANNEL 99.99% UPSTREAM",
-    bgGradient: "from-[#301f07]/98 via-[#1e1303]/98 to-[#0d0801]/98",
-    spotlight: "rgba(251, 191, 36, 0.42)",
-    borderGlow: "rgba(251, 191, 36, 0.75)",
+    bgGradient: "from-[#3d2709]/85 via-[#261805]/90 to-[#100a02]/95",
+    spotlight: "rgba(251, 191, 36, 0.5)",
+    borderGlow: "rgba(251, 191, 36, 0.9)",
     accentText: "text-amber-300",
-    accentBg: "bg-amber-400/20 border-amber-400/50 text-amber-200",
-    tagStyle: "text-amber-200 bg-amber-950/45 border-amber-700/40",
+    accentBg: "bg-amber-400/25 border-amber-400/60 text-amber-200",
+    tagStyle: "text-amber-200 bg-amber-950/50 border-amber-700/50",
     topBeam: "via-amber-400",
-    ambientAura: "radial-gradient(circle, rgba(251,191,36,0.38) 0%, transparent 70%)",
+    ambientAura: "radial-gradient(circle, rgba(251,191,36,0.45) 0%, transparent 70%)",
   },
   // 7: 2026 Golang Microservices
   {
     themeColor: "cyan",
     badgeLabel: "HIGH CONCURRENCY",
     telemetry: "GOLANG REST PIPELINE",
-    bgGradient: "from-[#071f2b]/98 via-[#04131b]/98 to-[#02080c]/98",
-    spotlight: "rgba(6, 182, 212, 0.32)",
-    borderGlow: "rgba(6, 182, 212, 0.65)",
+    bgGradient: "from-[#0a2736]/85 via-[#061923]/90 to-[#020b10]/95",
+    spotlight: "rgba(6, 182, 212, 0.45)",
+    borderGlow: "rgba(6, 182, 212, 0.85)",
     accentText: "text-cyan-300",
-    accentBg: "bg-cyan-400/15 border-cyan-400/40 text-cyan-200",
-    tagStyle: "text-cyan-200 bg-cyan-950/40 border-cyan-800/40",
+    accentBg: "bg-cyan-400/20 border-cyan-400/50 text-cyan-200",
+    tagStyle: "text-cyan-200 bg-cyan-950/50 border-cyan-700/50",
     topBeam: "via-cyan-400",
-    ambientAura: "radial-gradient(circle, rgba(6,182,212,0.28) 0%, transparent 70%)",
+    ambientAura: "radial-gradient(circle, rgba(6,182,212,0.38) 0%, transparent 70%)",
   },
   // 8: 2026 Featured Game Top-Up
   {
     themeColor: "emerald",
     badgeLabel: "FLAGSHIP WORK 03",
     telemetry: "AUTOMATED WHATSAPP BOT",
-    bgGradient: "from-[#06281e]/98 via-[#031913]/98 to-[#010c09]/98",
-    spotlight: "rgba(16, 185, 129, 0.42)",
-    borderGlow: "rgba(16, 185, 129, 0.75)",
+    bgGradient: "from-[#083327]/85 via-[#042018]/90 to-[#010e0a]/95",
+    spotlight: "rgba(16, 185, 129, 0.5)",
+    borderGlow: "rgba(16, 185, 129, 0.9)",
     accentText: "text-emerald-300",
-    accentBg: "bg-emerald-400/20 border-emerald-400/50 text-emerald-200",
-    tagStyle: "text-emerald-200 bg-emerald-950/45 border-emerald-700/40",
+    accentBg: "bg-emerald-400/25 border-emerald-400/60 text-emerald-200",
+    tagStyle: "text-emerald-200 bg-emerald-950/50 border-emerald-700/50",
     topBeam: "via-emerald-400",
-    ambientAura: "radial-gradient(circle, rgba(16,185,129,0.38) 0%, transparent 70%)",
+    ambientAura: "radial-gradient(circle, rgba(16,185,129,0.45) 0%, transparent 70%)",
   },
 ];
 
@@ -150,6 +150,7 @@ export default function Stage02ExperienceWaypoints({
   const trackRef = useRef<HTMLDivElement>(null);
   const [internalIndex, setInternalIndex] = useState(0);
   const [selectedWaypoint, setSelectedWaypoint] = useState<ExperienceWaypoint | null>(null);
+  const [activeModalImage, setActiveModalImage] = useState<string | null>(null);
   const [isClosingModal, setIsClosingModal] = useState<boolean>(false);
 
   const activeIndex = propActiveIndex !== undefined ? propActiveIndex : internalIndex;
@@ -157,6 +158,7 @@ export default function Stage02ExperienceWaypoints({
 
   const openModal = (wp: ExperienceWaypoint) => {
     setSelectedWaypoint(wp);
+    setActiveModalImage(wp.image || null);
     setIsClosingModal(false);
     onModalOpenChange?.(true);
   };
@@ -165,6 +167,7 @@ export default function Stage02ExperienceWaypoints({
     setIsClosingModal(true);
     setTimeout(() => {
       setSelectedWaypoint(null);
+      setActiveModalImage(null);
       setIsClosingModal(false);
       onModalOpenChange?.(false);
     }, 280);
@@ -196,43 +199,41 @@ export default function Stage02ExperienceWaypoints({
         return overflow > 0 ? overflow : 0;
       };
 
-      // Entrance & Exit viewport dynamics for every card:
-      // Computes each card's position relative to the viewing arena
+      // Continuous 3D Cylindrical Perspective & Focus Dynamics:
+      // Dynamically rotates, scales, and translates every card in real-time as it traverses the viewport
       const updateCardDynamics = (velocity = 0) => {
         const arenaRect = arena.getBoundingClientRect();
         const wrappers = track.querySelectorAll<HTMLElement>(".exp-card-wrapper");
-        const targetSkew = gsap.utils.clamp(-4.5, 4.5, velocity / -260);
+        const targetSkew = gsap.utils.clamp(-5.0, 5.0, velocity / -240);
 
         wrappers.forEach((wrapper) => {
           const rect = wrapper.getBoundingClientRect();
           const cardCenter = rect.left + rect.width / 2;
           const norm = (cardCenter - arenaRect.left) / arenaRect.width;
 
-          let opacity = 1;
-          let scale = 1;
-          let rotateY = 0;
-          let translateY = 0;
+          // Focal center is around 0.44 (the left arena's visual focus point)
+          const focusNorm = 0.44;
+          const dist = norm - focusNorm;
+          const absDist = Math.abs(dist);
 
-          if (norm > 0.82) {
-            // Materializing entrance from the right ("animasi muncul")
-            const factor = Math.max(0, Math.min(1, (1.15 - norm) / 0.33));
-            opacity = 0.2 + 0.8 * factor;
-            scale = 0.88 + 0.12 * factor;
-            rotateY = (1 - factor) * 12;
-            translateY = (1 - factor) * 24;
-          } else if (norm < 0.18) {
-            // Dematerializing exit to the left ("animasi keluar")
-            const factor = Math.max(0, Math.min(1, (norm - (-0.12)) / 0.3));
-            opacity = 0.12 + 0.88 * factor;
-            scale = 0.88 + 0.12 * factor;
-            rotateY = (1 - factor) * -12;
-            translateY = (1 - factor) * 18;
-          } else {
-            // Sweet spot: focused, full clarity, square angle
-            opacity = 1;
-            scale = 1.0;
-            rotateY = 0;
-            translateY = 0;
+          // 1. Dynamic continuous scale: focused card steps forward heroically (scale 1.04)
+          const scale = Math.max(0.86, 1.04 - absDist * 0.22);
+
+          // 2. Dynamic 3D Y-Axis Cylindrical Rotation: curves the cards towards the visitor
+          const rotateY = gsap.utils.clamp(-14, 14, dist * -18);
+
+          // 3. Fluid Sinusoidal Wave & Vertical Parallax: floats cards along an orbital curve
+          const translateY = Math.sin(norm * Math.PI) * -14 + absDist * 16;
+
+          // 4. Spatial 3D Depth (translateZ)
+          const translateZ = Math.max(-80, (1 - absDist * 1.8) * 35);
+
+          // 5. Smooth edge opacity falloff at extreme arena boundaries
+          let opacity = 1;
+          if (norm > 0.88) {
+            opacity = Math.max(0.15, (1.12 - norm) / 0.24);
+          } else if (norm < 0.12) {
+            opacity = Math.max(0.12, (norm - (-0.08)) / 0.2);
           }
 
           gsap.set(wrapper, {
@@ -240,8 +241,10 @@ export default function Stage02ExperienceWaypoints({
             scale,
             rotateY,
             y: translateY,
+            z: translateZ,
             skewX: targetSkew,
-            transformPerspective: 1000,
+            transformPerspective: 1200,
+            transformStyle: "preserve-3d",
           });
         });
       };
@@ -402,16 +405,16 @@ export default function Stage02ExperienceWaypoints({
                     spotlightColor={theme.spotlight}
                     borderColor={theme.borderGlow}
                     accentGlow={theme.ambientAura}
-                    className={`exp-card group relative w-[370px] sm:w-[450px] md:w-[480px] lg:w-[520px] xl:w-[550px] h-[530px] sm:h-[560px] lg:h-[590px] xl:h-[620px] shrink-0 border rounded-2xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 active:scale-95 bg-gradient-to-b ${
+                    className={`exp-card group relative w-[370px] sm:w-[450px] md:w-[480px] lg:w-[520px] xl:w-[550px] h-[540px] sm:h-[570px] lg:h-[600px] xl:h-[630px] shrink-0 border rounded-2xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 active:scale-95 bg-gradient-to-b ${
                       theme.bgGradient
                     } ${
                       isFeatured
                         ? isActive
-                          ? "border-amber-400/80 shadow-[0_25px_65px_rgba(0,0,0,0.9),0_0_35px_rgba(245,158,11,0.25)]"
-                          : "border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.85)] hover:border-amber-400/60 hover:shadow-[0_25px_60px_rgba(245,158,11,0.2)]"
+                          ? "border-amber-400/80 shadow-[0_25px_65px_rgba(0,0,0,0.9),0_0_40px_rgba(245,158,11,0.35)] ring-1 ring-amber-400/40"
+                          : "border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.85)] hover:border-amber-400/60 hover:shadow-[0_25px_60px_rgba(245,158,11,0.25)]"
                         : isActive
-                        ? "border-white/25 shadow-[0_25px_60px_rgba(0,0,0,0.85)]"
-                        : "border-white/[0.08] shadow-[0_15px_45px_rgba(0,0,0,0.7)] hover:border-white/20"
+                        ? "border-cyan-400/80 shadow-[0_25px_65px_rgba(0,0,0,0.9),0_0_35px_rgba(6,182,212,0.3)] ring-1 ring-cyan-400/40"
+                        : "border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.8)] hover:border-white/30"
                     } backdrop-blur-2xl bg-cyber-grid overflow-hidden`}
                   >
                     {/* Subtle Top Animated Light Beam */}
@@ -430,15 +433,10 @@ export default function Stage02ExperienceWaypoints({
                               <span>{theme.badgeLabel}</span>
                             </div>
                           ) : (
-                            <div className="flex items-center gap-2">
-                              <span
-                                className={`h-2.5 w-2.5 rounded-full ${
-                                  isActive ? "bg-amber-400 shadow-[0_0_8px_#f59e0b] animate-ping" : "bg-zinc-600"
-                                }`}
-                              />
-                              <span className="font-display text-xs text-zinc-300 font-bold tracking-widest uppercase">
-                                0{idx + 1} // {theme.badgeLabel}
-                              </span>
+                            <div className={`inline-flex items-center gap-1.5 font-mono text-[10px] sm:text-[11px] font-bold px-3 py-1 rounded-full border shadow-sm ${theme.accentBg}`}>
+                              <Sparkles className="h-3 w-3 text-amber-300 animate-spin [animation-duration:8s]" />
+                              <span>MILESTONE · 0{idx + 1}</span>
+                              <span className="h-1.5 w-1.5 rounded-full bg-current animate-pulse ml-0.5" />
                             </div>
                           )}
                         </div>
@@ -454,35 +452,48 @@ export default function Stage02ExperienceWaypoints({
                       <div className="relative w-full h-32 sm:h-36 lg:h-40 rounded-xl overflow-visible my-2.5 group/img select-none">
                         {/* Ambient Aura behind the image */}
                         <div
-                          className="absolute -inset-1.5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-md pointer-events-none"
+                          className="absolute -inset-1.5 rounded-xl opacity-20 group-hover:opacity-100 transition-opacity duration-500 blur-md pointer-events-none"
                           style={{ background: theme.ambientAura }}
                         />
 
                         {/* 3D Pop-out Container */}
                         <div
-                          className="relative w-full h-full rounded-xl overflow-hidden border border-white/20 bg-black/50 backdrop-blur-md shadow-[0_8px_20px_rgba(0,0,0,0.6)] transform-gpu transition-all duration-500 ease-out group-hover:-translate-y-2.5 group-hover:scale-[1.04] group-hover:shadow-[0_25px_45px_rgba(0,0,0,0.9),0_0_25px_rgba(245,158,11,0.25)] group-hover:border-white/50"
+                          className="relative w-full h-full rounded-xl overflow-hidden border border-white/20 bg-black/75 backdrop-blur-md shadow-[0_8px_20px_rgba(0,0,0,0.6)] transform-gpu transition-all duration-500 ease-out group-hover:-translate-y-2.5 group-hover:scale-[1.04] group-hover:shadow-[0_25px_45px_rgba(0,0,0,0.9),0_0_25px_rgba(245,158,11,0.25)] group-hover:border-white/50 flex items-center justify-center"
                           style={{
                             transformStyle: "preserve-3d",
                             transform: "translateZ(26px)",
                           }}
                         >
+                          {/* Ambient Blurred Background of the image */}
+                          <img
+                            src={wp.image || "/milestones/cimb-edebit.svg"}
+                            alt=""
+                            aria-hidden="true"
+                            className="absolute inset-0 w-full h-full object-cover blur-md opacity-35 scale-125 pointer-events-none"
+                          />
+
+                          {/* Sharp Foreground Image */}
                           <img
                             src={wp.image || "/milestones/cimb-edebit.svg"}
                             alt={wp.domain}
-                            className="w-full h-full object-cover object-center transform transition-transform duration-700 ease-out group-hover:scale-110"
+                            className="relative z-10 max-h-full max-w-full object-contain p-2 transform transition-transform duration-700 ease-out group-hover:scale-105"
                             loading="lazy"
                           />
+
+                          {/* Continuous Holographic Animated Scanline Laser Beam */}
+                          <div className="absolute inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_12px_#06b6d4] opacity-80 animate-scanline pointer-events-none z-20" />
+
                           {/* Corner Reticle Brackets */}
-                          <div className="absolute top-2 left-2 w-2 h-2 border-t-2 border-l-2 border-amber-400 opacity-60 group-hover:opacity-100 transition-opacity" />
-                          <div className="absolute top-2 right-2 w-2 h-2 border-t-2 border-r-2 border-amber-400 opacity-60 group-hover:opacity-100 transition-opacity" />
-                          <div className="absolute bottom-2 left-2 w-2 h-2 border-b-2 border-l-2 border-amber-400 opacity-60 group-hover:opacity-100 transition-opacity" />
-                          <div className="absolute bottom-2 right-2 w-2 h-2 border-b-2 border-r-2 border-amber-400 opacity-60 group-hover:opacity-100 transition-opacity" />
+                          <div className="absolute top-2 left-2 w-2 h-2 border-t-2 border-l-2 border-amber-400 opacity-60 group-hover:opacity-100 transition-opacity z-20" />
+                          <div className="absolute top-2 right-2 w-2 h-2 border-t-2 border-r-2 border-amber-400 opacity-60 group-hover:opacity-100 transition-opacity z-20" />
+                          <div className="absolute bottom-2 left-2 w-2 h-2 border-b-2 border-l-2 border-amber-400 opacity-60 group-hover:opacity-100 transition-opacity z-20" />
+                          <div className="absolute bottom-2 right-2 w-2 h-2 border-b-2 border-r-2 border-amber-400 opacity-60 group-hover:opacity-100 transition-opacity z-20" />
 
                           {/* Holographic Gradient Overlay */}
-                          <div className="absolute inset-0 bg-gradient-to-b from-white/[0.06] via-transparent to-black/50 pointer-events-none" />
+                          <div className="absolute inset-0 bg-gradient-to-b from-white/[0.04] via-transparent to-black/60 pointer-events-none z-10" />
 
                           {/* Quick View Tag on Image */}
-                          <div className="absolute bottom-1.5 right-2 font-mono text-[9px] uppercase tracking-widest px-2 py-0.5 rounded bg-black/75 backdrop-blur-md text-zinc-300 border border-white/10 flex items-center gap-1.5 shadow">
+                          <div className="absolute bottom-1.5 right-2 font-mono text-[9px] uppercase tracking-widest px-2 py-0.5 rounded bg-black/85 backdrop-blur-md text-zinc-300 border border-white/15 flex items-center gap-1.5 shadow z-20">
                             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
                             <span>TELEMETRY PREVIEW</span>
                           </div>
@@ -500,14 +511,14 @@ export default function Stage02ExperienceWaypoints({
                         className={`font-display font-bold tracking-tight uppercase leading-tight mb-2 line-clamp-1 transition-colors ${
                           isFeatured
                             ? "text-xl sm:text-2xl text-white group-hover:text-amber-200"
-                            : "text-lg sm:text-xl text-white group-hover:text-white"
+                            : "text-lg sm:text-xl text-white group-hover:text-amber-200"
                         }`}
                       >
                         {wp.domain}
                       </h3>
 
                       {/* Role & Company */}
-                      <div className="flex items-center gap-2 font-sans text-xs sm:text-sm text-zinc-300 font-normal mb-3.5">
+                      <div className="flex items-center gap-2 font-sans text-xs sm:text-sm text-zinc-300 font-normal mb-3">
                         <Briefcase className="h-3.5 w-3.5 text-amber-400 shrink-0" />
                         <span className="text-zinc-100 font-semibold">{wp.role}</span>
                         <span className="text-zinc-600">·</span>
@@ -515,17 +526,17 @@ export default function Stage02ExperienceWaypoints({
                       </div>
 
                       {/* Description */}
-                      <p className="text-xs sm:text-sm text-zinc-300 font-light leading-relaxed mb-4 border-l-2 border-white/20 pl-3.5 bg-white/[0.02] py-1.5 rounded-r line-clamp-3 group-hover:border-amber-400/60 transition-colors">
+                      <p className="text-xs sm:text-sm text-zinc-300 font-light leading-relaxed mb-3 border-l-2 border-white/20 pl-3.5 bg-white/[0.02] py-1.5 rounded-r line-clamp-2 group-hover:border-amber-400/60 transition-colors">
                         {wp.description}
                       </p>
 
-                      {/* Deliverables snippet for featured projects */}
-                      {isFeatured && wp.deliverables && (
-                        <div className="mb-3 space-y-1.5">
+                      {/* Key Deliverables snippet for all cards */}
+                      {wp.deliverables && wp.deliverables.length > 0 && (
+                        <div className="mb-3 space-y-1.5 bg-white/[0.02] p-2.5 rounded-lg border border-white/[0.06]">
                           {wp.deliverables.slice(0, 2).map((d, dIdx) => (
                             <div key={dIdx} className="text-xs text-zinc-300 flex items-start gap-2">
-                              <span className="text-amber-400 font-bold">›</span>
-                              <span className="line-clamp-1">{d}</span>
+                              <span className="text-amber-400 font-bold leading-none mt-0.5">›</span>
+                              <span className="line-clamp-1 text-[11px] sm:text-xs text-zinc-200 font-light">{d}</span>
                             </div>
                           ))}
                         </div>
@@ -639,17 +650,17 @@ export default function Stage02ExperienceWaypoints({
         <span>Scroll vertically to glide through milestones & featured projects · Hover cards to inspect 3D layers</span>
       </div>
 
-      {/* 5. Interactive Click Modal / Case Study Dossier (Restored to Clean Previous Layout) */}
+      {/* 5. Interactive Click Modal / Case Study Dossier (Cinematic Flagship Experience) */}
       {selectedWaypoint && (
         <div
           onClick={closeModal}
-          className={`fixed inset-0 z-[100] flex items-center justify-center p-6 bg-[#070814]/75 backdrop-blur-sm pointer-events-auto transition-opacity duration-300 ${
+          className={`fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-[#070814]/85 backdrop-blur-xl pointer-events-auto transition-opacity duration-300 ${
             isClosingModal ? "opacity-0" : "opacity-100"
           }`}
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className={`relative w-full max-w-xl border border-white/15 bg-gradient-to-b from-[#13172e] via-[#0d1022] to-[#070814] p-8 sm:p-10 rounded-3xl shadow-[0_30px_70px_rgba(0,0,0,0.9),0_0_40px_rgba(245,158,11,0.15)] text-left transition-all duration-300 ease-out ${
+            className={`relative w-full max-w-2xl sm:max-w-3xl max-h-[90vh] overflow-y-auto border border-white/20 bg-gradient-to-b from-[#141834] via-[#0d1024] to-[#060814] p-6 sm:p-8 md:p-10 rounded-3xl shadow-[0_30px_90px_rgba(0,0,0,0.95),0_0_50px_rgba(245,158,11,0.2)] text-left transition-all duration-300 ease-out ${
               isClosingModal
                 ? "scale-95 opacity-0 translate-y-4"
                 : "scale-100 opacity-100 translate-y-0"
@@ -659,29 +670,94 @@ export default function Stage02ExperienceWaypoints({
             <button
               onClick={closeModal}
               aria-label="Close dossier"
-              className="absolute top-6 right-6 p-2 rounded-full border border-white/10 hover:border-amber-400/60 text-zinc-400 hover:text-white transition-colors"
+              className="absolute top-5 right-5 sm:top-6 sm:right-6 p-2 rounded-full border border-white/15 bg-white/[0.05] hover:border-amber-400/60 text-zinc-400 hover:text-white transition-colors z-20"
             >
               <X className="h-4 w-4" />
             </button>
 
+            {/* Modal Top Showcase Image */}
+            <div className="relative w-full h-48 sm:h-60 md:h-72 rounded-2xl overflow-hidden border border-white/20 mb-3 bg-black/80 shadow-[0_15px_35px_rgba(0,0,0,0.8)] flex items-center justify-center">
+              {/* Blurred Ambient Image Background */}
+              <img
+                src={activeModalImage || selectedWaypoint.image || "/milestones/cimb-edebit.svg"}
+                alt=""
+                aria-hidden="true"
+                className="absolute inset-0 w-full h-full object-cover blur-xl opacity-40 scale-125 pointer-events-none"
+              />
+
+              {/* Sharp Foreground Image */}
+              <img
+                src={activeModalImage || selectedWaypoint.image || "/milestones/cimb-edebit.svg"}
+                alt={selectedWaypoint.domain}
+                className="relative z-10 max-h-full max-w-full object-contain p-4 transition-all duration-300"
+              />
+
+              {/* Scanline beam in modal image */}
+              <div className="absolute inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_12px_#06b6d4] opacity-80 animate-scanline pointer-events-none z-20" />
+
+              {/* Reticle Brackets */}
+              <div className="absolute top-3 left-3 w-3 h-3 border-t-2 border-l-2 border-amber-400 z-20" />
+              <div className="absolute top-3 right-3 w-3 h-3 border-t-2 border-r-2 border-amber-400 z-20" />
+              <div className="absolute bottom-3 left-3 w-3 h-3 border-b-2 border-l-2 border-amber-400 z-20" />
+              <div className="absolute bottom-3 right-3 w-3 h-3 border-b-2 border-r-2 border-amber-400 z-20" />
+
+              {/* Telemetry pill */}
+              <div className="absolute bottom-3 left-3 flex items-center gap-2 px-3 py-1 rounded-full bg-black/85 backdrop-blur-md border border-white/15 font-mono text-[10px] text-amber-200 uppercase tracking-widest z-20">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span>ENTERPRISE ARCHITECTURE DOSSIER</span>
+              </div>
+            </div>
+
+            {/* Gallery Thumbnail Strip (if waypoint has multiple images) */}
+            {selectedWaypoint.gallery && selectedWaypoint.gallery.length > 1 && (
+              <div className="mb-6 flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+                <span className="font-mono text-[10px] uppercase text-zinc-400 tracking-wider mr-1 shrink-0">
+                  GALLERY:
+                </span>
+                {selectedWaypoint.gallery.map((imgSrc, gIdx) => {
+                  const isSelected = (activeModalImage || selectedWaypoint.image) === imgSrc;
+                  return (
+                    <button
+                      key={gIdx}
+                      type="button"
+                      onClick={() => setActiveModalImage(imgSrc)}
+                      className={`relative h-12 w-16 sm:h-14 sm:w-20 rounded-lg overflow-hidden border transition-all duration-200 shrink-0 bg-black/70 flex items-center justify-center ${
+                        isSelected
+                          ? "border-amber-400 ring-2 ring-amber-400/50 scale-105 shadow-[0_0_12px_rgba(245,158,11,0.5)]"
+                          : "border-white/15 opacity-60 hover:opacity-100 hover:border-white/40"
+                      }`}
+                    >
+                      <img
+                        src={imgSrc}
+                        alt={`Screenshot ${gIdx + 1}`}
+                        className="max-h-full max-w-full object-contain p-1"
+                      />
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+
             {/* Modal Header */}
-            <div className="flex items-center gap-2 font-sans text-xs text-amber-300 font-medium mb-2 tracking-[0.2em] uppercase">
-              <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
+            <div className="flex items-center gap-2 font-mono text-xs text-amber-300 font-medium mb-2 tracking-[0.2em] uppercase">
+              <span className="h-2 w-2 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b]" />
               <span>
                 {selectedWaypoint.type === "featured-project"
-                  ? "Featured Production Work"
-                  : "Career Milestone"}{" "}
+                  ? "FEATURED PRODUCTION WORK"
+                  : "CAREER MILESTONE"}{" "}
                 · {selectedWaypoint.year}
               </span>
             </div>
 
-            <h3 className="font-display font-medium text-3xl sm:text-4xl text-white tracking-tight uppercase mb-2">
+            <h3 className="font-display font-bold text-2xl sm:text-3xl md:text-4xl text-white tracking-tight uppercase mb-2">
               {selectedWaypoint.domain}
             </h3>
 
-            <div className="font-sans text-sm text-zinc-300 font-normal mb-6">
-              <span className="text-amber-200 font-medium">{selectedWaypoint.role}</span> ·{" "}
-              <span className="text-zinc-400">{selectedWaypoint.company}</span>
+            <div className="flex items-center gap-2 font-sans text-sm text-zinc-300 font-normal mb-6">
+              <Briefcase className="h-4 w-4 text-amber-400 shrink-0" />
+              <span className="text-amber-200 font-semibold">{selectedWaypoint.role}</span>
+              <span className="text-zinc-600">·</span>
+              <span className="text-zinc-300">{selectedWaypoint.company}</span>
             </div>
 
             {/* Architectural Overview */}
@@ -689,38 +765,38 @@ export default function Stage02ExperienceWaypoints({
               <div className="font-sans text-xs text-zinc-400 uppercase tracking-[0.15em] mb-2 font-medium">
                 Scope & Architectural Execution
               </div>
-              <p className="text-sm sm:text-base text-zinc-200 font-light leading-relaxed border-l-2 border-amber-400/60 pl-4 py-1.5 bg-white/[0.02] rounded-r">
+              <p className="text-sm sm:text-base text-zinc-200 font-light leading-relaxed border-l-2 border-amber-400/60 pl-4 py-2 bg-white/[0.02] rounded-r">
                 {selectedWaypoint.description}
               </p>
             </div>
 
-            {/* Key Deliverables if present */}
+            {/* Key Deliverables & Impact */}
             {selectedWaypoint.deliverables && selectedWaypoint.deliverables.length > 0 && (
               <div className="mb-6">
-                <div className="font-sans text-xs text-zinc-400 uppercase tracking-[0.15em] mb-2 font-medium">
-                  Key Deliverables & Impact
+                <div className="font-sans text-xs text-zinc-400 uppercase tracking-[0.15em] mb-3 font-medium">
+                  Key Engineering Deliverables & Verified Impact
                 </div>
-                <ul className="space-y-1.5">
+                <div className="space-y-2 bg-white/[0.02] border border-white/[0.08] p-4 rounded-xl">
                   {selectedWaypoint.deliverables.map((d, dIdx) => (
-                    <li key={dIdx} className="text-xs sm:text-sm text-zinc-300 font-light flex items-start gap-2">
-                      <span className="text-amber-400 font-bold">›</span>
+                    <div key={dIdx} className="text-xs sm:text-sm text-zinc-200 font-light flex items-start gap-2.5">
+                      <span className="text-amber-400 font-bold leading-tight mt-0.5">›</span>
                       <span>{d}</span>
-                    </li>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
             )}
 
             {/* Core Tech Engines */}
             <div className="mb-8">
               <div className="font-sans text-xs text-zinc-400 uppercase tracking-[0.15em] mb-3 font-medium">
-                Technologies Used
+                Production Tech Arsenal
               </div>
               <div className="flex flex-wrap gap-2">
                 {selectedWaypoint.tech.map((t, idx) => (
                   <span
                     key={idx}
-                    className="font-sans text-xs text-zinc-200 bg-white/[0.05] border border-white/10 px-3 py-1 rounded-md"
+                    className="font-mono text-xs text-zinc-200 bg-white/[0.06] border border-white/15 px-3 py-1.5 rounded-lg shadow-sm"
                   >
                     {t}
                   </span>
@@ -732,9 +808,9 @@ export default function Stage02ExperienceWaypoints({
             <div className="pt-4 border-t border-white/[0.08] flex justify-end">
               <button
                 onClick={closeModal}
-                className="border border-white/15 bg-white/[0.04] px-6 py-2.5 font-sans text-xs tracking-[0.18em] uppercase text-zinc-300 hover:border-amber-400/60 hover:text-white transition-all rounded-full"
+                className="border border-white/20 bg-white/[0.06] px-7 py-2.5 font-sans text-xs tracking-[0.18em] uppercase text-zinc-200 hover:border-amber-400/60 hover:text-white hover:bg-amber-400/10 transition-all rounded-full shadow"
               >
-                Close Case
+                Close Dossier
               </button>
             </div>
           </div>
