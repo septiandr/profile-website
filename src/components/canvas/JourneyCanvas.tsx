@@ -72,7 +72,7 @@ export default function JourneyCanvas({
   const scrollProgressRef = useRef<number>(0);
 
   const robotTargetPos = useRef({ x: 0, y: -0.42, z: 1.65 });
-  const robotTargetScale = useRef<number>(1.05);
+  const robotTargetScale = useRef<number>(0.75);
   const robotTargetRotY = useRef<number>(0);
 
   // Rock-solid Animation Switcher with smooth crossFade
@@ -187,11 +187,11 @@ export default function JourneyCanvas({
     // Initial Stage Coordinates: Robot prominently in CENTER facing forward waving
     const isMobile = width < 768;
     robotGroup.position.set(0, -0.42, 1.65);
-    robotGroup.scale.setScalar(isMobile ? 0.72 : 1.05);
+    robotGroup.scale.setScalar(isMobile ? 0.52 : 0.75);
     robotGroup.rotation.set(0, 0, 0);
 
     rocketGroup.position.set(-2.5, 1.2, -1.0);
-    rocketGroup.scale.setScalar(0.95);
+    rocketGroup.scale.setScalar(0.72);
 
     // 8. LOAD GLTF ASSETS
     const loader = new GLTFLoader();
@@ -204,7 +204,7 @@ export default function JourneyCanvas({
         const box = new THREE.Box3().setFromObject(root);
         const size = box.getSize(new THREE.Vector3());
         const maxDim = Math.max(size.x, size.y, size.z);
-        const normalized = (1 / maxDim) * 1.05;
+        const normalized = (1 / maxDim) * 0.75;
 
         root.scale.setScalar(normalized);
         const center = box.getCenter(new THREE.Vector3());
@@ -245,7 +245,7 @@ export default function JourneyCanvas({
         const box = new THREE.Box3().setFromObject(root);
         const size = box.getSize(new THREE.Vector3());
         const maxDim = Math.max(size.x, size.y, size.z);
-        const normalized = (1 / maxDim) * 1.65;
+        const normalized = (1 / maxDim) * 1.25;
 
         root.scale.setScalar(normalized);
         const center = box.getCenter(new THREE.Vector3());
@@ -290,7 +290,7 @@ export default function JourneyCanvas({
         }
 
         // Invisible hitbox cylinder to make clicking and hovering on the robot effortless
-        const hitBoxGeo = new THREE.CylinderGeometry(0.75, 0.75, 2.2, 12);
+        const hitBoxGeo = new THREE.CylinderGeometry(0.55, 0.55, 1.7, 12);
         const hitBoxMat = new THREE.MeshBasicMaterial({ visible: false });
         const hitBoxMesh = new THREE.Mesh(hitBoxGeo, hitBoxMat);
         hitBoxMesh.name = "robot_hitbox";
@@ -332,8 +332,8 @@ export default function JourneyCanvas({
       gsap.killTweensOf(robotGroup.position, "y");
       const currentY = robotGroup.position.y;
       gsap.to(robotGroup.position, {
-        y: currentY + 0.16,
-        duration: 0.16,
+        y: currentY + 0.1,
+        duration: 0.15,
         yoyo: true,
         repeat: 1,
         ease: "power2.out",
@@ -560,7 +560,7 @@ export default function JourneyCanvas({
           // Centered & actively waving to welcome visitor
           onStageChange?.("the-void", p);
           robotTargetPos.current = { x: 0, y: -0.42, z: 1.65 };
-          robotTargetScale.current = isMobile ? 0.72 : 1.05;
+          robotTargetScale.current = isMobile ? 0.52 : 0.75;
           robotTargetRotY.current = 0;
           switchRobotAction("Wave");
         } else {
@@ -572,7 +572,7 @@ export default function JourneyCanvas({
             y: -0.42 - t * 0.38,
             z: 1.65 - t * 0.55,
           };
-          robotTargetScale.current = (isMobile ? 0.72 : 1.05) - t * 0.25;
+          robotTargetScale.current = (isMobile ? 0.52 : 0.75) - t * 0.18;
           robotTargetRotY.current = t * 0.35;
           switchRobotAction("Walking");
         }
@@ -580,14 +580,14 @@ export default function JourneyCanvas({
       onEnter: () => {
         onStageChange?.("the-void", 0);
         robotTargetPos.current = { x: 0, y: -0.42, z: 1.65 };
-        robotTargetScale.current = isMobile ? 0.72 : 1.05;
+        robotTargetScale.current = isMobile ? 0.52 : 0.75;
         robotTargetRotY.current = 0;
         switchRobotAction("Wave");
       },
       onLeaveBack: () => {
         onStageChange?.("the-void", 0);
         robotTargetPos.current = { x: 0, y: -0.42, z: 1.65 };
-        robotTargetScale.current = isMobile ? 0.72 : 1.05;
+        robotTargetScale.current = isMobile ? 0.52 : 0.75;
         robotTargetRotY.current = 0;
         switchRobotAction("Wave");
         if (starfieldRef.current) {
@@ -609,11 +609,11 @@ export default function JourneyCanvas({
         // User requested: "robot diam melambai" (stands stationary and waves)
         if (isMobile) {
           robotTargetPos.current = { x: 0.75, y: -0.85, z: 1.1 };
-          robotTargetScale.current = 0.62;
+          robotTargetScale.current = 0.45;
           robotTargetRotY.current = -0.3;
         } else {
           robotTargetPos.current = { x: -1.55, y: -0.65, z: 1.3 };
-          robotTargetScale.current = 0.88;
+          robotTargetScale.current = 0.65;
           robotTargetRotY.current = 0.35;
         }
         switchRobotAction("Wave");
@@ -624,11 +624,11 @@ export default function JourneyCanvas({
       onEnter: () => {
         if (isMobile) {
           robotTargetPos.current = { x: 0.75, y: -0.85, z: 1.1 };
-          robotTargetScale.current = 0.62;
+          robotTargetScale.current = 0.45;
           robotTargetRotY.current = -0.3;
         } else {
           robotTargetPos.current = { x: -1.55, y: -0.65, z: 1.3 };
-          robotTargetScale.current = 0.88;
+          robotTargetScale.current = 0.65;
           robotTargetRotY.current = 0.35;
         }
         switchRobotAction("Wave");
@@ -648,7 +648,7 @@ export default function JourneyCanvas({
         onStageChange?.("tech-lab", p);
 
         robotTargetPos.current = { x: isMobile ? 0 : 1.6, y: -0.7, z: 1.0 };
-        robotTargetScale.current = isMobile ? 0.65 : 0.88;
+        robotTargetScale.current = isMobile ? 0.48 : 0.65;
         robotTargetRotY.current = -0.5;
 
         // Materialize tech lab
@@ -670,7 +670,7 @@ export default function JourneyCanvas({
         onStageChange?.("projects", p);
 
         robotTargetPos.current = { x: isMobile ? 0.6 : -1.8, y: -0.8, z: 1.1 };
-        robotTargetScale.current = isMobile ? 0.62 : 0.85;
+        robotTargetScale.current = isMobile ? 0.45 : 0.62;
         robotTargetRotY.current = 0.5;
 
         const projectIdx = Math.min(Math.floor(p * 3), 2);
@@ -688,7 +688,7 @@ export default function JourneyCanvas({
       onEnter: () => {
         onStageChange?.("about", 0.5);
         robotTargetPos.current = { x: isMobile ? 0.7 : 1.6, y: -0.7, z: 1.1 };
-        robotTargetScale.current = isMobile ? 0.62 : 0.85;
+        robotTargetScale.current = isMobile ? 0.45 : 0.62;
         robotTargetRotY.current = -0.4;
         switchRobotAction("ThumbsUp");
       },
@@ -702,7 +702,7 @@ export default function JourneyCanvas({
       onEnter: () => {
         onStageChange?.("contact", 0.5);
         robotTargetPos.current = { x: 0, y: -0.5, z: 1.4 };
-        robotTargetScale.current = isMobile ? 0.72 : 0.98;
+        robotTargetScale.current = isMobile ? 0.52 : 0.72;
         robotTargetRotY.current = 0;
         switchRobotAction("Dance");
       },
