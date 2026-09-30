@@ -95,18 +95,18 @@ export default function Stage02ExperienceWaypoints({
     <section
       id="zone-experience"
       ref={containerRef}
-      className="relative h-screen w-full select-none bg-transparent overflow-hidden flex flex-col justify-between py-8 sm:py-12 px-6 sm:px-12 pointer-events-none"
+      className="relative h-screen w-full select-none bg-transparent overflow-hidden flex flex-col justify-between py-5 sm:py-7 lg:py-8 px-4 sm:px-8 lg:px-12 pointer-events-none"
     >
-      {/* 1. Dedicated Floating Time / Era Widget in Top Right Corner ("waktu di experience buat di pojok kanan atas") */}
-      <div className="absolute top-8 right-6 sm:top-10 sm:right-12 z-30 pointer-events-auto flex flex-col items-end">
-        <div className="inline-flex items-center gap-2.5 border border-amber-400/40 bg-gradient-to-r from-amber-400/15 via-[#0d1020]/95 to-[#070914]/98 backdrop-blur-2xl px-5 py-2.5 rounded-full shadow-[0_10px_35px_rgba(0,0,0,0.7),0_0_20px_rgba(245,158,11,0.18)]">
+      {/* 1. Dedicated Floating Time / Era Widget Safely Positioned Below HUD */}
+      <div className="absolute top-20 sm:top-24 right-6 sm:right-10 z-30 pointer-events-auto hidden sm:flex flex-col items-end">
+        <div className="inline-flex items-center gap-2.5 border border-amber-400/40 bg-gradient-to-r from-amber-400/15 via-[#0d1020]/95 to-[#070914]/98 backdrop-blur-2xl px-4 py-2 rounded-full shadow-[0_10px_35px_rgba(0,0,0,0.7),0_0_20px_rgba(245,158,11,0.18)]">
           <Calendar className="h-3.5 w-3.5 text-amber-400" />
           <span className="font-mono text-xs sm:text-sm font-bold text-amber-200 tracking-wider">
             {currentWaypoint.year}
           </span>
           <span className="h-2 w-2 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b] animate-pulse" />
         </div>
-        <div className="flex items-center gap-2 font-mono text-[10px] text-zinc-400 tracking-[0.2em] uppercase mt-2 pr-1">
+        <div className="flex items-center gap-2 font-mono text-[10px] text-zinc-400 tracking-[0.2em] uppercase mt-1.5 pr-1">
           <span className="text-amber-300 font-semibold">
             CASE 0{activeIndex + 1}
           </span>
@@ -118,13 +118,13 @@ export default function Stage02ExperienceWaypoints({
       </div>
 
       {/* 2. Environmental Header & Waypoint Selector */}
-      <div className="z-20 text-center max-w-3xl mx-auto pt-2 pointer-events-auto">
-        <div className="font-sans text-[11px] sm:text-xs tracking-[0.25em] uppercase text-amber-300/90 font-medium mb-1.5 flex items-center justify-center gap-2">
+      <div className="z-20 text-center max-w-4xl mx-auto pt-1 pointer-events-auto">
+        <div className="font-sans text-[10px] sm:text-xs tracking-[0.25em] uppercase text-amber-300/90 font-medium mb-1 flex items-center justify-center gap-2">
           <span className="h-1.5 w-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b]" />
           <span>Engineering Milestones & Featured Projects · 2022 — 2026</span>
         </div>
 
-        <h2 className="font-display font-light text-3xl sm:text-5xl md:text-6xl text-white tracking-tight uppercase">
+        <h2 className="font-display font-light text-2xl sm:text-4xl md:text-5xl text-white tracking-tight uppercase">
           Engineering{" "}
           <span className="font-serif italic font-normal text-transparent bg-clip-text bg-gradient-to-r from-champagne-300 via-amber-200 to-amber-400">
             Trajectory
@@ -132,7 +132,7 @@ export default function Stage02ExperienceWaypoints({
         </h2>
 
         {/* Minimal Waypoint Navigation Pills */}
-        <div className="flex items-center justify-center gap-1.5 sm:gap-2.5 mt-3 flex-wrap">
+        <div className="flex items-center justify-center gap-1.5 sm:gap-2 mt-2 sm:mt-2.5 flex-wrap max-w-2xl mx-auto">
           {EXPERIENCE_WAYPOINTS.map((wp, idx) => {
             const isFeatured = wp.type === "featured-project";
             return (
@@ -147,7 +147,7 @@ export default function Stage02ExperienceWaypoints({
                     window.scrollTo({ top: targetY, behavior: "smooth" });
                   }
                 }}
-                className={`group flex items-center gap-1.5 transition-all duration-300 py-0.5 px-2 rounded-full cursor-pointer border ${
+                className={`group flex items-center gap-1.5 transition-all duration-300 py-0.5 px-2.5 rounded-full cursor-pointer border ${
                   activeIndex === idx
                     ? isFeatured
                       ? "border-amber-400 bg-amber-400/20 text-white font-bold scale-105 shadow-[0_0_12px_rgba(245,158,11,0.3)]"
@@ -158,11 +158,11 @@ export default function Stage02ExperienceWaypoints({
                 <span
                   className={`h-1.5 transition-all duration-300 rounded-full ${
                     activeIndex === idx
-                      ? "w-4 bg-amber-400 shadow-[0_0_8px_#f59e0b]"
+                      ? "w-3.5 bg-amber-400 shadow-[0_0_8px_#f59e0b]"
                       : "w-1.5 bg-zinc-700 group-hover:bg-zinc-500"
                   }`}
                 />
-                <span className="font-sans text-[11px] tracking-wider">
+                <span className="font-sans text-[10px] sm:text-[11px] tracking-wider">
                   {isFeatured ? `★ ${wp.year}` : wp.year}
                 </span>
               </button>
@@ -172,17 +172,13 @@ export default function Stage02ExperienceWaypoints({
       </div>
 
       {/* 3. Main Stage: Two-Column Staging Layout */}
-      {/* Left column is reserved for the 3D Robot so cards can NEVER overlap or overwrite it! */}
       <div className="flex items-center w-full my-auto overflow-hidden">
-        {/* Dedicated Left Margin Space for the 3D Robot (340px - 400px clear area) */}
-        <div className="hidden md:block w-[320px] lg:w-[380px] shrink-0 pointer-events-none" />
-
-        {/* Right Arena: Horizontal Cards Track with strict overflow-hidden */}
-        {/* As cards glide to the left, they clip cleanly at the left boundary of this arena and NEVER enter the robot's area! */}
-        <div ref={arenaRef} className="flex-1 overflow-hidden pointer-events-auto h-full flex items-center">
+        {/* Left Arena: Horizontal Cards Track with strict overflow-hidden */}
+        {/* As cards glide to the left, they remain bounded inside this arena and NEVER enter the robot's right margin! */}
+        <div ref={arenaRef} className="flex-1 overflow-hidden pointer-events-auto h-full flex items-center py-2">
           <div
             ref={trackRef}
-            className="flex items-stretch gap-6 sm:gap-8 flex-nowrap will-change-transform py-4 pr-24 pl-2 sm:pl-4"
+            className="flex items-stretch gap-5 sm:gap-7 flex-nowrap will-change-transform py-2 pl-4 sm:pl-8 pr-16"
           >
             {EXPERIENCE_WAYPOINTS.map((wp, idx) => {
               const isActive = activeIndex === idx;
@@ -192,7 +188,7 @@ export default function Stage02ExperienceWaypoints({
                 <div
                   key={idx}
                   onClick={() => setSelectedWaypoint(wp)}
-                  className={`exp-card group relative w-[310px] sm:w-[410px] shrink-0 border rounded-2xl p-7 sm:p-8 flex flex-col justify-between transition-all duration-300 cursor-pointer active:scale-95 ${
+                  className={`exp-card group relative w-[310px] sm:w-[380px] lg:w-[400px] h-[390px] sm:h-[420px] shrink-0 border rounded-2xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 cursor-pointer active:scale-95 ${
                     isFeatured
                       ? isActive
                         ? "border-amber-400 bg-gradient-to-b from-[#181d38]/98 via-[#0e1224]/98 to-[#070914]/98 shadow-[0_25px_65px_rgba(0,0,0,0.9),0_0_35px_rgba(245,158,11,0.28)] scale-[1.01]"
@@ -211,7 +207,7 @@ export default function Stage02ExperienceWaypoints({
 
                   {/* Card Header: Type Badge & Top-Right Time / Year Badge */}
                   <div>
-                    <div className="flex items-center justify-between mb-4 border-b border-white/[0.08] pb-3">
+                    <div className="flex items-center justify-between mb-3 border-b border-white/[0.08] pb-2.5">
                       <div className="flex items-center gap-2">
                         {isFeatured ? (
                           <div className="inline-flex items-center gap-1.5 font-display text-[11px] font-bold text-amber-300 bg-amber-400/15 border border-amber-400/35 px-2.5 py-0.5 rounded-full">
@@ -233,7 +229,7 @@ export default function Stage02ExperienceWaypoints({
                       </div>
 
                       {/* Time / Year in Top Right of Card */}
-                      <div className="inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-amber-200 bg-amber-400/10 border border-amber-400/30 px-3 py-0.5 rounded-full shadow-[0_0_12px_rgba(245,158,11,0.12)]">
+                      <div className="inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-amber-200 bg-amber-400/10 border border-amber-400/30 px-2.5 py-0.5 rounded-full shadow-[0_0_12px_rgba(245,158,11,0.12)]">
                         <Calendar className="h-3 w-3 text-amber-400" />
                         <span>{wp.year}</span>
                       </div>
@@ -241,33 +237,33 @@ export default function Stage02ExperienceWaypoints({
 
                     {/* Domain Title */}
                     <h3
-                      className={`font-display font-bold tracking-tight uppercase leading-tight mb-2 transition-colors ${
+                      className={`font-display font-bold tracking-tight uppercase leading-tight mb-1.5 line-clamp-1 transition-colors ${
                         isFeatured
-                          ? "text-2xl sm:text-3xl text-white group-hover:text-amber-200"
-                          : "text-xl sm:text-2xl text-white group-hover:text-amber-200"
+                          ? "text-xl sm:text-2xl text-white group-hover:text-amber-200"
+                          : "text-lg sm:text-xl text-white group-hover:text-amber-200"
                       }`}
                     >
                       {wp.domain}
                     </h3>
 
                     {/* Role & Company */}
-                    <div className="flex items-center gap-2 font-sans text-xs sm:text-sm text-zinc-300 font-normal mb-4">
+                    <div className="flex items-center gap-2 font-sans text-xs text-zinc-300 font-normal mb-3">
                       <Briefcase className="h-3.5 w-3.5 text-amber-400 shrink-0" />
                       <span className="text-amber-200 font-medium">{wp.role}</span>
                       <span className="text-zinc-600">·</span>
-                      <span className="text-zinc-400">{wp.company}</span>
+                      <span className="text-zinc-400 line-clamp-1">{wp.company}</span>
                     </div>
 
                     {/* Description */}
-                    <p className="text-xs sm:text-sm text-zinc-300 font-light leading-relaxed mb-4 border-l-2 border-amber-400/40 pl-3.5 bg-white/[0.02] py-2 rounded-r">
+                    <p className="text-xs text-zinc-300 font-light leading-relaxed mb-3 border-l-2 border-amber-400/40 pl-3 bg-white/[0.02] py-1 rounded-r line-clamp-3">
                       {wp.description}
                     </p>
 
                     {/* Deliverables snippet for featured projects */}
                     {isFeatured && wp.deliverables && (
-                      <div className="mb-4 space-y-1.5">
+                      <div className="mb-2 space-y-1">
                         {wp.deliverables.slice(0, 2).map((d, dIdx) => (
-                          <div key={dIdx} className="text-[11px] text-zinc-400 flex items-start gap-2">
+                          <div key={dIdx} className="text-[11px] text-zinc-400 flex items-start gap-1.5">
                             <span className="text-amber-400 font-bold">›</span>
                             <span className="line-clamp-1">{d}</span>
                           </div>
@@ -277,12 +273,12 @@ export default function Stage02ExperienceWaypoints({
                   </div>
 
                   {/* Tech Stack Tags & Interactive Click Prompt */}
-                  <div className="pt-4 border-t border-white/[0.08]">
-                    <div className="flex flex-wrap gap-1.5 mb-4">
-                      {wp.tech.map((t, tIdx) => (
+                  <div className="pt-3 border-t border-white/[0.08]">
+                    <div className="flex flex-wrap gap-1.5 mb-3">
+                      {wp.tech.slice(0, 4).map((t, tIdx) => (
                         <span
                           key={tIdx}
-                          className={`font-sans text-[11px] tracking-wide px-2.5 py-0.5 rounded-md ${
+                          className={`font-sans text-[10px] sm:text-[11px] tracking-wide px-2 py-0.5 rounded-md ${
                             isFeatured
                               ? "text-amber-200 bg-amber-400/10 border border-amber-400/25"
                               : "text-zinc-200 bg-white/[0.05] border border-white/10"
@@ -291,10 +287,15 @@ export default function Stage02ExperienceWaypoints({
                           {t}
                         </span>
                       ))}
+                      {wp.tech.length > 4 && (
+                        <span className="font-sans text-[10px] sm:text-[11px] text-zinc-400 px-1 py-0.5">
+                          +{wp.tech.length - 4}
+                        </span>
+                      )}
                     </div>
 
                     {/* Click Indicator */}
-                    <div className="flex items-center justify-between text-zinc-400 group-hover:text-amber-300 font-sans text-xs tracking-wider transition-colors pt-1">
+                    <div className="flex items-center justify-between text-zinc-400 group-hover:text-amber-300 font-sans text-xs tracking-wider transition-colors pt-0.5">
                       <span>View Full Case Study</span>
                       <ChevronRight className="h-3.5 w-3.5 transform group-hover:translate-x-1 transition-transform text-amber-400" />
                     </div>
@@ -304,10 +305,13 @@ export default function Stage02ExperienceWaypoints({
             })}
           </div>
         </div>
+
+        {/* Dedicated Right Margin Space for 3D Robot (280px - 380px clear area on the right) */}
+        <div className="hidden md:block w-[280px] lg:w-[340px] xl:w-[380px] shrink-0 pointer-events-none" />
       </div>
 
       {/* 4. Footer Hint */}
-      <div className="z-20 text-center font-sans text-xs text-zinc-500 tracking-[0.2em] uppercase pb-2 pointer-events-auto">
+      <div className="z-20 text-center font-sans text-[11px] sm:text-xs text-zinc-500 tracking-[0.2em] uppercase pb-1 pointer-events-auto">
         <span>Scroll vertically to glide through milestones & featured projects · Click cards for full dossier</span>
       </div>
 

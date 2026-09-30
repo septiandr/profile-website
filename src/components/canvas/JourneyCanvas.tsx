@@ -573,16 +573,16 @@ export default function JourneyCanvas({
           robotTargetRotY.current = 0;
           switchRobotAction("Wave");
         } else {
-          // Page transition: robot smoothly glides from center to the far left margin while WALKING
+          // Page transition: robot smoothly glides from center to the RIGHT margin while WALKING
           onStageChange?.("take-off", p);
           const t = (p - 0.12) / 0.88;
           robotTargetPos.current = {
-            x: isMobile ? -1.35 * t : -2.85 * t,
+            x: isMobile ? 1.35 * t : 2.85 * t,
             y: -0.48 - t * 0.17,
             z: 1.65 - t * 0.4,
           };
           robotTargetScale.current = (isMobile ? 0.62 : 0.90) + t * 0.15;
-          robotTargetRotY.current = t * 0.50;
+          robotTargetRotY.current = -t * 0.50; // Angled left towards the cards
           switchRobotAction("Walking");
         }
       },
@@ -605,7 +605,7 @@ export default function JourneyCanvas({
       },
     });
 
-    // 2. EXPERIENCE WAYPOINTS STAGE (Robot positioned far left, walking when scrolling & waving when idle)
+    // 2. EXPERIENCE WAYPOINTS STAGE (Robot positioned on the RIGHT, walking when scrolling & waving when idle)
     addTrigger({
       trigger: "#zone-experience",
       start: "top top",
@@ -615,15 +615,15 @@ export default function JourneyCanvas({
         const p = self.progress;
         onStageChange?.("experience-waypoints", p);
 
-        // Robot stands far on the left edge ("lebih ke pinggir") facing towards the cards
+        // Robot stands on the RIGHT edge facing left towards the cards
         if (isMobile) {
-          robotTargetPos.current = { x: -1.35, y: -0.85, z: 1.1 };
+          robotTargetPos.current = { x: 1.35, y: -0.85, z: 1.1 };
           robotTargetScale.current = 0.72;
-          robotTargetRotY.current = 0.45;
+          robotTargetRotY.current = -0.45;
         } else {
-          robotTargetPos.current = { x: -2.85, y: -0.65, z: 1.25 };
+          robotTargetPos.current = { x: 2.85, y: -0.65, z: 1.25 };
           robotTargetScale.current = 1.05;
-          robotTargetRotY.current = 0.50;
+          robotTargetRotY.current = -0.50;
         }
 
         // When actively scrolling, robot performs dynamic Walking stride!
@@ -645,13 +645,13 @@ export default function JourneyCanvas({
       },
       onEnter: () => {
         if (isMobile) {
-          robotTargetPos.current = { x: -1.35, y: -0.85, z: 1.1 };
+          robotTargetPos.current = { x: 1.35, y: -0.85, z: 1.1 };
           robotTargetScale.current = 0.72;
-          robotTargetRotY.current = 0.45;
+          robotTargetRotY.current = -0.45;
         } else {
-          robotTargetPos.current = { x: -2.85, y: -0.65, z: 1.25 };
+          robotTargetPos.current = { x: 2.85, y: -0.65, z: 1.25 };
           robotTargetScale.current = 1.05;
-          robotTargetRotY.current = 0.50;
+          robotTargetRotY.current = -0.50;
         }
         switchRobotAction("Wave");
       },
@@ -659,7 +659,7 @@ export default function JourneyCanvas({
       onLeave: () => switchRobotAction("Walking"),
     });
 
-    // 3. TECHNOLOGY LAB STAGE (Protagonist robot safely on left margin, looking at skills on the right)
+    // 3. TECHNOLOGY LAB STAGE (Protagonist robot strictly on the RIGHT margin, looking left at skills)
     addTrigger({
       trigger: "#zone-skills",
       start: "top center",
@@ -669,41 +669,41 @@ export default function JourneyCanvas({
         const p = self.progress;
         onStageChange?.("tech-lab", p);
 
-        robotTargetPos.current = { x: isMobile ? 0 : -2.85, y: -0.65, z: 1.25 };
-        robotTargetScale.current = isMobile ? 0.65 : 1.05;
-        robotTargetRotY.current = 0.50;
+        robotTargetPos.current = { x: isMobile ? 1.25 : 2.85, y: isMobile ? -0.85 : -0.65, z: 1.25 };
+        robotTargetScale.current = isMobile ? 0.70 : 1.05;
+        robotTargetRotY.current = -0.50; // Angled left towards skills
 
-        // Materialize tech lab 3D nodes on the right
-        techLab.position.set(isMobile ? 0 : 0.8, 0, -0.3);
+        // Materialize tech lab 3D nodes on the left/center
+        techLab.position.set(isMobile ? 0 : -0.8, 0, -0.3);
         techLab.scale.setScalar(Math.min(p * 1.3, 1.0));
       },
       onEnter: () => switchRobotAction("ThumbsUp"),
       onLeave: () => switchRobotAction("Walking"),
     });
 
-    // 4. ABOUT DOSSIER STAGE (Robot stays on left margin!)
+    // 4. ABOUT DOSSIER STAGE (Robot strictly on the RIGHT margin, looking left at dossier!)
     addTrigger({
       trigger: "#zone-about",
       start: "top center",
       end: "bottom center",
       onEnter: () => {
         onStageChange?.("about", 0.5);
-        robotTargetPos.current = { x: isMobile ? 0 : -2.85, y: -0.65, z: 1.25 };
-        robotTargetScale.current = isMobile ? 0.7 : 1.05;
-        robotTargetRotY.current = 0.50; // Angled towards the dossier on the right
+        robotTargetPos.current = { x: isMobile ? 1.25 : 2.85, y: isMobile ? -0.85 : -0.65, z: 1.25 };
+        robotTargetScale.current = isMobile ? 0.70 : 1.05;
+        robotTargetRotY.current = -0.50; // Angled towards the dossier on the left
         switchRobotAction("ThumbsUp");
       },
     });
 
-    // 6. CONTACT & VICTORY DANCE
+    // 6. CONTACT & VICTORY DANCE (Robot in Center, clear from top headline and bottom buttons)
     addTrigger({
       trigger: "#zone-contact",
       start: "top center",
       end: "bottom bottom",
       onEnter: () => {
         onStageChange?.("contact", 0.5);
-        robotTargetPos.current = { x: 0, y: -0.5, z: 1.4 };
-        robotTargetScale.current = isMobile ? 0.85 : 1.2;
+        robotTargetPos.current = { x: 0, y: -0.38, z: 1.4 };
+        robotTargetScale.current = isMobile ? 0.85 : 1.15;
         robotTargetRotY.current = 0;
         switchRobotAction("Dance");
       },
