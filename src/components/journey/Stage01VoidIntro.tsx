@@ -108,33 +108,34 @@ export default function Stage01VoidIntro({
     >
       {/* Sticky Fullscreen Frame for Discrete Page-like Experience */}
       <div className="sticky top-0 h-screen w-full flex flex-col justify-between items-center px-6 pt-24 sm:pt-28 pb-12 sm:pb-16 overflow-hidden">
-        {/* Editorial Cinematic Headline (Framed above the center robot) */}
+        {/* Editorial Headline (Framed above the center robot) */}
         <div
           ref={headlineRef}
           className="text-center max-w-4xl mx-auto z-10 pointer-events-auto"
         >
-          <div className="font-mono text-[11px] tracking-[0.35em] text-solar-400 uppercase mb-2 font-medium">
-            WELCOME TO
+          <div className="font-sans text-[11px] sm:text-xs tracking-[0.3em] uppercase text-zinc-400 font-medium mb-3 flex items-center justify-center gap-2.5">
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b]" />
+            <span>Interactive Portfolio · Software Engineer</span>
           </div>
 
-          <h1 className="font-sans font-light tracking-tight text-4xl sm:text-6xl md:text-7xl lg:text-8xl text-zinc-100 uppercase leading-[0.96] mb-3">
-            <span className="kinetic-text-line block font-black tracking-tighter text-white">
-              RISANGGALIH
+          <h1 className="font-display font-medium tracking-tight text-5xl sm:text-7xl md:text-8xl lg:text-[6.5rem] text-white leading-[0.92] mb-5">
+            <span className="kinetic-text-line block font-extrabold tracking-tight">
+              SEPTIAN DWI
             </span>
-            <span className="kinetic-text-line block text-transparent bg-clip-text bg-gradient-to-r from-solar-400 via-solar-300 to-amber-200 font-extralight tracking-widest text-3xl sm:text-5xl md:text-6xl mt-1">
-              PORTFOLIO
+            <span className="kinetic-text-line block font-serif italic font-normal text-transparent bg-clip-text bg-gradient-to-r from-champagne-200 via-amber-200 to-amber-400 mt-1">
+              Risanggalih
             </span>
           </h1>
 
-          <p className="void-sub font-mono text-xs sm:text-sm text-zinc-400 tracking-[0.3em] uppercase font-light">
-            SOFTWARE ENGINEER
+          <p className="void-sub font-sans text-xs sm:text-sm text-zinc-400 font-light tracking-[0.2em] uppercase">
+            Senior Frontend & Fullstack Systems Developer
           </p>
         </div>
 
-        {/* Center Stage is Kept Clear for the 3D Protagonist Robot Waving at Visitor */}
+        {/* Center Stage is Kept Clear for the 3D Protagonist Robot */}
         <div className="flex-1 w-full flex items-center justify-center pointer-events-none" />
 
-        {/* Primary Action Button & Mission Prompt */}
+        {/* Primary Action Button & Elegant Agency Prompt */}
         <div
           ref={ctaRef}
           className="void-cta-box z-10 pointer-events-auto flex flex-col items-center gap-3.5"
@@ -143,16 +144,15 @@ export default function Stage01VoidIntro({
             onClick={handleEnter}
             onMouseEnter={() => onEngineHover?.(true)}
             onMouseLeave={() => onEngineHover?.(false)}
-            className="group relative flex items-center gap-3 border border-solar-500/50 bg-obsidian-950/80 px-8 py-3.5 font-mono text-xs tracking-[0.25em] text-solar-300 transition-all duration-500 hover:border-solar-400 hover:text-white hover:bg-solar-500/10 hover:shadow-[0_0_30px_rgba(245,158,11,0.3)]"
+            className="group relative flex items-center gap-3.5 border border-white/15 bg-white/[0.04] backdrop-blur-xl px-9 py-3.5 rounded-full font-sans text-xs tracking-[0.22em] uppercase text-zinc-200 hover:text-white hover:border-amber-400/60 hover:bg-amber-400/10 transition-all duration-500 shadow-[0_15px_35px_rgba(0,0,0,0.6)]"
           >
-            <span className="h-2 w-2 rounded-full bg-solar-400 group-hover:animate-ping" />
-            <span>ENTER JOURNEY</span>
-            <ArrowDown className="h-3.5 w-3.5 transition-transform group-hover:translate-y-1" />
+            <span className="h-1.5 w-1.5 rounded-full bg-amber-400 group-hover:scale-125 transition-transform" />
+            <span>Explore Experience</span>
+            <ArrowDown className="h-3.5 w-3.5 text-amber-300 group-hover:translate-y-1 transition-transform" />
           </button>
 
-          <div className="flex items-center gap-2 font-mono text-[10px] text-zinc-500 tracking-widest uppercase">
-            <Sparkles className="h-3 w-3 text-solar-400/80" />
-            <span>CLICK ROBOT TO WAVE • SCROLL TO ENTER</span>
+          <div className="flex items-center gap-2 font-sans text-[11px] text-zinc-500 tracking-[0.18em] uppercase">
+            <span>Click companion to wave · Scroll to navigate</span>
           </div>
         </div>
       </div>

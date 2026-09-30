@@ -43,25 +43,25 @@ export default function HUDMissionControl({ currentStage }: HUDMissionControlPro
   const isVisible = scrolledPastVoid && currentStage !== "the-void";
 
   const stageTitles: Record<JourneyStage, string> = {
-    "the-void": "SECTOR 01 // ORBITAL VOID",
-    "take-off": "SECTOR 01 // WARP CRUISE",
-    "experience-waypoints": "SECTOR 02 // EXPEDITION WAYPOINTS",
-    "tech-lab": "SECTOR 03 // ARCHITECTURAL LAB",
-    "project-portal": "SECTOR 03 // PORTAL ACTIVATION",
-    projects: "SECTOR 04 // PROJECT DESTINATIONS",
-    about: "SECTOR 05 // PERSONNEL DOSSIER",
-    contact: "SECTOR 06 // MISSION CONTROL COMMS",
-    departure: "SECTOR 07 // CELEBRATION DANCE",
-    "end-screen": "MISSION LOG // ARCHIVED",
+    "the-void": "Prologue · Introduction",
+    "take-off": "Transition · Velocity",
+    "experience-waypoints": "Milestones · Trajectory",
+    "tech-lab": "Arsenal · Capabilities",
+    "project-portal": "Showcase · Enterprise",
+    projects: "Featured Works · Production",
+    about: "Philosophy · The Engineer",
+    contact: "Inquiries · Collaboration",
+    departure: "Epilogue · Celebration",
+    "end-screen": "Archive · Complete",
   };
 
   const navLinks = [
-    { id: "zone-void", label: "00 // INTRO" },
-    { id: "zone-experience", label: "01 // EXP" },
-    { id: "zone-skills", label: "02 // SKILLS" },
-    { id: "zone-projects", label: "03 // PROJECTS" },
-    { id: "zone-about", label: "04 // ABOUT" },
-    { id: "zone-contact", label: "05 // CONTACT" },
+    { id: "zone-void", label: "Intro" },
+    { id: "zone-experience", label: "Experience" },
+    { id: "zone-skills", label: "Arsenal" },
+    { id: "zone-projects", label: "Projects" },
+    { id: "zone-about", label: "About" },
+    { id: "zone-contact", label: "Contact" },
   ];
 
   const scrollToZone = (id: string, e: React.MouseEvent) => {
@@ -80,34 +80,33 @@ export default function HUDMissionControl({ currentStage }: HUDMissionControlPro
           : "opacity-0 -translate-y-10 pointer-events-none"
       }`}
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between pointer-events-auto border-b border-solar-500/20 pb-3 backdrop-blur-xl bg-obsidian-950/70 px-5 rounded-2xl shadow-[0_4px_25px_rgba(0,0,0,0.5)]">
+      <div className="mx-auto flex max-w-7xl items-center justify-between pointer-events-auto border border-white/[0.08] pb-3 pt-3 backdrop-blur-2xl bg-[#070814]/80 px-6 rounded-full shadow-[0_15px_35px_rgba(0,0,0,0.6)]">
         {/* Brand & Sector Status */}
         <div className="flex items-center gap-4">
           <a
             href="#zone-void"
             onClick={(e) => scrollToZone("zone-void", e)}
-            className="font-mono text-xs tracking-[0.25em] font-bold text-zinc-100 hover:text-solar-400 transition-colors flex items-center gap-2"
+            className="font-display text-xs tracking-[0.2em] font-bold text-white hover:text-amber-300 transition-colors flex items-center gap-2"
           >
-            <span className="h-2 w-2 rounded-full bg-solar-400 shadow-[0_0_8px_#f59e0b]" />
+            <span className="h-1.5 w-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b]" />
             <span>RISANGGALIH</span>
-            <span className="text-solar-400 text-[10px] font-normal">.PORTO</span>
           </a>
-          <span className="hidden sm:inline text-zinc-700">|</span>
-          <div className="hidden sm:flex items-center gap-2 font-mono text-[11px] text-zinc-400">
-            <span className="text-solar-300 font-medium tracking-wider">
+          <span className="hidden sm:inline text-zinc-700">·</span>
+          <div className="hidden sm:flex items-center gap-2 font-sans text-xs text-zinc-400">
+            <span className="text-amber-300/90 font-medium tracking-wide">
               {stageTitles[currentStage]}
             </span>
           </div>
         </div>
 
         {/* Minimal Navigation */}
-        <nav className="hidden md:flex items-center gap-6">
+        <nav className="hidden md:flex items-center gap-7">
           {navLinks.map((link) => (
             <a
               key={link.id}
               href={`#${link.id}`}
               onClick={(e) => scrollToZone(link.id, e)}
-              className="font-mono text-[11px] tracking-widest text-zinc-400 hover:text-solar-300 transition-colors"
+              className="font-sans text-xs tracking-wider text-zinc-400 hover:text-amber-300 transition-colors"
             >
               {link.label}
             </a>
@@ -116,9 +115,9 @@ export default function HUDMissionControl({ currentStage }: HUDMissionControlPro
 
         {/* Clock & Audio */}
         <div className="flex items-center gap-4">
-          <div className="hidden lg:flex items-center gap-2 font-mono text-[11px] text-zinc-500">
-            <span className="text-zinc-600">KLATEN (WIB)</span>
-            <span className="text-solar-300 font-semibold">{timeStr}</span>
+          <div className="hidden lg:flex items-center gap-2 font-sans text-xs text-zinc-400">
+            <span className="text-zinc-500">JKT</span>
+            <span className="text-amber-300 font-medium">{timeStr}</span>
           </div>
           <AudioController />
         </div>

@@ -14,10 +14,13 @@ export class StarfieldRig {
     this.originalZ = new Float32Array(count);
     const colors = new Float32Array(count * 3);
 
-    // Warm Solar Theme Palette: champagne gold, bone white, soft amber
-    const c1 = new THREE.Color(0xfef3c7); // Champagne bone
-    const c2 = new THREE.Color(0xd4d4d8); // Muted titanium
-    const c3 = new THREE.Color(0xf59e0b); // Solar amber accent
+    // Multi-chromatic Luxury Astral Palette: champagne gold, celestial cyan, soft nebula rose, royal periwinkle, solar amber
+    const c1 = new THREE.Color(0xfef3c7); // Warm Champagne
+    const c2 = new THREE.Color(0x38bdf8); // Celestial Cyan
+    const c3 = new THREE.Color(0xf59e0b); // Radiant Solar Amber
+    const c4 = new THREE.Color(0x818cf8); // Royal Periwinkle
+    const c5 = new THREE.Color(0xf472b6); // Soft Nebula Rose
+    const c6 = new THREE.Color(0xe4e4e7); // Fine Starlight White
 
     for (let i = 0; i < count; i++) {
       this.positions[i * 3] = (Math.random() - 0.5) * 85;
@@ -27,7 +30,18 @@ export class StarfieldRig {
       this.originalZ[i] = z;
 
       const rand = Math.random();
-      const col = rand > 0.8 ? c3 : rand > 0.35 ? c1 : c2;
+      const col =
+        rand > 0.88
+          ? c3
+          : rand > 0.72
+          ? c2
+          : rand > 0.56
+          ? c4
+          : rand > 0.42
+          ? c5
+          : rand > 0.2
+          ? c1
+          : c6;
       colors[i * 3] = col.r;
       colors[i * 3 + 1] = col.g;
       colors[i * 3 + 2] = col.b;

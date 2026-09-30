@@ -114,11 +114,11 @@ export default function JourneyCanvas({
     const width = window.innerWidth;
     const height = window.innerHeight;
 
-    // 1. SCENE (Warm deep obsidian void)
+    // 1. SCENE (Cinematic Deep Midnight Astral Void)
     const scene = new THREE.Scene();
     sceneRef.current = scene;
-    scene.background = new THREE.Color(0x060709);
-    scene.fog = new THREE.FogExp2(0x060709, 0.024);
+    scene.background = new THREE.Color(0x070814);
+    scene.fog = new THREE.FogExp2(0x070814, 0.022);
 
     // 2. CAMERA
     const camera = new THREE.PerspectiveCamera(44, width / height, 0.1, 100);
@@ -133,25 +133,29 @@ export default function JourneyCanvas({
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.3;
+    renderer.toneMappingExposure = 1.35;
     container.appendChild(renderer.domElement);
     rendererRef.current = renderer;
 
-    // 4. WARM SOLAR LIGHTING (Warm Key + Amber Accent + Neutral Rim)
-    const ambientLight = new THREE.AmbientLight(0xfef3c7, 0.9);
+    // 4. RICH CHROMATIC STUDIO LIGHTING (Champagne Key + Indigo Fill + Amber Rim + Cyan Starlight)
+    const ambientLight = new THREE.AmbientLight(0x1a1e36, 1.4); // Velvet deep indigo ambient
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0xfffbeb, 3.5);
+    const keyLight = new THREE.DirectionalLight(0xfff5e4, 3.8); // Warm champagne sunlight
     keyLight.position.set(6, 7, 5);
     scene.add(keyLight);
 
-    const solarAccentLight = new THREE.DirectionalLight(0xf59e0b, 3.0);
-    solarAccentLight.position.set(-6, -3, 3);
+    const indigoFillLight = new THREE.DirectionalLight(0x4338ca, 2.6); // Deep royal indigo fill for rich cinematic shadows
+    indigoFillLight.position.set(-6, -2, -3);
+    scene.add(indigoFillLight);
+
+    const solarAccentLight = new THREE.DirectionalLight(0xf59e0b, 3.2); // Radiant solar amber
+    solarAccentLight.position.set(0, 8, -6);
     scene.add(solarAccentLight);
 
-    const rimLight = new THREE.DirectionalLight(0xd4d4d8, 2.2);
-    rimLight.position.set(0, 8, -6);
-    scene.add(rimLight);
+    const cyanBounceLight = new THREE.DirectionalLight(0x06b6d4, 1.2); // Subtle celestial cyan bounce
+    cyanBounceLight.position.set(-3, 4, 4);
+    scene.add(cyanBounceLight);
 
     // Rocket Thruster Point Light (parented to rocketGroup at thruster -Z offset)
     const engineLight = new THREE.PointLight(0xf59e0b, 2.5, 10);
@@ -557,10 +561,10 @@ export default function JourneyCanvas({
         }
 
         if (p < 0.22) {
-          // Centered & actively waving to welcome visitor
+          // Centered & actively waving at intro: slightly smaller per user request
           onStageChange?.("the-void", p);
           robotTargetPos.current = { x: 0, y: -0.42, z: 1.65 };
-          robotTargetScale.current = isMobile ? 0.52 : 0.75;
+          robotTargetScale.current = isMobile ? 0.45 : 0.65;
           robotTargetRotY.current = 0;
           switchRobotAction("Wave");
         } else {
@@ -568,26 +572,26 @@ export default function JourneyCanvas({
           onStageChange?.("take-off", p);
           const t = (p - 0.22) / 0.78;
           robotTargetPos.current = {
-            x: isMobile ? 0.4 * t : -1.6 * t,
-            y: -0.42 - t * 0.38,
-            z: 1.65 - t * 0.55,
+            x: isMobile ? 0.4 * t : -1.85 * t,
+            y: -0.42 - t * 0.23,
+            z: 1.65 - t * 0.4,
           };
-          robotTargetScale.current = (isMobile ? 0.52 : 0.75) - t * 0.18;
-          robotTargetRotY.current = t * 0.35;
+          robotTargetScale.current = (isMobile ? 0.45 : 0.65) + t * 0.33;
+          robotTargetRotY.current = t * 0.45;
           switchRobotAction("Walking");
         }
       },
       onEnter: () => {
         onStageChange?.("the-void", 0);
         robotTargetPos.current = { x: 0, y: -0.42, z: 1.65 };
-        robotTargetScale.current = isMobile ? 0.52 : 0.75;
+        robotTargetScale.current = isMobile ? 0.45 : 0.65;
         robotTargetRotY.current = 0;
         switchRobotAction("Wave");
       },
       onLeaveBack: () => {
         onStageChange?.("the-void", 0);
         robotTargetPos.current = { x: 0, y: -0.42, z: 1.65 };
-        robotTargetScale.current = isMobile ? 0.52 : 0.75;
+        robotTargetScale.current = isMobile ? 0.45 : 0.65;
         robotTargetRotY.current = 0;
         switchRobotAction("Wave");
         if (starfieldRef.current) {
@@ -596,7 +600,7 @@ export default function JourneyCanvas({
       },
     });
 
-    // 2. EXPERIENCE WAYPOINTS STAGE (Robot stands stationary and waves at visitor)
+    // 2. EXPERIENCE WAYPOINTS STAGE (Bigger protagonist robot waving on left side)
     addTrigger({
       trigger: "#zone-experience",
       start: "top top",
@@ -606,15 +610,15 @@ export default function JourneyCanvas({
         const p = self.progress;
         onStageChange?.("experience-waypoints", p);
 
-        // User requested: "robot diam melambai" (stands stationary and waves)
+        // Robot stands prominent and waves at visitor without being blocked by cards
         if (isMobile) {
           robotTargetPos.current = { x: 0.75, y: -0.85, z: 1.1 };
-          robotTargetScale.current = 0.45;
+          robotTargetScale.current = 0.72;
           robotTargetRotY.current = -0.3;
         } else {
-          robotTargetPos.current = { x: -1.55, y: -0.65, z: 1.3 };
-          robotTargetScale.current = 0.65;
-          robotTargetRotY.current = 0.35;
+          robotTargetPos.current = { x: -1.85, y: -0.65, z: 1.25 };
+          robotTargetScale.current = 0.98;
+          robotTargetRotY.current = 0.45;
         }
         switchRobotAction("Wave");
 
@@ -624,12 +628,12 @@ export default function JourneyCanvas({
       onEnter: () => {
         if (isMobile) {
           robotTargetPos.current = { x: 0.75, y: -0.85, z: 1.1 };
-          robotTargetScale.current = 0.45;
+          robotTargetScale.current = 0.72;
           robotTargetRotY.current = -0.3;
         } else {
-          robotTargetPos.current = { x: -1.55, y: -0.65, z: 1.3 };
-          robotTargetScale.current = 0.65;
-          robotTargetRotY.current = 0.35;
+          robotTargetPos.current = { x: -1.85, y: -0.65, z: 1.25 };
+          robotTargetScale.current = 0.98;
+          robotTargetRotY.current = 0.45;
         }
         switchRobotAction("Wave");
       },
@@ -637,7 +641,7 @@ export default function JourneyCanvas({
       onLeave: () => switchRobotAction("ThumbsUp"),
     });
 
-    // 3. TECHNOLOGY LAB STAGE
+    // 3. TECHNOLOGY LAB STAGE (Prominent protagonist guide)
     addTrigger({
       trigger: "#zone-skills",
       start: "top center",
@@ -647,8 +651,8 @@ export default function JourneyCanvas({
         const p = self.progress;
         onStageChange?.("tech-lab", p);
 
-        robotTargetPos.current = { x: isMobile ? 0 : 1.6, y: -0.7, z: 1.0 };
-        robotTargetScale.current = isMobile ? 0.48 : 0.65;
+        robotTargetPos.current = { x: isMobile ? 0 : 1.65, y: -0.7, z: 1.05 };
+        robotTargetScale.current = isMobile ? 0.72 : 0.98;
         robotTargetRotY.current = -0.5;
 
         // Materialize tech lab
@@ -669,8 +673,8 @@ export default function JourneyCanvas({
         const p = self.progress;
         onStageChange?.("projects", p);
 
-        robotTargetPos.current = { x: isMobile ? 0.6 : -1.8, y: -0.8, z: 1.1 };
-        robotTargetScale.current = isMobile ? 0.45 : 0.62;
+        robotTargetPos.current = { x: isMobile ? 0.6 : -1.85, y: -0.8, z: 1.1 };
+        robotTargetScale.current = isMobile ? 0.7 : 0.95;
         robotTargetRotY.current = 0.5;
 
         const projectIdx = Math.min(Math.floor(p * 3), 2);
@@ -687,8 +691,8 @@ export default function JourneyCanvas({
       end: "bottom center",
       onEnter: () => {
         onStageChange?.("about", 0.5);
-        robotTargetPos.current = { x: isMobile ? 0.7 : 1.6, y: -0.7, z: 1.1 };
-        robotTargetScale.current = isMobile ? 0.45 : 0.62;
+        robotTargetPos.current = { x: isMobile ? 0.7 : 1.65, y: -0.7, z: 1.1 };
+        robotTargetScale.current = isMobile ? 0.7 : 0.95;
         robotTargetRotY.current = -0.4;
         switchRobotAction("ThumbsUp");
       },
@@ -702,7 +706,7 @@ export default function JourneyCanvas({
       onEnter: () => {
         onStageChange?.("contact", 0.5);
         robotTargetPos.current = { x: 0, y: -0.5, z: 1.4 };
-        robotTargetScale.current = isMobile ? 0.52 : 0.72;
+        robotTargetScale.current = isMobile ? 0.82 : 1.15;
         robotTargetRotY.current = 0;
         switchRobotAction("Dance");
       },

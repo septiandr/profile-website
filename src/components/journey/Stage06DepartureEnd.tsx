@@ -22,40 +22,38 @@ export default function Stage06DepartureEnd({ onRestart }: Stage06Props) {
       ref={containerRef}
       className="relative min-h-screen w-full px-6 py-32 flex flex-col justify-between items-center text-center select-none bg-obsidian-950 z-30"
     >
-      <div className="font-mono text-[10px] tracking-[0.35em] text-solar-400 uppercase flex items-center gap-2">
-        <Bot className="h-3 w-3 text-solar-400" />
-        <span>JOURNEY LOG // TRANSMISSION COMPLETE</span>
+      <div className="font-sans text-[11px] sm:text-xs tracking-[0.25em] text-amber-300/90 uppercase flex items-center gap-2">
+        <span className="h-1.5 w-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b]" />
+        <span>Experience Concluded · Thank You For Visiting</span>
       </div>
 
       {/* End Screen Credential */}
       <div className="max-w-xl mx-auto space-y-4 my-auto">
-        <h2 className="font-sans font-light tracking-tight text-3xl sm:text-5xl text-white uppercase leading-none">
-          RISANGGALIH
+        <h2 className="font-display font-medium tracking-tight text-4xl sm:text-6xl text-white uppercase leading-none">
+          Septian Dwi <span className="font-serif italic font-normal text-transparent bg-clip-text bg-gradient-to-r from-champagne-300 via-amber-200 to-amber-400">Risanggalih</span>
         </h2>
 
-        <div className="font-mono text-xs sm:text-sm text-solar-400 tracking-[0.25em] uppercase font-semibold">
-          SOFTWARE ENGINEER
+        <div className="font-sans text-xs sm:text-sm text-amber-300/90 tracking-[0.25em] uppercase font-medium">
+          Senior Frontend & Fullstack Software Engineer
         </div>
 
-        <p className="font-mono text-xs text-zinc-400 tracking-widest uppercase pt-4 leading-relaxed max-w-md mx-auto">
-          BUILDING DIGITAL EXPERIENCES
-          <br />
-          THROUGH CODE.
+        <p className="font-sans text-xs sm:text-sm text-zinc-400 tracking-[0.18em] uppercase pt-4 leading-relaxed max-w-md mx-auto font-light">
+          Engineering Scalable Systems · Designing Elevated Web Experiences
         </p>
 
         <div className="pt-10">
           <button
             onClick={handleRestartClick}
-            className="group inline-flex items-center gap-2.5 border border-solar-500/50 bg-obsidian-900/90 px-8 py-4 font-mono text-xs tracking-[0.25em] text-solar-300 hover:border-solar-400 hover:text-white hover:bg-solar-500/10 transition-all duration-300 shadow-[0_0_25px_rgba(245,158,11,0.2)]"
+            className="group inline-flex items-center gap-3 border border-amber-400/40 bg-white/[0.04] px-8 py-4 rounded-full font-sans text-xs tracking-[0.22em] text-amber-200 hover:border-amber-400 hover:text-white hover:bg-amber-400/10 transition-all duration-300 shadow-[0_10px_30px_rgba(245,158,11,0.15)]"
           >
-            <RotateCcw className="h-3.5 w-3.5 transition-transform group-hover:-rotate-90 text-solar-400" />
-            <span>RESTART JOURNEY</span>
+            <RotateCcw className="h-3.5 w-3.5 transition-transform group-hover:-rotate-90 text-amber-300" />
+            <span>RETURN TO BEGINNING</span>
           </button>
         </div>
       </div>
 
-      <div className="font-mono text-[11px] text-zinc-600 tracking-widest uppercase">
-        © 2026 SEPTIAN DWI RISANGGALIH. CRAFTED WITH THREE.JS & GSAP.
+      <div className="font-sans text-[11px] text-zinc-600 tracking-widest uppercase">
+        © 2026 SEPTIAN DWI RISANGGALIH · ALL RIGHTS RESERVED
       </div>
     </section>
   );

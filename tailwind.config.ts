@@ -11,11 +11,17 @@ const config: Config = {
     extend: {
       colors: {
         obsidian: {
-          950: "#060709",
-          900: "#0b0d12",
-          850: "#10141c",
-          800: "#161b26",
-          700: "#222a3a",
+          950: "#070811",
+          900: "#0b0e1b",
+          850: "#101426",
+          800: "#151b30",
+          700: "#222a4d",
+        },
+        astral: {
+          void: "#070811",
+          deep: "#0a0d1e",
+          card: "#0e1224",
+          surface: "#141932",
         },
         solar: {
           50: "#fffbeb",
@@ -26,10 +32,19 @@ const config: Config = {
           500: "#f59e0b",
           600: "#d97706",
         },
+        champagne: {
+          100: "#fdfbf7",
+          200: "#f9f4ea",
+          300: "#f3e8d2",
+          400: "#ebd8b6",
+          500: "#dfc495",
+        },
       },
       fontFamily: {
-        mono: ["var(--font-mono)", "JetBrains Mono", "Courier New", "monospace"],
-        sans: ["var(--font-sans)", "Inter", "system-ui", "sans-serif"],
+        display: ["var(--font-display)", "Syne", "sans-serif"],
+        sans: ["var(--font-sans)", "Plus Jakarta Sans", "Inter", "sans-serif"],
+        serif: ["var(--font-serif)", "Playfair Display", "serif"],
+        mono: ["var(--font-mono)", "JetBrains Mono", "monospace"],
       },
       animation: {
         "pulse-slow": "pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite",

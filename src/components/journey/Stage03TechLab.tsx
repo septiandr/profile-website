@@ -59,17 +59,20 @@ export default function Stage03TechLab({
       ref={containerRef}
       className="relative min-h-[200vh] w-full px-6 py-32 flex flex-col justify-start items-center select-none"
     >
-      {/* Sticky Environmental HUD */}
+      {/* Environmental Header */}
       <div className="sticky top-28 z-20 text-center max-w-2xl mx-auto mb-16 pointer-events-none">
-        <div className="inline-flex items-center gap-2 font-mono text-[10px] tracking-[0.35em] text-solar-400 uppercase mb-2 border border-solar-500/30 bg-obsidian-950/80 px-4 py-1 rounded-full backdrop-blur-md">
-          <Cpu className="h-3 w-3 text-solar-400" />
-          <span>SECTOR 03 // ARCHITECTURAL LAB</span>
+        <div className="font-sans text-[11px] sm:text-xs tracking-[0.25em] uppercase text-amber-300/90 font-medium mb-2 flex items-center justify-center gap-2">
+          <span className="h-1.5 w-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b]" />
+          <span>Technical Capabilities · Systems & Engines</span>
         </div>
-        <h2 className="font-sans font-light text-4xl sm:text-6xl text-white tracking-tight uppercase">
-          SYSTEM SCAN <span className="font-extralight text-zinc-500">• NODES</span>
+        <h2 className="font-display font-light text-4xl sm:text-6xl text-white tracking-tight uppercase">
+          Technical{" "}
+          <span className="font-serif italic font-normal text-transparent bg-clip-text bg-gradient-to-r from-champagne-300 via-amber-200 to-amber-400">
+            Arsenal
+          </span>
         </h2>
-        <p className="font-mono text-xs text-solar-200 tracking-widest uppercase mt-2">
-          ROBOT GUIDED ARCHITECTURAL COMPILATION
+        <p className="font-sans text-xs text-zinc-400 tracking-[0.18em] uppercase mt-2 font-light">
+          Distributed Web · Real-Time Applications · Mobile Architecture
         </p>
       </div>
 
@@ -80,12 +83,12 @@ export default function Stage03TechLab({
           return (
             <div
               key={cat}
-              className="border-t border-solar-500/30 pt-4 flex flex-col justify-between"
+              className="pt-2 flex flex-col justify-between"
             >
               <div>
-                <div className="font-mono text-[10px] tracking-[0.25em] text-solar-400 uppercase mb-3 font-semibold flex items-center gap-2">
-                  <span className="h-1.5 w-1.5 rounded-full bg-solar-400" />
-                  <span>// {cat}</span>
+                <div className="font-display text-xs tracking-[0.2em] text-amber-300 font-semibold uppercase mb-4 flex items-center gap-2 border-b border-white/[0.08] pb-2.5">
+                  <span className="h-1 w-3 bg-amber-400 rounded-full" />
+                  <span>{cat}</span>
                 </div>
 
                 <div className="space-y-3">
@@ -100,15 +103,17 @@ export default function Stage03TechLab({
                         onMouseLeave={handleNodeLeave}
                         className={`tech-card p-4 rounded-xl border transition-all duration-300 cursor-pointer active:scale-95 ${
                           isHovered
-                            ? "border-solar-400 bg-[#121724] text-white shadow-[0_0_25px_rgba(245,158,11,0.3)] -translate-y-1 scale-[1.02]"
-                            : "border-solar-500/20 bg-[#0c0f17]/95 text-zinc-300 hover:border-solar-400/60 hover:bg-[#10141f] hover:-translate-y-1 hover:shadow-[0_10px_25px_rgba(0,0,0,0.5)]"
+                            ? "border-amber-400/70 bg-gradient-to-b from-[#171c36] via-[#101429] to-[#0a0d1d] text-white shadow-[0_15px_35px_rgba(0,0,0,0.8),0_0_25px_rgba(245,158,11,0.2)] -translate-y-1 scale-[1.02]"
+                            : "border-white/[0.08] bg-gradient-to-b from-[#101426]/90 via-[#0b0e1b]/95 to-[#070912]/98 text-zinc-300 hover:border-amber-400/40 hover:-translate-y-1 hover:shadow-[0_10px_25px_rgba(0,0,0,0.6)]"
                         } backdrop-blur-xl`}
                       >
-                        <div className="flex items-center justify-between font-mono text-xs mb-1.5">
+                        <div className="flex items-center justify-between font-display text-xs mb-1.5">
                           <span className="font-bold text-white tracking-wide">{node.name}</span>
-                          <span className="text-[10px] font-semibold text-solar-400">ACTIVE</span>
+                          <span className="text-[10px] font-sans font-medium text-amber-300/80 uppercase tracking-widest">
+                            Production
+                          </span>
                         </div>
-                        <p className="text-xs text-zinc-300 font-light leading-relaxed">
+                        <p className="font-sans text-xs text-zinc-300 font-light leading-relaxed">
                           {node.detail}
                         </p>
                       </div>
@@ -121,11 +126,10 @@ export default function Stage03TechLab({
         })}
       </div>
 
-      {/* Spatial Portal Notice */}
-      <div className="mt-auto mb-16 text-center z-20 pointer-events-none pt-12">
-        <div className="inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.25em] text-zinc-500 uppercase">
-          <Sparkles className="h-3 w-3 text-solar-400" />
-          <span>[ SPATIAL PORTAL EXPEDITION // SCROLL TO ADVANCE TO PROJECTS ]</span>
+      {/* Subtle Navigation Prompt */}
+      <div className="mt-auto mb-16 text-center z-20 pointer-events-none pt-16">
+        <div className="inline-flex items-center gap-2 font-sans text-xs text-zinc-500 tracking-[0.2em] uppercase">
+          <span>Scroll to explore featured project destinations</span>
         </div>
       </div>
     </section>
