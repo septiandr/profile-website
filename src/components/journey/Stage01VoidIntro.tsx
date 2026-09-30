@@ -6,11 +6,24 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowDown, Bot, Sparkles } from "lucide-react";
 
 interface Stage01Props {
+  currentAction?: string;
+  onSelectAction?: (action: string) => void;
   onEngineHover?: (hovered: boolean) => void;
   onEnterJourney?: () => void;
 }
 
+const GESTURE_ACTIONS = [
+  { id: "Wave", label: "Wave", icon: "👋" },
+  { id: "Dance", label: "Dance", icon: "🕺" },
+  { id: "Jump", label: "Jump", icon: "⚡" },
+  { id: "ThumbsUp", label: "Thumbs Up", icon: "👍" },
+  { id: "Punch", label: "Punch", icon: "🥊" },
+  { id: "Yes", label: "Nod Yes", icon: "✨" },
+];
+
 export default function Stage01VoidIntro({
+  currentAction = "Wave",
+  onSelectAction,
   onEngineHover,
   onEnterJourney,
 }: Stage01Props) {
@@ -138,8 +151,44 @@ export default function Stage01VoidIntro({
         {/* Primary Action Button & Elegant Agency Prompt */}
         <div
           ref={ctaRef}
-          className="void-cta-box z-10 pointer-events-auto flex flex-col items-center gap-3.5"
+          className="void-cta-box z-10 pointer-events-auto flex flex-col items-center gap-3.5 max-w-xl w-full"
         >
+          {/* Interactive Companion Gesture Selector Dock */}
+          <div className="flex flex-col items-center gap-2 w-full">
+            <div className="flex items-center gap-2 font-mono text-[10px] tracking-[0.25em] uppercase text-zinc-400">
+              <Bot className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+              <span>Companion Stance Control</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_6px_#f59e0b]" />
+            </div>
+
+            <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 p-1.5 rounded-2xl sm:rounded-full bg-zinc-950/70 backdrop-blur-2xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.65)]">
+              {GESTURE_ACTIONS.map((gesture) => {
+                const isActive = (currentAction || "Wave") === gesture.id;
+                return (
+                  <button
+                    key={gesture.id}
+                    onClick={() => onSelectAction?.(gesture.id)}
+                    className={`relative group px-3 sm:px-3.5 py-1.5 rounded-full text-xs font-mono tracking-wider transition-all duration-300 flex items-center gap-1.5 ${
+                      isActive
+                        ? "bg-gradient-to-r from-amber-500/25 to-amber-400/20 text-amber-200 border border-amber-400/60 shadow-[0_0_16px_rgba(245,158,11,0.35)] scale-105"
+                        : "text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.06] border border-transparent hover:border-white/10"
+                    }`}
+                  >
+                    <span className="text-sm select-none transition-transform group-hover:scale-125 duration-200">
+                      {gesture.icon}
+                    </span>
+                    <span className="text-[11px] font-medium uppercase tracking-[0.14em]">
+                      {gesture.label}
+                    </span>
+                    {isActive && (
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_6px_#f59e0b] animate-pulse ml-0.5" />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           <button
             onClick={handleEnter}
             onMouseEnter={() => onEngineHover?.(true)}
@@ -152,7 +201,7 @@ export default function Stage01VoidIntro({
           </button>
 
           <div className="flex items-center gap-2 font-sans text-[11px] text-zinc-500 tracking-[0.18em] uppercase">
-            <span>Click companion to wave · Scroll to navigate</span>
+            <span>Choose stance or click companion · Scroll to navigate</span>
           </div>
         </div>
       </div>

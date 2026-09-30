@@ -17,6 +17,7 @@ interface JourneyCanvasProps {
   onHoverTechNode?: (index: number | null) => void;
   isEngineHot?: boolean;
   robotAction?: string;
+  actionTriggerId?: number;
   onRobotActionChange?: (action: string) => void;
   isModalOpen?: boolean;
 }
@@ -29,10 +30,17 @@ export default function JourneyCanvas({
   onHoverTechNode,
   isEngineHot = false,
   robotAction = "Wave",
+  actionTriggerId,
   onRobotActionChange,
   isModalOpen = false,
 }: JourneyCanvasProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Synchronized ref for robot action to prevent scroll overwrite
+  const robotActionRef = useRef<string>(robotAction);
+  useEffect(() => {
+    robotActionRef.current = robotAction;
+  }, [robotAction]);
 
   // Three.js instances
   const sceneRef = useRef<THREE.Scene | null>(null);
@@ -78,13 +86,13 @@ export default function JourneyCanvas({
   const robotTargetRotY = useRef<number>(0);
   const scrollIdleTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Rock-solid Animation Switcher with smooth crossFade
-  const switchRobotAction = useCallback((newActionName: string) => {
+  // Rock-solid Animation Switcher with smooth crossFade & tactile bounce
+  const switchRobotAction = useCallback((newActionName: string, forceRestart = false) => {
     const actions = robotActionsRef.current;
     const next = actions[newActionName];
     if (!next) return;
 
-    if (newActionName === currentActionNameRef.current) {
+    if (newActionName === currentActionNameRef.current && !forceRestart) {
       // Already active! Just ensure it is running without resetting timer on every scroll frame!
       if (!next.isRunning()) {
         next.play();
@@ -94,6 +102,7 @@ export default function JourneyCanvas({
 
     const prev = actions[currentActionNameRef.current];
     currentActionNameRef.current = newActionName;
+    robotActionRef.current = newActionName;
 
     next.reset();
     next.enabled = true;
@@ -106,6 +115,24 @@ export default function JourneyCanvas({
       next.fadeIn(0.35);
     }
     next.play();
+
+    // Tactile hop when explicitly triggered
+    if (robotGroupRef.current && forceRestart) {
+      gsap.killTweensOf(robotGroupRef.current.position, "y");
+      const currentY = robotGroupRef.current.position.y;
+      gsap.to(robotGroupRef.current.position, {
+        y: currentY + 0.12,
+        duration: 0.16,
+        yoyo: true,
+        repeat: 1,
+        ease: "power2.out",
+        onComplete: () => {
+          if (robotGroupRef.current) {
+            robotGroupRef.current.position.y = currentY;
+          }
+        },
+      });
+    }
 
     onRobotActionChangeRef.current?.(newActionName);
   }, []);
@@ -283,11 +310,12 @@ export default function JourneyCanvas({
             robotActionsRef.current[clip.name] = mixer.clipAction(clip);
           });
 
-          // Play initial greeting Wave and keep waving to welcome visitor
-          const waveAction = robotActionsRef.current["Wave"];
-          if (waveAction) {
-            waveAction.reset().play();
-            currentActionNameRef.current = "Wave";
+          // Play initial greeting action and keep playing to welcome visitor
+          const targetInit = robotActionRef.current || "Wave";
+          const initAction = robotActionsRef.current[targetInit] || robotActionsRef.current["Wave"];
+          if (initAction) {
+            initAction.reset().play();
+            currentActionNameRef.current = targetInit;
           } else {
             const idleAction = robotActionsRef.current["Idle"] || robotActionsRef.current["Standing"];
             if (idleAction) {
@@ -324,6 +352,7 @@ export default function JourneyCanvas({
 
       const prev = actions[currentActionNameRef.current];
       currentActionNameRef.current = "Wave";
+      robotActionRef.current = "Wave";
 
       waveAction.reset();
       waveAction.enabled = true;
@@ -526,12 +555,12 @@ export default function JourneyCanvas({
     }
   }, [activeTechNode]);
 
-  // Sync external robot action triggers (e.g. from companion HUD)
+  // Sync external robot action triggers (e.g. from companion HUD or stance dock)
   useEffect(() => {
     if (robotAction && !isModalOpen) {
-      switchRobotAction(robotAction);
+      switchRobotAction(robotAction, true);
     }
-  }, [robotAction, isModalOpen, switchRobotAction]);
+  }, [robotAction, actionTriggerId, isModalOpen, switchRobotAction]);
 
   // Dedicated Experience Modal Open Handler ("robot jangan hilang disini, buat dance")
   const isModalOpenRef = useRef(isModalOpen);
@@ -550,7 +579,7 @@ export default function JourneyCanvas({
       switchRobotAction("Dance");
     } else {
       // Modal closed: return to standard wave/walk posture
-      switchRobotAction("Wave");
+      switchRobotAction(robotActionRef.current || "Wave");
     }
   }, [isModalOpen, switchRobotAction]);
 
@@ -590,12 +619,12 @@ export default function JourneyCanvas({
         }
 
         if (p < 0.12) {
-          // Centered & actively waving at intro: enlarged and heroic per user request
+          // Centered & actively showing chosen action at intro: enlarged and heroic per user request
           onStageChange?.("the-void", p);
           robotTargetPos.current = { x: 0, y: -0.40, z: 1.8 };
           robotTargetScale.current = isMobile ? 0.85 : 1.35;
           robotTargetRotY.current = 0;
-          switchRobotAction("Wave");
+          switchRobotAction(robotActionRef.current || "Wave");
         } else {
           // Page transition: robot smoothly glides from center to the RIGHT margin while WALKING
           onStageChange?.("take-off", p);
@@ -616,7 +645,7 @@ export default function JourneyCanvas({
         robotTargetPos.current = { x: 0, y: -0.40, z: 1.8 };
         robotTargetScale.current = isMobile ? 0.85 : 1.35;
         robotTargetRotY.current = 0;
-        switchRobotAction("Wave");
+        switchRobotAction(robotActionRef.current || "Wave");
       },
       onLeaveBack: () => {
         if (isModalOpenRef.current) return;
@@ -624,7 +653,7 @@ export default function JourneyCanvas({
         robotTargetPos.current = { x: 0, y: -0.40, z: 1.8 };
         robotTargetScale.current = isMobile ? 0.85 : 1.35;
         robotTargetRotY.current = 0;
-        switchRobotAction("Wave");
+        switchRobotAction(robotActionRef.current || "Wave");
         if (starfieldRef.current) {
           starfieldRef.current.setWarp(1.0);
         }

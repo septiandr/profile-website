@@ -22,6 +22,7 @@ export default function JourneyManager() {
   const [activeTechNode, setActiveTechNode] = useState<number | null>(null);
   const [isEngineHot, setIsEngineHot] = useState<boolean>(false);
   const [robotAction, setRobotAction] = useState<string>("Wave");
+  const [actionTriggerId, setActionTriggerId] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const handleStageChange = useCallback((stage: JourneyStage) => {
@@ -40,6 +41,11 @@ export default function JourneyManager() {
     setActiveTechNode(index);
   }, []);
 
+  const handleSelectRobotAction = useCallback((action: string) => {
+    setRobotAction(action);
+    setActionTriggerId((prev) => prev + 1);
+  }, []);
+
   const handleRobotActionChange = useCallback((action: string) => {
     setRobotAction(action);
   }, []);
@@ -54,6 +60,7 @@ export default function JourneyManager() {
     setActiveProjectIndex(0);
     setActiveTechNode(null);
     setRobotAction("Wave");
+    setActionTriggerId((prev) => prev + 1);
     setIsModalOpen(false);
   }, []);
 
@@ -68,6 +75,7 @@ export default function JourneyManager() {
         onHoverTechNode={handleHoverTechNode}
         isEngineHot={isEngineHot}
         robotAction={robotAction}
+        actionTriggerId={actionTriggerId}
         onRobotActionChange={handleRobotActionChange}
         isModalOpen={isModalOpen}
       />
@@ -79,6 +87,8 @@ export default function JourneyManager() {
       <main className="relative z-10">
         {/* Zone 1: The Void & Robot Welcome */}
         <Stage01VoidIntro
+          currentAction={robotAction}
+          onSelectAction={handleSelectRobotAction}
           onEngineHover={setIsEngineHot}
           onEnterJourney={() => {
             setIsEngineHot(true);
