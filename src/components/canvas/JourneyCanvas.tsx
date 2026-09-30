@@ -74,6 +74,7 @@ export default function JourneyCanvas({
   const robotTargetPos = useRef({ x: 0, y: -0.42, z: 1.65 });
   const robotTargetScale = useRef<number>(0.75);
   const robotTargetRotY = useRef<number>(0);
+  const scrollIdleTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Rock-solid Animation Switcher with smooth crossFade
   const switchRobotAction = useCallback((newActionName: string) => {
@@ -82,9 +83,10 @@ export default function JourneyCanvas({
     if (!next) return;
 
     if (newActionName === currentActionNameRef.current) {
-      // Re-trigger if same action (e.g. user re-clicked to wave)
-      next.reset();
-      next.play();
+      // Already active! Just ensure it is running without resetting timer on every scroll frame!
+      if (!next.isRunning()) {
+        next.play();
+      }
       return;
     }
 
@@ -93,13 +95,13 @@ export default function JourneyCanvas({
 
     next.reset();
     next.enabled = true;
-    next.setEffectiveTimeScale(1);
+    next.setEffectiveTimeScale(newActionName === "Walking" ? 1.2 : 1.0);
     next.setEffectiveWeight(1);
 
     if (prev && prev !== next) {
-      prev.crossFadeTo(next, 0.45, true);
+      prev.crossFadeTo(next, 0.35, true);
     } else {
-      next.fadeIn(0.45);
+      next.fadeIn(0.35);
     }
     next.play();
 
@@ -504,6 +506,9 @@ export default function JourneyCanvas({
       techLab.dispose();
       triggersRef.current.forEach((st) => st.kill());
       triggersRef.current = [];
+      if (scrollIdleTimerRef.current) {
+        clearTimeout(scrollIdleTimerRef.current);
+      }
       if (container.contains(renderer.domElement)) {
         container.removeChild(renderer.domElement);
       }
@@ -560,7 +565,7 @@ export default function JourneyCanvas({
           starfieldRef.current.setWarp(1 + p * 7);
         }
 
-        if (p < 0.22) {
+        if (p < 0.12) {
           // Centered & actively waving at intro: slightly smaller per user request
           onStageChange?.("the-void", p);
           robotTargetPos.current = { x: 0, y: -0.42, z: 1.65 };
@@ -568,16 +573,16 @@ export default function JourneyCanvas({
           robotTargetRotY.current = 0;
           switchRobotAction("Wave");
         } else {
-          // Page transition: robot smoothly glides from center into Sector 02 walking guide
+          // Page transition: robot smoothly glides from center to the far left margin while WALKING
           onStageChange?.("take-off", p);
-          const t = (p - 0.22) / 0.78;
+          const t = (p - 0.12) / 0.88;
           robotTargetPos.current = {
-            x: isMobile ? 0.4 * t : -1.85 * t,
+            x: isMobile ? -1.35 * t : -2.95 * t,
             y: -0.42 - t * 0.23,
             z: 1.65 - t * 0.4,
           };
-          robotTargetScale.current = (isMobile ? 0.45 : 0.65) + t * 0.33;
-          robotTargetRotY.current = t * 0.45;
+          robotTargetScale.current = (isMobile ? 0.45 : 0.65) + t * 0.4;
+          robotTargetRotY.current = t * 0.55;
           switchRobotAction("Walking");
         }
       },
@@ -600,7 +605,7 @@ export default function JourneyCanvas({
       },
     });
 
-    // 2. EXPERIENCE WAYPOINTS STAGE (Bigger protagonist robot waving on left side)
+    // 2. EXPERIENCE WAYPOINTS STAGE (Robot positioned far left, walking when scrolling & waving when idle)
     addTrigger({
       trigger: "#zone-experience",
       start: "top top",
@@ -610,38 +615,48 @@ export default function JourneyCanvas({
         const p = self.progress;
         onStageChange?.("experience-waypoints", p);
 
-        // Robot stands prominent and waves at visitor without being blocked by cards
+        // Robot stands far on the left edge ("lebih ke pinggir") facing towards the cards
         if (isMobile) {
-          robotTargetPos.current = { x: 0.75, y: -0.85, z: 1.1 };
+          robotTargetPos.current = { x: -1.35, y: -0.85, z: 1.1 };
           robotTargetScale.current = 0.72;
-          robotTargetRotY.current = -0.3;
-        } else {
-          robotTargetPos.current = { x: -1.85, y: -0.65, z: 1.25 };
-          robotTargetScale.current = 0.98;
           robotTargetRotY.current = 0.45;
+        } else {
+          robotTargetPos.current = { x: -2.95, y: -0.65, z: 1.25 };
+          robotTargetScale.current = 1.05;
+          robotTargetRotY.current = 0.55;
         }
-        switchRobotAction("Wave");
+
+        // When actively scrolling, robot performs dynamic Walking stride!
+        switchRobotAction("Walking");
+
+        // When user pauses scrolling, robot smoothly transitions to waving
+        if (scrollIdleTimerRef.current) {
+          clearTimeout(scrollIdleTimerRef.current);
+        }
+        scrollIdleTimerRef.current = setTimeout(() => {
+          switchRobotAction("Wave");
+        }, 500);
 
         const waypointIndex = Math.min(Math.floor(p * 6), 5);
         onActiveWaypointChange?.(waypointIndex);
       },
       onEnter: () => {
         if (isMobile) {
-          robotTargetPos.current = { x: 0.75, y: -0.85, z: 1.1 };
+          robotTargetPos.current = { x: -1.35, y: -0.85, z: 1.1 };
           robotTargetScale.current = 0.72;
-          robotTargetRotY.current = -0.3;
-        } else {
-          robotTargetPos.current = { x: -1.85, y: -0.65, z: 1.25 };
-          robotTargetScale.current = 0.98;
           robotTargetRotY.current = 0.45;
+        } else {
+          robotTargetPos.current = { x: -2.95, y: -0.65, z: 1.25 };
+          robotTargetScale.current = 1.05;
+          robotTargetRotY.current = 0.55;
         }
         switchRobotAction("Wave");
       },
-      onLeaveBack: () => switchRobotAction("Wave"),
-      onLeave: () => switchRobotAction("ThumbsUp"),
+      onLeaveBack: () => switchRobotAction("Walking"),
+      onLeave: () => switchRobotAction("Walking"),
     });
 
-    // 3. TECHNOLOGY LAB STAGE (Prominent protagonist guide)
+    // 3. TECHNOLOGY LAB STAGE (Prominent protagonist guide on right margin)
     addTrigger({
       trigger: "#zone-skills",
       start: "top center",
@@ -651,19 +666,19 @@ export default function JourneyCanvas({
         const p = self.progress;
         onStageChange?.("tech-lab", p);
 
-        robotTargetPos.current = { x: isMobile ? 0 : 1.65, y: -0.7, z: 1.05 };
-        robotTargetScale.current = isMobile ? 0.72 : 0.98;
-        robotTargetRotY.current = -0.5;
+        robotTargetPos.current = { x: isMobile ? 1.35 : 2.7, y: -0.7, z: 1.05 };
+        robotTargetScale.current = isMobile ? 0.72 : 1.0;
+        robotTargetRotY.current = -0.55;
 
         // Materialize tech lab
         techLab.position.set(0, 0, -0.3);
         techLab.scale.setScalar(Math.min(p * 1.3, 1.0));
       },
       onEnter: () => switchRobotAction("ThumbsUp"),
-      onLeave: () => switchRobotAction("Jump"),
+      onLeave: () => switchRobotAction("Walking"),
     });
 
-    // 4. PROJECTS DESTINATIONS STAGE
+    // 4. PROJECTS DESTINATIONS STAGE (Robot on left margin)
     addTrigger({
       trigger: "#zone-projects",
       start: "top center",
@@ -673,27 +688,27 @@ export default function JourneyCanvas({
         const p = self.progress;
         onStageChange?.("projects", p);
 
-        robotTargetPos.current = { x: isMobile ? 0.6 : -1.85, y: -0.8, z: 1.1 };
-        robotTargetScale.current = isMobile ? 0.7 : 0.95;
-        robotTargetRotY.current = 0.5;
+        robotTargetPos.current = { x: isMobile ? -1.35 : -2.95, y: -0.8, z: 1.1 };
+        robotTargetScale.current = isMobile ? 0.7 : 1.0;
+        robotTargetRotY.current = 0.55;
 
         const projectIdx = Math.min(Math.floor(p * 3), 2);
         onActiveProjectChange?.(projectIdx);
       },
-      onEnter: () => switchRobotAction("Jump"),
-      onLeave: () => switchRobotAction("ThumbsUp"),
+      onEnter: () => switchRobotAction("ThumbsUp"),
+      onLeave: () => switchRobotAction("Walking"),
     });
 
-    // 5. ABOUT DOSSIER STAGE
+    // 5. ABOUT DOSSIER STAGE (Robot on right margin)
     addTrigger({
       trigger: "#zone-about",
       start: "top center",
       end: "bottom center",
       onEnter: () => {
         onStageChange?.("about", 0.5);
-        robotTargetPos.current = { x: isMobile ? 0.7 : 1.65, y: -0.7, z: 1.1 };
-        robotTargetScale.current = isMobile ? 0.7 : 0.95;
-        robotTargetRotY.current = -0.4;
+        robotTargetPos.current = { x: isMobile ? 1.35 : 2.7, y: -0.7, z: 1.1 };
+        robotTargetScale.current = isMobile ? 0.7 : 1.0;
+        robotTargetRotY.current = -0.45;
         switchRobotAction("ThumbsUp");
       },
     });
@@ -706,7 +721,7 @@ export default function JourneyCanvas({
       onEnter: () => {
         onStageChange?.("contact", 0.5);
         robotTargetPos.current = { x: 0, y: -0.5, z: 1.4 };
-        robotTargetScale.current = isMobile ? 0.82 : 1.15;
+        robotTargetScale.current = isMobile ? 0.85 : 1.2;
         robotTargetRotY.current = 0;
         switchRobotAction("Dance");
       },
