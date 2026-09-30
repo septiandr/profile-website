@@ -22,6 +22,7 @@ export default function JourneyManager() {
   const [activeTechNode, setActiveTechNode] = useState<number | null>(null);
   const [isEngineHot, setIsEngineHot] = useState<boolean>(false);
   const [robotAction, setRobotAction] = useState<string>("Wave");
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const handleStageChange = useCallback((stage: JourneyStage) => {
     setCurrentStage(stage);
@@ -43,12 +44,17 @@ export default function JourneyManager() {
     setRobotAction(action);
   }, []);
 
+  const handleModalOpenChange = useCallback((isOpen: boolean) => {
+    setIsModalOpen(isOpen);
+  }, []);
+
   const handleRestart = useCallback(() => {
     setCurrentStage("the-void");
     setActiveWaypointIndex(0);
     setActiveProjectIndex(0);
     setActiveTechNode(null);
     setRobotAction("Wave");
+    setIsModalOpen(false);
   }, []);
 
   return (
@@ -63,6 +69,7 @@ export default function JourneyManager() {
         isEngineHot={isEngineHot}
         robotAction={robotAction}
         onRobotActionChange={handleRobotActionChange}
+        isModalOpen={isModalOpen}
       />
 
       {/* Mission Control Minimal HUD (Hidden on void/first screen, appears on scroll) */}
@@ -82,6 +89,7 @@ export default function JourneyManager() {
         {/* Zone 2: Robot-guided Experience & Featured Projects Waypoints */}
         <Stage02ExperienceWaypoints
           activeWaypointIndex={activeWaypointIndex}
+          onModalOpenChange={handleModalOpenChange}
         />
 
         {/* Zone 3: Architectural Tech Lab & Robot Diagnostics */}

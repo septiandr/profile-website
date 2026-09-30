@@ -66,8 +66,8 @@ export default function Stage01VoidIntro({
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top top",
-          end: "60% top",
-          scrub: 1.0,
+          end: "75% top",
+          scrub: 1.2,
         },
         opacity: 0,
         y: -90,
@@ -79,8 +79,8 @@ export default function Stage01VoidIntro({
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top top",
-          end: "45% top",
-          scrub: 1.0,
+          end: "55% top",
+          scrub: 1.2,
         },
         opacity: 0,
         y: 60,
@@ -104,7 +104,7 @@ export default function Stage01VoidIntro({
     <section
       id="zone-void"
       ref={containerRef}
-      className="relative min-h-[160vh] w-full select-none pointer-events-none"
+      className="relative min-h-[220vh] w-full select-none pointer-events-none"
     >
       {/* Sticky Fullscreen Frame for Discrete Page-like Experience */}
       <div className="sticky top-0 h-screen w-full flex flex-col justify-between items-center px-6 pt-24 sm:pt-28 pb-12 sm:pb-16 overflow-hidden">

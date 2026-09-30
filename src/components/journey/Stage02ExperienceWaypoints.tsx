@@ -138,19 +138,47 @@ const WAYPOINT_THEMES = [
 
 interface Stage02Props {
   activeWaypointIndex?: number;
+  onModalOpenChange?: (isOpen: boolean) => void;
 }
 
 export default function Stage02ExperienceWaypoints({
   activeWaypointIndex: propActiveIndex,
+  onModalOpenChange,
 }: Stage02Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const arenaRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const [internalIndex, setInternalIndex] = useState(0);
   const [selectedWaypoint, setSelectedWaypoint] = useState<ExperienceWaypoint | null>(null);
+  const [isClosingModal, setIsClosingModal] = useState<boolean>(false);
 
   const activeIndex = propActiveIndex !== undefined ? propActiveIndex : internalIndex;
   const currentWaypoint = EXPERIENCE_WAYPOINTS[activeIndex] || EXPERIENCE_WAYPOINTS[0];
+
+  const openModal = (wp: ExperienceWaypoint) => {
+    setSelectedWaypoint(wp);
+    setIsClosingModal(false);
+    onModalOpenChange?.(true);
+  };
+
+  const closeModal = () => {
+    setIsClosingModal(true);
+    setTimeout(() => {
+      setSelectedWaypoint(null);
+      setIsClosingModal(false);
+      onModalOpenChange?.(false);
+    }, 280);
+  };
+
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && selectedWaypoint) {
+        closeModal();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [selectedWaypoint]);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -164,7 +192,7 @@ export default function Stage02ExperienceWaypoints({
       // Calculate horizontal translation distance safely
       // Full track scrollable width minus visible arena container width + clearance for end boundary
       const getScrollAmount = () => {
-        const overflow = track.scrollWidth - arena.clientWidth + 140;
+        const overflow = track.scrollWidth - arena.clientWidth + 160;
         return overflow > 0 ? overflow : 0;
       };
 
@@ -173,7 +201,7 @@ export default function Stage02ExperienceWaypoints({
       const updateCardDynamics = (velocity = 0) => {
         const arenaRect = arena.getBoundingClientRect();
         const wrappers = track.querySelectorAll<HTMLElement>(".exp-card-wrapper");
-        const targetSkew = gsap.utils.clamp(-5, 5, velocity / -220);
+        const targetSkew = gsap.utils.clamp(-4.5, 4.5, velocity / -260);
 
         wrappers.forEach((wrapper) => {
           const rect = wrapper.getBoundingClientRect();
@@ -218,15 +246,15 @@ export default function Stage02ExperienceWaypoints({
         });
       };
 
-      // When horizontal scroll happens, vertical scroll stops ("scroll vertical berhenti")
-      // pin: true locks this section vertically until all cards have glided across
+      // Horizontal pin with extended scroll travel ("buat semua scroll lebih pelan")
+      // Multiplying getScrollAmount() by 1.8 makes the user experience 80% slower & smoother!
       ScrollTrigger.create({
         id: "exp-horizontal-pin",
         trigger: container,
         pin: true,
         start: "top top",
-        end: () => `+=${getScrollAmount()}`,
-        scrub: 1.0,
+        end: () => `+=${Math.round(getScrollAmount() * 1.8)}`,
+        scrub: 1.4, // Silky smooth deceleration lag
         invalidateOnRefresh: true,
         anticipatePin: 1,
         animation: gsap.to(track, {
@@ -370,7 +398,7 @@ export default function Stage02ExperienceWaypoints({
                   className="exp-card-wrapper shrink-0 will-change-transform h-full flex items-center"
                 >
                   <TiltSpotlightCard
-                    onClick={() => setSelectedWaypoint(wp)}
+                    onClick={() => openModal(wp)}
                     spotlightColor={theme.spotlight}
                     borderColor={theme.borderGlow}
                     accentGlow={theme.ambientAura}
@@ -469,7 +497,7 @@ export default function Stage02ExperienceWaypoints({
 
                       {/* Domain Title with Gradient Hover */}
                       <h3
-                        className={`font-display font-bold tracking-tight uppercase leading-tight mb-1.5 line-clamp-1 transition-colors ${
+                        className={`font-display font-bold tracking-tight uppercase leading-tight mb-2 line-clamp-1 transition-colors ${
                           isFeatured
                             ? "text-xl sm:text-2xl text-white group-hover:text-amber-200"
                             : "text-lg sm:text-xl text-white group-hover:text-white"
@@ -479,7 +507,7 @@ export default function Stage02ExperienceWaypoints({
                       </h3>
 
                       {/* Role & Company */}
-                      <div className="flex items-center gap-2 font-sans text-xs text-zinc-300 font-normal mb-2.5">
+                      <div className="flex items-center gap-2 font-sans text-xs sm:text-sm text-zinc-300 font-normal mb-3.5">
                         <Briefcase className="h-3.5 w-3.5 text-amber-400 shrink-0" />
                         <span className="text-zinc-100 font-semibold">{wp.role}</span>
                         <span className="text-zinc-600">·</span>
@@ -487,15 +515,15 @@ export default function Stage02ExperienceWaypoints({
                       </div>
 
                       {/* Description */}
-                      <p className="text-xs sm:text-sm text-zinc-300 font-light leading-relaxed mb-3 border-l-2 border-white/20 pl-3 bg-white/[0.02] py-1 rounded-r line-clamp-2 group-hover:border-amber-400/60 transition-colors">
+                      <p className="text-xs sm:text-sm text-zinc-300 font-light leading-relaxed mb-4 border-l-2 border-white/20 pl-3.5 bg-white/[0.02] py-1.5 rounded-r line-clamp-3 group-hover:border-amber-400/60 transition-colors">
                         {wp.description}
                       </p>
 
                       {/* Deliverables snippet for featured projects */}
                       {isFeatured && wp.deliverables && (
-                        <div className="mb-2 space-y-1">
+                        <div className="mb-3 space-y-1.5">
                           {wp.deliverables.slice(0, 2).map((d, dIdx) => (
-                            <div key={dIdx} className="text-[11px] sm:text-xs text-zinc-300 flex items-start gap-1.5">
+                            <div key={dIdx} className="text-xs text-zinc-300 flex items-start gap-2">
                               <span className="text-amber-400 font-bold">›</span>
                               <span className="line-clamp-1">{d}</span>
                             </div>
@@ -510,7 +538,7 @@ export default function Stage02ExperienceWaypoints({
                         {wp.tech.slice(0, 4).map((t, tIdx) => (
                           <span
                             key={tIdx}
-                            className={`font-sans text-[11px] sm:text-xs tracking-wide px-2.5 py-0.5 rounded-md border ${theme.tagStyle}`}
+                            className={`font-sans text-xs tracking-wide px-3 py-0.5 rounded-md border ${theme.tagStyle}`}
                           >
                             {t}
                           </span>
@@ -571,7 +599,7 @@ export default function Stage02ExperienceWaypoints({
                       All 09 enterprise milestones & featured works inspected.
                     </p>
                     <div className="text-[11px] text-amber-300 font-semibold">
-                      Approaching Sector 03: Technical Skills
+                      Approaching Sector 03: Technical Arsenal
                     </div>
                   </div>
 
@@ -611,21 +639,27 @@ export default function Stage02ExperienceWaypoints({
         <span>Scroll vertically to glide through milestones & featured projects · Hover cards to inspect 3D layers</span>
       </div>
 
-      {/* 5. Interactive Click Modal / Case Study Dossier */}
+      {/* 5. Interactive Click Modal / Case Study Dossier (Restored to Clean Previous Layout) */}
       {selectedWaypoint && (
         <div
-          onClick={() => setSelectedWaypoint(null)}
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-[#070814]/85 backdrop-blur-2xl pointer-events-auto animate-fade-in overflow-y-auto"
+          onClick={closeModal}
+          className={`fixed inset-0 z-[100] flex items-center justify-center p-6 bg-[#070814]/75 backdrop-blur-sm pointer-events-auto transition-opacity duration-300 ${
+            isClosingModal ? "opacity-0" : "opacity-100"
+          }`}
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-2xl border border-white/15 bg-gradient-to-b from-[#13172e] via-[#0d1022] to-[#070814] p-6 sm:p-8 md:p-10 rounded-3xl shadow-[0_30px_70px_rgba(0,0,0,0.9),0_0_40px_rgba(245,158,11,0.15)] text-left my-8"
+            className={`relative w-full max-w-xl border border-white/15 bg-gradient-to-b from-[#13172e] via-[#0d1022] to-[#070814] p-8 sm:p-10 rounded-3xl shadow-[0_30px_70px_rgba(0,0,0,0.9),0_0_40px_rgba(245,158,11,0.15)] text-left transition-all duration-300 ease-out ${
+              isClosingModal
+                ? "scale-95 opacity-0 translate-y-4"
+                : "scale-100 opacity-100 translate-y-0"
+            }`}
           >
             {/* Close Button */}
             <button
-              onClick={() => setSelectedWaypoint(null)}
+              onClick={closeModal}
               aria-label="Close dossier"
-              className="absolute top-5 right-5 p-2 rounded-full border border-white/10 hover:border-amber-400/60 text-zinc-400 hover:text-white transition-colors"
+              className="absolute top-6 right-6 p-2 rounded-full border border-white/10 hover:border-amber-400/60 text-zinc-400 hover:text-white transition-colors"
             >
               <X className="h-4 w-4" />
             </button>
@@ -641,39 +675,28 @@ export default function Stage02ExperienceWaypoints({
               </span>
             </div>
 
-            <h3 className="font-display font-medium text-2xl sm:text-3xl md:text-4xl text-white tracking-tight uppercase mb-2">
+            <h3 className="font-display font-medium text-3xl sm:text-4xl text-white tracking-tight uppercase mb-2">
               {selectedWaypoint.domain}
             </h3>
 
-            <div className="font-sans text-sm text-zinc-300 font-normal mb-5">
+            <div className="font-sans text-sm text-zinc-300 font-normal mb-6">
               <span className="text-amber-200 font-medium">{selectedWaypoint.role}</span> ·{" "}
               <span className="text-zinc-400">{selectedWaypoint.company}</span>
             </div>
 
-            {/* High-Resolution System Architecture / Mockup Hero Banner */}
-            {selectedWaypoint.image && (
-              <div className="w-full h-44 sm:h-52 md:h-60 rounded-xl overflow-hidden border border-white/15 mb-6 bg-black/60 shadow-[0_15px_35px_rgba(0,0,0,0.8)]">
-                <img
-                  src={selectedWaypoint.image}
-                  alt={selectedWaypoint.domain}
-                  className="w-full h-full object-cover object-center"
-                />
-              </div>
-            )}
-
             {/* Architectural Overview */}
-            <div className="mb-5">
+            <div className="mb-6">
               <div className="font-sans text-xs text-zinc-400 uppercase tracking-[0.15em] mb-2 font-medium">
                 Scope & Architectural Execution
               </div>
-              <p className="text-xs sm:text-sm text-zinc-200 font-light leading-relaxed border-l-2 border-amber-400/60 pl-3.5 py-1 bg-white/[0.02] rounded-r">
+              <p className="text-sm sm:text-base text-zinc-200 font-light leading-relaxed border-l-2 border-amber-400/60 pl-4 py-1.5 bg-white/[0.02] rounded-r">
                 {selectedWaypoint.description}
               </p>
             </div>
 
             {/* Key Deliverables if present */}
             {selectedWaypoint.deliverables && selectedWaypoint.deliverables.length > 0 && (
-              <div className="mb-5">
+              <div className="mb-6">
                 <div className="font-sans text-xs text-zinc-400 uppercase tracking-[0.15em] mb-2 font-medium">
                   Key Deliverables & Impact
                 </div>
@@ -689,8 +712,8 @@ export default function Stage02ExperienceWaypoints({
             )}
 
             {/* Core Tech Engines */}
-            <div className="mb-7">
-              <div className="font-sans text-xs text-zinc-400 uppercase tracking-[0.15em] mb-2.5 font-medium">
+            <div className="mb-8">
+              <div className="font-sans text-xs text-zinc-400 uppercase tracking-[0.15em] mb-3 font-medium">
                 Technologies Used
               </div>
               <div className="flex flex-wrap gap-2">
@@ -708,7 +731,7 @@ export default function Stage02ExperienceWaypoints({
             {/* Close Prompt */}
             <div className="pt-4 border-t border-white/[0.08] flex justify-end">
               <button
-                onClick={() => setSelectedWaypoint(null)}
+                onClick={closeModal}
                 className="border border-white/15 bg-white/[0.04] px-6 py-2.5 font-sans text-xs tracking-[0.18em] uppercase text-zinc-300 hover:border-amber-400/60 hover:text-white transition-all rounded-full"
               >
                 Close Case

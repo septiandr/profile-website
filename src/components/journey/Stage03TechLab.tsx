@@ -118,7 +118,7 @@ export default function Stage03TechLab({
     <section
       id="zone-skills"
       ref={containerRef}
-      className="relative min-h-screen w-full px-6 sm:px-12 py-24 sm:py-32 flex flex-col justify-center items-center select-none overflow-hidden"
+      className="relative min-h-[125vh] w-full px-6 sm:px-12 py-28 sm:py-36 flex flex-col justify-center items-center select-none overflow-hidden"
     >
       {/* Two-Column Staging Layout: Dedicated Right Space for 3D Robot */}
       <div className="w-full max-w-7xl flex flex-col lg:flex-row items-center lg:items-start justify-between z-20 pointer-events-auto">

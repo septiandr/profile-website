@@ -14,7 +14,7 @@ export default function Stage05AboutContact() {
       {/* SCENE 13: ABOUT (HOLOGRAPHIC DOSSIER WITH ROBOT COMPANION ON RIGHT) */}
       <section
         id="zone-about"
-        className="relative min-h-screen w-full px-6 sm:px-12 py-24 sm:py-32 flex items-center justify-center select-none"
+        className="relative min-h-[120vh] w-full px-6 sm:px-12 py-28 sm:py-36 flex items-center justify-center select-none"
       >
         <div className="w-full max-w-7xl flex flex-col lg:flex-row items-center justify-between z-20 pointer-events-auto">
           {/* Left Editorial Dossier */}
@@ -113,7 +113,7 @@ export default function Stage05AboutContact() {
       {/* SCENE 14: CONTACT (CALM CONCLUSION & CELEBRATION) */}
       <section
         id="zone-contact"
-        className="relative min-h-screen w-full px-6 py-20 sm:py-24 flex flex-col justify-between items-center text-center select-none overflow-hidden"
+        className="relative min-h-[120vh] w-full px-6 py-24 sm:py-28 flex flex-col justify-between items-center text-center select-none overflow-hidden"
       >
         {/* Ambient Cosmic Background Glow Pods */}
         <div aria-hidden="true" className="absolute top-1/4 left-1/4 w-80 h-80 rounded-full bg-amber-500/10 blur-3xl pointer-events-none -z-10" />

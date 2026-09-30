@@ -18,6 +18,7 @@ interface JourneyCanvasProps {
   isEngineHot?: boolean;
   robotAction?: string;
   onRobotActionChange?: (action: string) => void;
+  isModalOpen?: boolean;
 }
 
 export default function JourneyCanvas({
@@ -29,6 +30,7 @@ export default function JourneyCanvas({
   isEngineHot = false,
   robotAction = "Wave",
   onRobotActionChange,
+  isModalOpen = false,
 }: JourneyCanvasProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -192,8 +194,8 @@ export default function JourneyCanvas({
 
     // Initial Stage Coordinates: Robot prominently in CENTER facing forward waving
     const isMobile = width < 768;
-    robotGroup.position.set(0, -0.42, 1.65);
-    robotGroup.scale.setScalar(isMobile ? 0.52 : 0.75);
+    robotGroup.position.set(0, -0.40, 1.8);
+    robotGroup.scale.setScalar(isMobile ? 0.78 : 1.25);
     robotGroup.rotation.set(0, 0, 0);
 
     rocketGroup.position.set(-2.5, 1.2, -1.0);
@@ -251,7 +253,7 @@ export default function JourneyCanvas({
         const box = new THREE.Box3().setFromObject(root);
         const size = box.getSize(new THREE.Vector3());
         const maxDim = Math.max(size.x, size.y, size.z);
-        const normalized = (1 / maxDim) * 1.25;
+        const normalized = (1 / maxDim) * 1.55;
 
         root.scale.setScalar(normalized);
         const center = box.getCenter(new THREE.Vector3());
@@ -526,10 +528,31 @@ export default function JourneyCanvas({
 
   // Sync external robot action triggers (e.g. from companion HUD)
   useEffect(() => {
-    if (robotAction) {
+    if (robotAction && !isModalOpen) {
       switchRobotAction(robotAction);
     }
-  }, [robotAction, switchRobotAction]);
+  }, [robotAction, isModalOpen, switchRobotAction]);
+
+  // Dedicated Experience Modal Open Handler ("robot jangan hilang disini, buat dance")
+  const isModalOpenRef = useRef(isModalOpen);
+  useEffect(() => {
+    isModalOpenRef.current = isModalOpen;
+    if (isModalOpen) {
+      const isMobile = window.innerWidth < 768;
+      // Step forward prominently into the visible right corridor, enlarge and DANCE!
+      robotTargetPos.current = {
+        x: isMobile ? 1.05 : 2.65,
+        y: isMobile ? -0.45 : -0.32,
+        z: 1.65,
+      };
+      robotTargetScale.current = isMobile ? 1.15 : 1.55;
+      robotTargetRotY.current = -0.45;
+      switchRobotAction("Dance");
+    } else {
+      // Modal closed: return to standard wave/walk posture
+      switchRobotAction("Wave");
+    }
+  }, [isModalOpen, switchRobotAction]);
 
   // Discrete ScrollTrigger setup: updates TARGETS smoothly, NEVER snaps!
   const setupDiscreteScrollChoreography = (techLab: THREE.Group) => {
@@ -558,6 +581,7 @@ export default function JourneyCanvas({
       end: "bottom top",
       scrub: 1.0,
       onUpdate: (self) => {
+        if (isModalOpenRef.current) return;
         const p = self.progress;
 
         // Cinematic hyperspace warp stars as user scrolls between pages
@@ -568,8 +592,8 @@ export default function JourneyCanvas({
         if (p < 0.12) {
           // Centered & actively waving at intro: enlarged and heroic per user request
           onStageChange?.("the-void", p);
-          robotTargetPos.current = { x: 0, y: -0.48, z: 1.65 };
-          robotTargetScale.current = isMobile ? 0.62 : 0.90;
+          robotTargetPos.current = { x: 0, y: -0.40, z: 1.8 };
+          robotTargetScale.current = isMobile ? 0.85 : 1.35;
           robotTargetRotY.current = 0;
           switchRobotAction("Wave");
         } else {
@@ -577,26 +601,28 @@ export default function JourneyCanvas({
           onStageChange?.("take-off", p);
           const t = (p - 0.12) / 0.88;
           robotTargetPos.current = {
-            x: isMobile ? 1.35 * t : 3.25 * t,
-            y: -0.48 - t * 0.14,
-            z: 1.65 - t * 0.45,
+            x: isMobile ? 1.45 * t : 3.35 * t,
+            y: -0.40 - t * 0.14,
+            z: 1.8 - t * 0.45,
           };
-          robotTargetScale.current = (isMobile ? 0.62 : 0.90) + t * 0.15;
+          robotTargetScale.current = (isMobile ? 0.85 : 1.35) + t * 0.15;
           robotTargetRotY.current = -t * 0.55; // Angled left towards the cards
           switchRobotAction("Walking");
         }
       },
       onEnter: () => {
+        if (isModalOpenRef.current) return;
         onStageChange?.("the-void", 0);
-        robotTargetPos.current = { x: 0, y: -0.48, z: 1.65 };
-        robotTargetScale.current = isMobile ? 0.62 : 0.90;
+        robotTargetPos.current = { x: 0, y: -0.40, z: 1.8 };
+        robotTargetScale.current = isMobile ? 0.85 : 1.35;
         robotTargetRotY.current = 0;
         switchRobotAction("Wave");
       },
       onLeaveBack: () => {
+        if (isModalOpenRef.current) return;
         onStageChange?.("the-void", 0);
-        robotTargetPos.current = { x: 0, y: -0.48, z: 1.65 };
-        robotTargetScale.current = isMobile ? 0.62 : 0.90;
+        robotTargetPos.current = { x: 0, y: -0.40, z: 1.8 };
+        robotTargetScale.current = isMobile ? 0.85 : 1.35;
         robotTargetRotY.current = 0;
         switchRobotAction("Wave");
         if (starfieldRef.current) {
@@ -612,17 +638,18 @@ export default function JourneyCanvas({
       end: "bottom bottom",
       scrub: 1.0,
       onUpdate: (self) => {
+        if (isModalOpenRef.current) return;
         const p = self.progress;
         onStageChange?.("experience-waypoints", p);
 
         // Robot stands on the RIGHT edge with generous space facing left towards the cards
         if (isMobile) {
-          robotTargetPos.current = { x: 1.35, y: -0.85, z: 1.1 };
-          robotTargetScale.current = 0.72;
+          robotTargetPos.current = { x: 1.4, y: -0.75, z: 1.3 };
+          robotTargetScale.current = 0.95;
           robotTargetRotY.current = -0.45;
         } else {
-          robotTargetPos.current = { x: 3.25, y: -0.62, z: 1.15 };
-          robotTargetScale.current = 1.05;
+          robotTargetPos.current = { x: 3.35, y: -0.52, z: 1.4 };
+          robotTargetScale.current = 1.45;
           robotTargetRotY.current = -0.55;
         }
 
@@ -634,7 +661,9 @@ export default function JourneyCanvas({
           clearTimeout(scrollIdleTimerRef.current);
         }
         scrollIdleTimerRef.current = setTimeout(() => {
-          switchRobotAction("Wave");
+          if (!isModalOpenRef.current) {
+            switchRobotAction("Wave");
+          }
         }, 500);
 
         const waypointIndex = Math.min(
@@ -644,19 +673,24 @@ export default function JourneyCanvas({
         onActiveWaypointChange?.(waypointIndex);
       },
       onEnter: () => {
+        if (isModalOpenRef.current) return;
         if (isMobile) {
-          robotTargetPos.current = { x: 1.35, y: -0.85, z: 1.1 };
-          robotTargetScale.current = 0.72;
+          robotTargetPos.current = { x: 1.4, y: -0.75, z: 1.3 };
+          robotTargetScale.current = 0.95;
           robotTargetRotY.current = -0.45;
         } else {
-          robotTargetPos.current = { x: 3.25, y: -0.62, z: 1.15 };
-          robotTargetScale.current = 1.05;
+          robotTargetPos.current = { x: 3.35, y: -0.52, z: 1.4 };
+          robotTargetScale.current = 1.45;
           robotTargetRotY.current = -0.55;
         }
         switchRobotAction("Wave");
       },
-      onLeaveBack: () => switchRobotAction("Walking"),
-      onLeave: () => switchRobotAction("Walking"),
+      onLeaveBack: () => {
+        if (!isModalOpenRef.current) switchRobotAction("Walking");
+      },
+      onLeave: () => {
+        if (!isModalOpenRef.current) switchRobotAction("Walking");
+      },
     });
 
     // 3. TECHNOLOGY LAB STAGE (Protagonist robot strictly on the RIGHT margin, looking left at skills)
@@ -666,19 +700,24 @@ export default function JourneyCanvas({
       end: "bottom center",
       scrub: 1.0,
       onUpdate: (self) => {
+        if (isModalOpenRef.current) return;
         const p = self.progress;
         onStageChange?.("tech-lab", p);
 
-        robotTargetPos.current = { x: isMobile ? 1.25 : 2.85, y: isMobile ? -0.85 : -0.65, z: 1.25 };
-        robotTargetScale.current = isMobile ? 0.70 : 1.05;
+        robotTargetPos.current = { x: isMobile ? 1.3 : 3.05, y: isMobile ? -0.75 : -0.55, z: 1.4 };
+        robotTargetScale.current = isMobile ? 0.95 : 1.45;
         robotTargetRotY.current = -0.50; // Angled left towards skills
 
         // Materialize tech lab 3D nodes on the left/center
         techLab.position.set(isMobile ? 0 : -0.8, 0, -0.3);
         techLab.scale.setScalar(Math.min(p * 1.3, 1.0));
       },
-      onEnter: () => switchRobotAction("ThumbsUp"),
-      onLeave: () => switchRobotAction("Walking"),
+      onEnter: () => {
+        if (!isModalOpenRef.current) switchRobotAction("ThumbsUp");
+      },
+      onLeave: () => {
+        if (!isModalOpenRef.current) switchRobotAction("Walking");
+      },
     });
 
     // 4. ABOUT DOSSIER STAGE (Robot strictly on the RIGHT margin, looking left at dossier!)
@@ -687,9 +726,10 @@ export default function JourneyCanvas({
       start: "top center",
       end: "bottom center",
       onEnter: () => {
+        if (isModalOpenRef.current) return;
         onStageChange?.("about", 0.5);
-        robotTargetPos.current = { x: isMobile ? 1.25 : 2.85, y: isMobile ? -0.85 : -0.65, z: 1.25 };
-        robotTargetScale.current = isMobile ? 0.70 : 1.05;
+        robotTargetPos.current = { x: isMobile ? 1.3 : 3.05, y: isMobile ? -0.75 : -0.55, z: 1.4 };
+        robotTargetScale.current = isMobile ? 0.95 : 1.45;
         robotTargetRotY.current = -0.50; // Angled towards the dossier on the left
         switchRobotAction("ThumbsUp");
       },
@@ -701,9 +741,10 @@ export default function JourneyCanvas({
       start: "top center",
       end: "bottom bottom",
       onEnter: () => {
+        if (isModalOpenRef.current) return;
         onStageChange?.("contact", 0.5);
-        robotTargetPos.current = { x: 0, y: -0.38, z: 1.4 };
-        robotTargetScale.current = isMobile ? 0.85 : 1.15;
+        robotTargetPos.current = { x: 0, y: -0.30, z: 1.65 };
+        robotTargetScale.current = isMobile ? 1.15 : 1.65;
         robotTargetRotY.current = 0;
         switchRobotAction("Dance");
       },
