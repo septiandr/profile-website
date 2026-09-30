@@ -105,14 +105,35 @@ export default function JourneyManager() {
           onModalOpenChange={handleModalOpenChange}
         />
 
+        {/* Transit Corridor 01: Deep Space Traversing from Experience to Arsenal */}
+        <div
+          id="zone-transit-01"
+          className="relative h-[25vh] sm:h-[30vh] w-full pointer-events-none select-none overflow-hidden"
+          aria-hidden="true"
+        />
+
         {/* Zone 3: Architectural Tech Lab & Robot Diagnostics */}
         <Stage03TechLab
           onHoverTechNode={handleHoverTechNode}
           activeTechNode={activeTechNode}
         />
 
+        {/* Transit Corridor 02: Deep Space Traversing from Arsenal to Contact */}
+        <div
+          id="zone-transit-02"
+          className="relative h-[25vh] sm:h-[30vh] w-full pointer-events-none select-none overflow-hidden"
+          aria-hidden="true"
+        />
+
         {/* Zone 4: Personnel Dossier & Contact */}
         <Stage05AboutContact />
+
+        {/* Transit Corridor 03: Deep Space Traversing from Contact to Departure */}
+        <div
+          id="zone-transit-03"
+          className="relative h-[25vh] sm:h-[30vh] w-full pointer-events-none select-none overflow-hidden"
+          aria-hidden="true"
+        />
 
         {/* Zone 5: Final Departure & End Screen */}
         <Stage06DepartureEnd onRestart={handleRestart} />

@@ -680,10 +680,16 @@ export default function JourneyCanvas({
         robotTargetScale.current = isMobile ? 0.95 : 1.45;
         robotTargetRotY.current = -0.55;
 
-        if (p > 0.85) {
+        if (p > 0.60) {
           switchRobotAction("Walking");
+          if (starfieldRef.current) {
+            starfieldRef.current.setWarp(1.0 + Math.sin(((p - 0.60) / 0.40) * Math.PI) * 8.0);
+          }
         } else {
           switchRobotAction(robotActionRef.current || "ThumbsUp");
+          if (starfieldRef.current) {
+            starfieldRef.current.setWarp(1.0);
+          }
         }
       },
       onEnter: () => {
@@ -699,8 +705,7 @@ export default function JourneyCanvas({
         switchRobotAction(robotActionRef.current || "ThumbsUp");
       },
       onLeaveBack: () => {
-        if (isModalOpenRef.current) return;
-        switchRobotAction("Walking");
+        if (!isModalOpenRef.current) switchRobotAction("Walking");
       },
     });
 
@@ -766,10 +771,10 @@ export default function JourneyCanvas({
       },
     });
 
-    // 2B. TRANSIT CORRIDOR: Active Walking Animation & Warp between Experience and Skills
+    // 2B. TRANSIT CORRIDOR 01: Active Walking Animation & Warp between Experience and Skills
     addTrigger({
-      trigger: "#zone-transit",
-      start: "top top",
+      trigger: "#zone-transit-01",
+      start: "top bottom",
       end: "bottom top",
       scrub: 1.0,
       onUpdate: (self) => {
@@ -842,6 +847,49 @@ export default function JourneyCanvas({
       },
     });
 
+    // 3B. TRANSIT CORRIDOR 02: Active Walking & Warp between Technical Arsenal and Contact
+    addTrigger({
+      trigger: "#zone-transit-02",
+      start: "top bottom",
+      end: "bottom top",
+      scrub: 1.0,
+      onUpdate: (self) => {
+        if (isModalOpenRef.current) return;
+        const p = self.progress;
+
+        // Robot walks continuously throughout this transit distance
+        switchRobotAction("Walking");
+
+        // Cinematic hyperspace warp acceleration
+        if (starfieldRef.current) {
+          starfieldRef.current.setWarp(1.0 + Math.sin(p * Math.PI) * 9.0);
+        }
+
+        // Bipedal stride bobbing + gliding towards center stage for Contact celebration
+        const strideBob = Math.sin(p * Math.PI * 6) * 0.035;
+        const startX = isMobile ? 1.3 : 3.05;
+        const endX = 0;
+        const currX = startX + (endX - startX) * p;
+
+        robotTargetPos.current = {
+          x: currX,
+          y: -0.40 + strideBob,
+          z: 1.45 + p * 0.20,
+        };
+        robotTargetScale.current = (isMobile ? 0.95 : 1.45) + p * 0.20;
+        robotTargetRotY.current = -0.50 * (1 - p); // Rotate smoothly to facing forward (0)
+      },
+      onEnter: () => {
+        if (!isModalOpenRef.current) switchRobotAction("Walking");
+      },
+      onLeaveBack: () => {
+        if (!isModalOpenRef.current) switchRobotAction("Walking");
+      },
+      onLeave: () => {
+        if (!isModalOpenRef.current) switchRobotAction("Dance");
+      },
+    });
+
     // 4. CONTACT & VICTORY DANCE (Robot in Center, clear from top headline and bottom buttons)
     addTrigger({
       trigger: "#zone-contact",
@@ -854,6 +902,63 @@ export default function JourneyCanvas({
         robotTargetScale.current = isMobile ? 1.15 : 1.65;
         robotTargetRotY.current = 0;
         switchRobotAction("Dance");
+      },
+      onLeave: () => {
+        if (!isModalOpenRef.current) switchRobotAction("Walking");
+      },
+    });
+
+    // 4B. TRANSIT CORRIDOR 03: Active Walking & Warp between Contact and Final Departure
+    addTrigger({
+      trigger: "#zone-transit-03",
+      start: "top bottom",
+      end: "bottom top",
+      scrub: 1.0,
+      onUpdate: (self) => {
+        if (isModalOpenRef.current) return;
+        const p = self.progress;
+
+        // Robot walks continuously throughout this transit distance
+        switchRobotAction("Walking");
+
+        // Cinematic hyperspace warp acceleration
+        if (starfieldRef.current) {
+          starfieldRef.current.setWarp(1.0 + Math.sin(p * Math.PI) * 9.0);
+        }
+
+        // Bipedal stride bobbing
+        const strideBob = Math.sin(p * Math.PI * 6) * 0.035;
+        robotTargetPos.current = {
+          x: 0,
+          y: -0.35 + strideBob,
+          z: 1.65 - p * 0.25,
+        };
+        robotTargetScale.current = (isMobile ? 1.15 : 1.65) - p * 0.25;
+        robotTargetRotY.current = 0;
+      },
+      onEnter: () => {
+        if (!isModalOpenRef.current) switchRobotAction("Walking");
+      },
+      onLeaveBack: () => {
+        if (!isModalOpenRef.current) switchRobotAction("Walking");
+      },
+      onLeave: () => {
+        if (!isModalOpenRef.current) switchRobotAction("Wave");
+      },
+    });
+
+    // 5. FINAL DEPARTURE (Robot waves warmly in the center)
+    addTrigger({
+      trigger: "#zone-end",
+      start: "top center",
+      end: "bottom bottom",
+      onEnter: () => {
+        if (isModalOpenRef.current) return;
+        onStageChange?.("departure", 0.5);
+        robotTargetPos.current = { x: 0, y: -0.40, z: 1.4 };
+        robotTargetScale.current = isMobile ? 1.0 : 1.4;
+        robotTargetRotY.current = 0;
+        switchRobotAction("Wave");
       },
     });
   };

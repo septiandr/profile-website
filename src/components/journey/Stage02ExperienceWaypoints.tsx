@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { EXPERIENCE_WAYPOINTS, ExperienceWaypoint } from "@/journey/types";
-import { Briefcase, Calendar, ChevronRight, Star, ArrowDown, X, Sparkles } from "lucide-react";
+import { Briefcase, Calendar, ChevronRight, Star, ArrowDown, X, Sparkles, Cpu } from "lucide-react";
 import TiltSpotlightCard from "@/components/ui/TiltSpotlightCard";
 
 const WAYPOINT_THEMES = [
@@ -136,6 +136,94 @@ const WAYPOINT_THEMES = [
   },
 ];
 
+// Robust, aesthetic architectural fallback component for empty or broken images
+function WaypointImage({
+  src,
+  alt,
+  theme,
+  year,
+  domain,
+  className = "",
+}: {
+  src?: string;
+  alt: string;
+  theme: (typeof WAYPOINT_THEMES)[number];
+  year: string;
+  domain: string;
+  className?: string;
+}) {
+  const [hasError, setHasError] = useState(false);
+
+  // If no source provided or failed to load, show a sophisticated architectural schematic fallback
+  if (!src || hasError) {
+    return (
+      <div
+        className={`relative w-full h-full flex flex-col items-center justify-center p-4 bg-gradient-to-br from-[#0c0f24] via-[#080a18] to-[#04050d] select-none overflow-hidden ${className}`}
+      >
+        {/* Subtle Cyber Grid */}
+        <div className="absolute inset-0 bg-cyber-grid opacity-35 pointer-events-none" />
+
+        {/* Ambient Radial Center Glow */}
+        <div
+          className="absolute w-28 h-28 rounded-full blur-2xl opacity-40 pointer-events-none"
+          style={{ background: theme.spotlight }}
+        />
+
+        {/* Blueprint Circuit Lines */}
+        <div className="relative z-10 flex flex-col items-center justify-center text-center gap-1.5">
+          {/* Animated System Hologram Icon */}
+          <div
+            className="w-10 h-10 rounded-xl flex items-center justify-center border shadow-lg backdrop-blur-md"
+            style={{
+              borderColor: theme.borderGlow,
+              backgroundColor: "rgba(0,0,0,0.6)",
+              boxShadow: `0 0 20px ${theme.spotlight}`,
+            }}
+          >
+            <Cpu className="w-5 h-5 text-amber-300" />
+          </div>
+
+          {/* Minimal Telemetry Label */}
+          <div className="font-mono text-[9px] tracking-[0.2em] text-zinc-300 uppercase font-semibold flex items-center gap-1.5 mt-0.5">
+            <span
+              className="h-1.5 w-1.5 rounded-full animate-ping"
+              style={{ backgroundColor: theme.borderGlow }}
+            />
+            <span>SYSTEM ARCHITECTURE // {year}</span>
+          </div>
+
+          <div className="font-sans text-[11px] text-zinc-400 font-light tracking-wider max-w-[220px] truncate">
+            {domain}
+          </div>
+        </div>
+
+        {/* Corner Reticle Brackets */}
+        <div className="absolute top-2 left-2 w-2 h-2 border-t border-l border-amber-400/60" />
+        <div className="absolute top-2 right-2 w-2 h-2 border-t border-r border-amber-400/60" />
+        <div className="absolute bottom-2 left-2 w-2 h-2 border-b border-l border-amber-400/60" />
+        <div className="absolute bottom-2 right-2 w-2 h-2 border-b border-r border-amber-400/60" />
+      </div>
+    );
+  }
+
+  return (
+    <div className={`relative w-full h-full overflow-hidden bg-black/60 flex items-center justify-center ${className}`}>
+      <img
+        src={src}
+        alt={alt}
+        onError={() => setHasError(true)}
+        className="w-full h-full object-cover object-center transform transition-transform duration-700 ease-out group-hover:scale-105"
+        loading="lazy"
+      />
+      {/* Corner Reticle Brackets */}
+      <div className="absolute top-2 left-2 w-2 h-2 border-t-2 border-l-2 border-amber-400/70 opacity-70 group-hover:opacity-100 transition-opacity pointer-events-none" />
+      <div className="absolute top-2 right-2 w-2 h-2 border-t-2 border-r-2 border-amber-400/70 opacity-70 group-hover:opacity-100 transition-opacity pointer-events-none" />
+      <div className="absolute bottom-2 left-2 w-2 h-2 border-b-2 border-l-2 border-amber-400/70 opacity-70 group-hover:opacity-100 transition-opacity pointer-events-none" />
+      <div className="absolute bottom-2 right-2 w-2 h-2 border-b-2 border-r-2 border-amber-400/70 opacity-70 group-hover:opacity-100 transition-opacity pointer-events-none" />
+    </div>
+  );
+}
+
 interface Stage02Props {
   activeWaypointIndex?: number;
   onModalOpenChange?: (isOpen: boolean) => void;
@@ -150,7 +238,6 @@ export default function Stage02ExperienceWaypoints({
   const trackRef = useRef<HTMLDivElement>(null);
   const [internalIndex, setInternalIndex] = useState(0);
   const [selectedWaypoint, setSelectedWaypoint] = useState<ExperienceWaypoint | null>(null);
-  const [activeModalImage, setActiveModalImage] = useState<string | null>(null);
   const [isClosingModal, setIsClosingModal] = useState<boolean>(false);
 
   const activeIndex = propActiveIndex !== undefined ? propActiveIndex : internalIndex;
@@ -158,7 +245,6 @@ export default function Stage02ExperienceWaypoints({
 
   const openModal = (wp: ExperienceWaypoint) => {
     setSelectedWaypoint(wp);
-    setActiveModalImage(wp.image || null);
     setIsClosingModal(false);
     onModalOpenChange?.(true);
   };
@@ -167,7 +253,6 @@ export default function Stage02ExperienceWaypoints({
     setIsClosingModal(true);
     setTimeout(() => {
       setSelectedWaypoint(null);
-      setActiveModalImage(null);
       setIsClosingModal(false);
       onModalOpenChange?.(false);
     }, 280);
@@ -307,7 +392,7 @@ export default function Stage02ExperienceWaypoints({
       ref={containerRef}
       className="relative h-screen w-full select-none bg-transparent overflow-hidden flex flex-col justify-between py-4 sm:py-6 lg:py-7 px-4 sm:px-8 lg:px-12 pointer-events-none"
     >
-      {/* 1. Dedicated Floating Time / Era Widget Safely Positioned Below HUD */}
+        {/* 1. Dedicated Floating Time / Era Widget Safely Positioned Below HUD */}
       <div className="absolute top-16 sm:top-20 right-6 sm:right-10 z-30 pointer-events-auto hidden sm:flex flex-col items-end">
         <div className="inline-flex items-center gap-2.5 border border-amber-400/40 bg-gradient-to-r from-amber-400/15 via-[#0d1020]/95 to-[#070914]/98 backdrop-blur-2xl px-4 py-2 rounded-full shadow-[0_10px_35px_rgba(0,0,0,0.7),0_0_20px_rgba(245,158,11,0.18)]">
           <Calendar className="h-3.5 w-3.5 text-amber-400" />
@@ -452,51 +537,25 @@ export default function Stage02ExperienceWaypoints({
                       <div className="relative w-full h-32 sm:h-36 lg:h-40 rounded-xl overflow-visible my-2.5 group/img select-none">
                         {/* Ambient Aura behind the image */}
                         <div
-                          className="absolute -inset-1.5 rounded-xl opacity-20 group-hover:opacity-100 transition-opacity duration-500 blur-md pointer-events-none"
+                          className="absolute -inset-1.5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-md pointer-events-none"
                           style={{ background: theme.ambientAura }}
                         />
 
                         {/* 3D Pop-out Container */}
                         <div
-                          className="relative w-full h-full rounded-xl overflow-hidden border border-white/20 bg-black/75 backdrop-blur-md shadow-[0_8px_20px_rgba(0,0,0,0.6)] transform-gpu transition-all duration-500 ease-out group-hover:-translate-y-2.5 group-hover:scale-[1.04] group-hover:shadow-[0_25px_45px_rgba(0,0,0,0.9),0_0_25px_rgba(245,158,11,0.25)] group-hover:border-white/50 flex items-center justify-center"
+                          className="relative w-full h-full rounded-xl overflow-hidden border border-white/20 bg-black/50 backdrop-blur-md shadow-[0_8px_20px_rgba(0,0,0,0.6)] transform-gpu transition-all duration-500 ease-out group-hover:-translate-y-2.5 group-hover:scale-[1.04] group-hover:shadow-[0_25px_45px_rgba(0,0,0,0.9),0_0_25px_rgba(245,158,11,0.25)] group-hover:border-white/50"
                           style={{
                             transformStyle: "preserve-3d",
                             transform: "translateZ(26px)",
                           }}
                         >
-                          {/* Ambient Blurred Background of the image */}
-                          <img
-                            src={wp.image || "/milestones/cimb-edebit.svg"}
-                            alt=""
-                            aria-hidden="true"
-                            className="absolute inset-0 w-full h-full object-cover blur-md opacity-35 scale-125 pointer-events-none"
-                          />
-
-                          {/* Sharp Foreground Image */}
-                          <img
-                            src={wp.image || "/milestones/cimb-edebit.svg"}
+                          <WaypointImage
+                            src={wp.image}
                             alt={wp.domain}
-                            className="relative z-10 max-h-full max-w-full object-contain p-2 transform transition-transform duration-700 ease-out group-hover:scale-105"
-                            loading="lazy"
+                            theme={theme}
+                            year={wp.year}
+                            domain={wp.domain}
                           />
-
-                          {/* Continuous Holographic Animated Scanline Laser Beam */}
-                          <div className="absolute inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_12px_#06b6d4] opacity-80 animate-scanline pointer-events-none z-20" />
-
-                          {/* Corner Reticle Brackets */}
-                          <div className="absolute top-2 left-2 w-2 h-2 border-t-2 border-l-2 border-amber-400 opacity-60 group-hover:opacity-100 transition-opacity z-20" />
-                          <div className="absolute top-2 right-2 w-2 h-2 border-t-2 border-r-2 border-amber-400 opacity-60 group-hover:opacity-100 transition-opacity z-20" />
-                          <div className="absolute bottom-2 left-2 w-2 h-2 border-b-2 border-l-2 border-amber-400 opacity-60 group-hover:opacity-100 transition-opacity z-20" />
-                          <div className="absolute bottom-2 right-2 w-2 h-2 border-b-2 border-r-2 border-amber-400 opacity-60 group-hover:opacity-100 transition-opacity z-20" />
-
-                          {/* Holographic Gradient Overlay */}
-                          <div className="absolute inset-0 bg-gradient-to-b from-white/[0.04] via-transparent to-black/60 pointer-events-none z-10" />
-
-                          {/* Quick View Tag on Image */}
-                          <div className="absolute bottom-1.5 right-2 font-mono text-[9px] uppercase tracking-widest px-2 py-0.5 rounded bg-black/85 backdrop-blur-md text-zinc-300 border border-white/15 flex items-center gap-1.5 shadow z-20">
-                            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                            <span>TELEMETRY PREVIEW</span>
-                          </div>
                         </div>
                       </div>
 
@@ -650,17 +709,17 @@ export default function Stage02ExperienceWaypoints({
         <span>Scroll vertically to glide through milestones & featured projects · Hover cards to inspect 3D layers</span>
       </div>
 
-      {/* 5. Interactive Click Modal / Case Study Dossier (Cinematic Flagship Experience) */}
+      {/* 5. Interactive Click Modal / Case Study Dossier (Restored to Clean Previous Layout) */}
       {selectedWaypoint && (
         <div
           onClick={closeModal}
-          className={`fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-[#070814]/85 backdrop-blur-xl pointer-events-auto transition-opacity duration-300 ${
+          className={`fixed inset-0 z-[100] flex items-center justify-center p-6 bg-[#070814]/80 backdrop-blur-sm pointer-events-auto transition-opacity duration-300 ${
             isClosingModal ? "opacity-0" : "opacity-100"
           }`}
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className={`relative w-full max-w-2xl sm:max-w-3xl max-h-[90vh] overflow-y-auto border border-white/20 bg-gradient-to-b from-[#141834] via-[#0d1024] to-[#060814] p-6 sm:p-8 md:p-10 rounded-3xl shadow-[0_30px_90px_rgba(0,0,0,0.95),0_0_50px_rgba(245,158,11,0.2)] text-left transition-all duration-300 ease-out ${
+            className={`relative w-full max-w-xl max-h-[90vh] overflow-y-auto border border-white/15 bg-gradient-to-b from-[#13172e] via-[#0d1022] to-[#070814] p-8 sm:p-10 rounded-3xl shadow-[0_30px_70px_rgba(0,0,0,0.95),0_0_40px_rgba(245,158,11,0.15)] text-left transition-all duration-300 ease-out ${
               isClosingModal
                 ? "scale-95 opacity-0 translate-y-4"
                 : "scale-100 opacity-100 translate-y-0"
@@ -670,94 +729,42 @@ export default function Stage02ExperienceWaypoints({
             <button
               onClick={closeModal}
               aria-label="Close dossier"
-              className="absolute top-5 right-5 sm:top-6 sm:right-6 p-2 rounded-full border border-white/15 bg-white/[0.05] hover:border-amber-400/60 text-zinc-400 hover:text-white transition-colors z-20"
+              className="absolute top-6 right-6 p-2 rounded-full border border-white/10 hover:border-amber-400/60 text-zinc-400 hover:text-white transition-colors z-20"
             >
               <X className="h-4 w-4" />
             </button>
 
-            {/* Modal Top Showcase Image */}
-            <div className="relative w-full h-48 sm:h-60 md:h-72 rounded-2xl overflow-hidden border border-white/20 mb-3 bg-black/80 shadow-[0_15px_35px_rgba(0,0,0,0.8)] flex items-center justify-center">
-              {/* Blurred Ambient Image Background */}
-              <img
-                src={activeModalImage || selectedWaypoint.image || "/milestones/cimb-edebit.svg"}
-                alt=""
-                aria-hidden="true"
-                className="absolute inset-0 w-full h-full object-cover blur-xl opacity-40 scale-125 pointer-events-none"
-              />
-
-              {/* Sharp Foreground Image */}
-              <img
-                src={activeModalImage || selectedWaypoint.image || "/milestones/cimb-edebit.svg"}
-                alt={selectedWaypoint.domain}
-                className="relative z-10 max-h-full max-w-full object-contain p-4 transition-all duration-300"
-              />
-
-              {/* Scanline beam in modal image */}
-              <div className="absolute inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_12px_#06b6d4] opacity-80 animate-scanline pointer-events-none z-20" />
-
-              {/* Reticle Brackets */}
-              <div className="absolute top-3 left-3 w-3 h-3 border-t-2 border-l-2 border-amber-400 z-20" />
-              <div className="absolute top-3 right-3 w-3 h-3 border-t-2 border-r-2 border-amber-400 z-20" />
-              <div className="absolute bottom-3 left-3 w-3 h-3 border-b-2 border-l-2 border-amber-400 z-20" />
-              <div className="absolute bottom-3 right-3 w-3 h-3 border-b-2 border-r-2 border-amber-400 z-20" />
-
-              {/* Telemetry pill */}
-              <div className="absolute bottom-3 left-3 flex items-center gap-2 px-3 py-1 rounded-full bg-black/85 backdrop-blur-md border border-white/15 font-mono text-[10px] text-amber-200 uppercase tracking-widest z-20">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span>ENTERPRISE ARCHITECTURE DOSSIER</span>
-              </div>
-            </div>
-
-            {/* Gallery Thumbnail Strip (if waypoint has multiple images) */}
-            {selectedWaypoint.gallery && selectedWaypoint.gallery.length > 1 && (
-              <div className="mb-6 flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
-                <span className="font-mono text-[10px] uppercase text-zinc-400 tracking-wider mr-1 shrink-0">
-                  GALLERY:
-                </span>
-                {selectedWaypoint.gallery.map((imgSrc, gIdx) => {
-                  const isSelected = (activeModalImage || selectedWaypoint.image) === imgSrc;
-                  return (
-                    <button
-                      key={gIdx}
-                      type="button"
-                      onClick={() => setActiveModalImage(imgSrc)}
-                      className={`relative h-12 w-16 sm:h-14 sm:w-20 rounded-lg overflow-hidden border transition-all duration-200 shrink-0 bg-black/70 flex items-center justify-center ${
-                        isSelected
-                          ? "border-amber-400 ring-2 ring-amber-400/50 scale-105 shadow-[0_0_12px_rgba(245,158,11,0.5)]"
-                          : "border-white/15 opacity-60 hover:opacity-100 hover:border-white/40"
-                      }`}
-                    >
-                      <img
-                        src={imgSrc}
-                        alt={`Screenshot ${gIdx + 1}`}
-                        className="max-h-full max-w-full object-contain p-1"
-                      />
-                    </button>
-                  );
-                })}
-              </div>
-            )}
-
             {/* Modal Header */}
-            <div className="flex items-center gap-2 font-mono text-xs text-amber-300 font-medium mb-2 tracking-[0.2em] uppercase">
-              <span className="h-2 w-2 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b]" />
+            <div className="flex items-center gap-2 font-sans text-xs text-amber-300 font-medium mb-2 tracking-[0.2em] uppercase">
+              <span className="h-1.5 w-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b]" />
               <span>
                 {selectedWaypoint.type === "featured-project"
-                  ? "FEATURED PRODUCTION WORK"
-                  : "CAREER MILESTONE"}{" "}
+                  ? "Featured Production Work"
+                  : "Career Milestone"}{" "}
                 · {selectedWaypoint.year}
               </span>
             </div>
 
-            <h3 className="font-display font-bold text-2xl sm:text-3xl md:text-4xl text-white tracking-tight uppercase mb-2">
+            <h3 className="font-display font-medium text-3xl sm:text-4xl text-white tracking-tight uppercase mb-2">
               {selectedWaypoint.domain}
             </h3>
 
-            <div className="flex items-center gap-2 font-sans text-sm text-zinc-300 font-normal mb-6">
+            <div className="font-sans text-sm text-zinc-300 font-normal mb-6 flex items-center gap-2">
               <Briefcase className="h-4 w-4 text-amber-400 shrink-0" />
-              <span className="text-amber-200 font-semibold">{selectedWaypoint.role}</span>
+              <span className="text-amber-200 font-medium">{selectedWaypoint.role}</span>
               <span className="text-zinc-600">·</span>
-              <span className="text-zinc-300">{selectedWaypoint.company}</span>
+              <span className="text-zinc-400">{selectedWaypoint.company}</span>
+            </div>
+
+            {/* High-Resolution System Architecture / Mockup Hero Banner with Fallback */}
+            <div className="w-full h-44 sm:h-52 md:h-60 rounded-xl overflow-hidden border border-white/15 mb-6 bg-black/60 shadow-[0_15px_35px_rgba(0,0,0,0.8)]">
+              <WaypointImage
+                src={selectedWaypoint.image}
+                alt={selectedWaypoint.domain}
+                theme={WAYPOINT_THEMES[EXPERIENCE_WAYPOINTS.indexOf(selectedWaypoint)] || WAYPOINT_THEMES[0]}
+                year={selectedWaypoint.year}
+                domain={selectedWaypoint.domain}
+              />
             </div>
 
             {/* Architectural Overview */}
@@ -765,38 +772,38 @@ export default function Stage02ExperienceWaypoints({
               <div className="font-sans text-xs text-zinc-400 uppercase tracking-[0.15em] mb-2 font-medium">
                 Scope & Architectural Execution
               </div>
-              <p className="text-sm sm:text-base text-zinc-200 font-light leading-relaxed border-l-2 border-amber-400/60 pl-4 py-2 bg-white/[0.02] rounded-r">
+              <p className="text-sm sm:text-base text-zinc-200 font-light leading-relaxed border-l-2 border-amber-400/60 pl-4 py-1.5 bg-white/[0.02] rounded-r">
                 {selectedWaypoint.description}
               </p>
             </div>
 
-            {/* Key Deliverables & Impact */}
+            {/* Key Deliverables if present */}
             {selectedWaypoint.deliverables && selectedWaypoint.deliverables.length > 0 && (
               <div className="mb-6">
-                <div className="font-sans text-xs text-zinc-400 uppercase tracking-[0.15em] mb-3 font-medium">
-                  Key Engineering Deliverables & Verified Impact
+                <div className="font-sans text-xs text-zinc-400 uppercase tracking-[0.15em] mb-2 font-medium">
+                  Key Deliverables & Impact
                 </div>
-                <div className="space-y-2 bg-white/[0.02] border border-white/[0.08] p-4 rounded-xl">
+                <ul className="space-y-1.5">
                   {selectedWaypoint.deliverables.map((d, dIdx) => (
-                    <div key={dIdx} className="text-xs sm:text-sm text-zinc-200 font-light flex items-start gap-2.5">
-                      <span className="text-amber-400 font-bold leading-tight mt-0.5">›</span>
+                    <li key={dIdx} className="text-xs sm:text-sm text-zinc-300 font-light flex items-start gap-2">
+                      <span className="text-amber-400 font-bold">›</span>
                       <span>{d}</span>
-                    </div>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </div>
             )}
 
             {/* Core Tech Engines */}
             <div className="mb-8">
               <div className="font-sans text-xs text-zinc-400 uppercase tracking-[0.15em] mb-3 font-medium">
-                Production Tech Arsenal
+                Technologies Used
               </div>
               <div className="flex flex-wrap gap-2">
                 {selectedWaypoint.tech.map((t, idx) => (
                   <span
                     key={idx}
-                    className="font-mono text-xs text-zinc-200 bg-white/[0.06] border border-white/15 px-3 py-1.5 rounded-lg shadow-sm"
+                    className="font-sans text-xs text-zinc-200 bg-white/[0.05] border border-white/10 px-3 py-1 rounded-md"
                   >
                     {t}
                   </span>
@@ -808,9 +815,9 @@ export default function Stage02ExperienceWaypoints({
             <div className="pt-4 border-t border-white/[0.08] flex justify-end">
               <button
                 onClick={closeModal}
-                className="border border-white/20 bg-white/[0.06] px-7 py-2.5 font-sans text-xs tracking-[0.18em] uppercase text-zinc-200 hover:border-amber-400/60 hover:text-white hover:bg-amber-400/10 transition-all rounded-full shadow"
+                className="border border-white/15 bg-white/[0.04] px-6 py-2.5 font-sans text-xs tracking-[0.18em] uppercase text-zinc-300 hover:border-amber-400/60 hover:text-white transition-all rounded-full"
               >
-                Close Dossier
+                Close Case
               </button>
             </div>
           </div>

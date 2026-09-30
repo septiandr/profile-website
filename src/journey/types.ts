@@ -22,7 +22,6 @@ export interface ExperienceWaypoint {
   tech: string[];
   deliverables?: string[];
   image?: string;
-  gallery?: string[];
 }
 
 export interface TechNode {
@@ -75,12 +74,6 @@ export const EXPERIENCE_WAYPOINTS: ExperienceWaypoint[] = [
       "Reduced bundle payload by 42% through lazy-loaded module federation",
     ],
     image: "/porto/natieva.jpeg",
-    gallery: [
-      "/porto/natieva.jpeg",
-      "/porto/luna.png",
-      "/porto/natieva-mobile.png",
-      "/porto/natieva-kids.jpg",
-    ],
   },
   {
     type: "milestone",

@@ -1,16 +1,20 @@
 "use client";
 
+import { useRef } from "react";
 import { Mail, Globe, ExternalLink, ArrowUpRight } from "lucide-react";
 import { profileData } from "@/data/profile";
 import TiltSpotlightCard from "@/components/ui/TiltSpotlightCard";
 
 export default function Stage05AboutContact() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
   return (
     <div className="w-full">
       {/* SCENE: CONTACT (CALM CONCLUSION & CELEBRATION WITH DANCING ROBOT) */}
       <section
         id="zone-contact"
-        className="relative min-h-[120vh] w-full px-6 py-24 sm:py-32 flex flex-col justify-between items-center text-center select-none overflow-hidden"
+        ref={containerRef}
+        className="relative min-h-screen w-full flex flex-col justify-between items-center text-center px-6 py-20 sm:py-24 overflow-hidden select-none"
       >
         {/* Ambient Cosmic Background Glow Pods with Rich Saturation */}
         <div

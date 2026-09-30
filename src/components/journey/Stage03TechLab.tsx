@@ -15,14 +15,17 @@ interface SkillBubbleItem {
   name: string;
   category: "Frontend" | "Backend" | "Database" | "Mobile";
   size: "lg" | "md" | "sm";
-  floatType: "slow" | "rev" | "diagonal";
+  floatType: "slow" | "rev" | "diagonal" | "pulse";
   floatDelay: string;
   floatDuration: string;
-  marginTop?: string;
-  marginBottom?: string;
+  pos: {
+    desktop: { left: string; top: string };
+    mobile: { left: string; top: string };
+  };
 }
 
-// 12 Core Production Skills with organic scattered offsets
+// 12 Core Production Skills scattered across an expansive zero-gravity constellation
+// Distances between nearest neighbors are generous (180px - 270px) to prevent clustering
 const SKILL_BUBBLES: SkillBubbleItem[] = [
   {
     id: "react",
@@ -31,8 +34,11 @@ const SKILL_BUBBLES: SkillBubbleItem[] = [
     size: "lg",
     floatType: "slow",
     floatDelay: "0s",
-    floatDuration: "9.5s",
-    marginTop: "0px",
+    floatDuration: "5.2s",
+    pos: {
+      desktop: { left: "4%", top: "4%" },
+      mobile: { left: "4%", top: "2%" },
+    },
   },
   {
     id: "golang",
@@ -40,9 +46,12 @@ const SKILL_BUBBLES: SkillBubbleItem[] = [
     category: "Backend",
     size: "lg",
     floatType: "rev",
-    floatDelay: "0.8s",
-    floatDuration: "11.0s",
-    marginTop: "32px",
+    floatDelay: "0.6s",
+    floatDuration: "5.6s",
+    pos: {
+      desktop: { left: "38%", top: "1%" },
+      mobile: { left: "54%", top: "8%" },
+    },
   },
   {
     id: "nextjs",
@@ -50,89 +59,116 @@ const SKILL_BUBBLES: SkillBubbleItem[] = [
     category: "Frontend",
     size: "lg",
     floatType: "diagonal",
-    floatDelay: "1.6s",
-    floatDuration: "12.5s",
-    marginTop: "-24px",
+    floatDelay: "1.2s",
+    floatDuration: "6.2s",
+    pos: {
+      desktop: { left: "73%", top: "6%" },
+      mobile: { left: "7%", top: "18%" },
+    },
   },
   {
     id: "postgres",
     name: "PostgreSQL",
     category: "Database",
     size: "lg",
-    floatType: "slow",
-    floatDelay: "0.5s",
-    floatDuration: "10.0s",
-    marginTop: "20px",
+    floatType: "pulse",
+    floatDelay: "0.4s",
+    floatDuration: "4.8s",
+    pos: {
+      desktop: { left: "15%", top: "28%" },
+      mobile: { left: "52%", top: "24%" },
+    },
   },
   {
     id: "hono",
     name: "Hono",
     category: "Backend",
     size: "lg",
-    floatType: "rev",
-    floatDelay: "2.2s",
-    floatDuration: "9.2s",
-    marginTop: "-16px",
+    floatType: "slow",
+    floatDelay: "1.8s",
+    floatDuration: "5.5s",
+    pos: {
+      desktop: { left: "53%", top: "24%" },
+      mobile: { left: "3%", top: "35%" },
+    },
   },
   {
     id: "typescript",
     name: "TypeScript",
     category: "Frontend",
     size: "md",
-    floatType: "diagonal",
-    floatDelay: "1.1s",
-    floatDuration: "11.8s",
-    marginTop: "36px",
+    floatType: "rev",
+    floatDelay: "0.9s",
+    floatDuration: "5.9s",
+    pos: {
+      desktop: { left: "86%", top: "32%" },
+      mobile: { left: "55%", top: "41%" },
+    },
   },
   {
     id: "react-native",
     name: "React Native",
     category: "Mobile",
     size: "lg",
-    floatType: "slow",
-    floatDelay: "1.9s",
-    floatDuration: "10.5s",
-    marginTop: "8px",
+    floatType: "diagonal",
+    floatDelay: "1.5s",
+    floatDuration: "6.4s",
+    pos: {
+      desktop: { left: "2%", top: "56%" },
+      mobile: { left: "6%", top: "52%" },
+    },
   },
   {
     id: "redis",
     name: "Redis",
     category: "Database",
     size: "md",
-    floatType: "rev",
-    floatDelay: "2.7s",
-    floatDuration: "11.4s",
-    marginTop: "-28px",
+    floatType: "pulse",
+    floatDelay: "2.1s",
+    floatDuration: "5.1s",
+    pos: {
+      desktop: { left: "34%", top: "50%" },
+      mobile: { left: "52%", top: "58%" },
+    },
   },
   {
     id: "nodejs",
     name: "Node.js",
     category: "Backend",
     size: "md",
-    floatType: "diagonal",
+    floatType: "slow",
     floatDelay: "0.7s",
-    floatDuration: "12.0s",
-    marginTop: "16px",
+    floatDuration: "5.3s",
+    pos: {
+      desktop: { left: "68%", top: "52%" },
+      mobile: { left: "3%", top: "68%" },
+    },
   },
   {
     id: "laravel",
     name: "Laravel",
     category: "Backend",
     size: "md",
-    floatType: "slow",
-    floatDelay: "2.0s",
-    floatDuration: "9.8s",
-    marginTop: "-18px",
+    floatType: "rev",
+    floatDelay: "1.7s",
+    floatDuration: "5.7s",
+    pos: {
+      desktop: { left: "17%", top: "82%" },
+      mobile: { left: "54%", top: "74%" },
+    },
   },
   {
     id: "expo",
     name: "Expo",
     category: "Mobile",
     size: "md",
-    floatType: "rev",
-    floatDelay: "3.1s",
-    floatDuration: "10.8s",
-    marginTop: "26px",
+    floatType: "pulse",
+    floatDelay: "2.5s",
+    floatDuration: "4.9s",
+    pos: {
+      desktop: { left: "49%", top: "76%" },
+      mobile: { left: "7%", top: "84%" },
+    },
   },
   {
     id: "tailwind",
@@ -140,9 +176,12 @@ const SKILL_BUBBLES: SkillBubbleItem[] = [
     category: "Frontend",
     size: "sm",
     floatType: "diagonal",
-    floatDelay: "1.4s",
-    floatDuration: "11.2s",
-    marginTop: "-10px",
+    floatDelay: "1.1s",
+    floatDuration: "6.1s",
+    pos: {
+      desktop: { left: "81%", top: "78%" },
+      mobile: { left: "53%", top: "90%" },
+    },
   },
 ];
 
@@ -236,7 +275,7 @@ export default function Stage03TechLab({
 
     const ctx = gsap.context(() => {
       // Master ScrollTrigger timeline for:
-      // 1. Muncul satu persatu onScroll (Entrance)
+      // 1. Muncul satu persatu onScroll (Entrance - extended scroll pacing)
       // 2. Mengambang perlahan (Plateau where visitor reads & interacts)
       // 3. Pergi satu persatu setelah terlewat section nya (Exit)
       const tl = gsap.timeline({
@@ -245,7 +284,7 @@ export default function Stage03TechLab({
           trigger: containerRef.current,
           pin: true,
           start: "top top",
-          end: "+=2600", // Extended scroll space for slow, smooth pacing
+          end: "+=3800", // Generous scroll space for deliberate, satisfying bubble revelations
           scrub: 1.2,
           anticipatePin: 1,
           invalidateOnRefresh: true,
@@ -265,29 +304,42 @@ export default function Stage03TechLab({
           opacity: 1,
           y: 0,
           stagger: {
-            each: 0.16,
+            each: 0.35,
             from: "start",
           },
-          duration: 1.6,
+          duration: 3.2,
           ease: "back.out(2.0)",
         }
       );
 
       // 2. Plateau: Semua gelembung melayang perlahan di viewport (pengunjung membaca)
-      tl.to({}, { duration: 1.4 });
+      tl.to({}, { duration: 2.2 });
 
-      // 3. Pergi satu persatu setelah terlewat section nya (Exit: Y 0 -> -90 & Scale 1 -> 0)
+      // 3. Pergi satu persatu setelah terlewat section nya (Exit: Y 0 -> -95 & Scale 1 -> 0)
       tl.to(".skill-bubble-slot", {
         scale: 0,
         opacity: 0,
         y: -95,
         stagger: {
-          each: 0.15,
+          each: 0.16,
           from: "start",
         },
-        duration: 1.6,
+        duration: 1.8,
         ease: "power2.in",
       });
+
+      // 4. Header & Filter fade out concurrently with bubble exit
+      tl.to(
+        ".skills-header-block",
+        {
+          opacity: 0,
+          y: -50,
+          scale: 0.95,
+          duration: 1.5,
+          ease: "power2.inOut",
+        },
+        "<"
+      );
 
       // Ambient Cosmic Halos Parallax Drift on Scroll
       gsap.to(".skills-halo-cyan", {
@@ -366,7 +418,7 @@ export default function Stage03TechLab({
         <div className="w-full flex flex-col lg:flex-row items-center lg:items-start justify-between z-20 pointer-events-auto gap-6">
           <div className="flex-1 w-full max-w-5xl xl:max-w-6xl">
             {/* Minimal Environmental Header */}
-            <div className="mb-6 text-center lg:text-left">
+            <div className="mb-6 text-center lg:text-left skills-header-block">
               <div className="font-sans text-xs sm:text-sm tracking-[0.25em] uppercase text-amber-300 font-semibold mb-2 flex items-center justify-center lg:justify-start gap-2.5">
                 <span className="h-2 w-2 rounded-full bg-amber-400 shadow-[0_0_12px_#f59e0b] animate-ping" />
                 <span className="bg-amber-400/10 px-3.5 py-1 rounded-full border border-amber-400/30 flex items-center gap-2">
@@ -430,9 +482,9 @@ export default function Stage03TechLab({
             </div>
 
             {/* ========================================================================= */}
-            {/* FLOATING ORGANIC BUBBLE FIELD (Tidak terbungkus, bergerak perlahan)        */}
+            {/* FLOATING ORGANIC BUBBLE FIELD (Random scattered constellation, wide space) */}
             {/* ========================================================================= */}
-            <div className="relative w-full py-4 min-h-[460px] sm:min-h-[500px] flex flex-wrap items-center justify-center gap-5 sm:gap-7 md:gap-9">
+            <div className="relative w-full h-[540px] sm:h-[580px] lg:h-[600px] my-1 select-none">
               {SKILL_BUBBLES.map((skill, idx) => {
                 const style = CATEGORY_STYLES[skill.category];
                 const isWobbling = wobbleId === skill.id;
@@ -442,30 +494,36 @@ export default function Stage03TechLab({
 
                 const sizeClasses =
                   skill.size === "lg"
-                    ? "w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 text-base sm:text-lg md:text-xl font-bold"
+                    ? "w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 text-xs sm:text-base md:text-lg font-bold"
                     : skill.size === "md"
-                    ? "w-26 h-26 sm:w-30 sm:h-30 md:w-34 md:h-34 text-sm sm:text-base md:text-lg font-semibold"
-                    : "w-22 h-22 sm:w-26 sm:h-26 md:w-28 md:h-28 text-xs sm:text-sm md:text-base font-semibold";
+                    ? "w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32 text-[11px] sm:text-sm md:text-base font-semibold"
+                    : "w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 text-[10px] sm:text-xs md:text-sm font-semibold";
 
-                // Ultra-slow, silky organic floating drift ("bergerak perlahan")
+                // Living, pronounced zero-gravity floating drift ("gerakan lebih terlihat")
                 const driftClass =
                   skill.floatType === "slow"
                     ? "animate-drift-slow"
                     : skill.floatType === "rev"
                     ? "animate-drift-rev"
+                    : skill.floatType === "pulse"
+                    ? "animate-drift-pulse"
                     : "animate-drift-diagonal";
 
                 return (
                   // Outer wrapper: Targeted by GSAP ScrollTrigger for staggered entrance & exit onScroll
                   <div
                     key={skill.id}
-                    className="skill-bubble-slot transform-gpu will-change-transform"
-                    style={{
-                      marginTop: skill.marginTop || "0px",
-                      marginBottom: skill.marginBottom || "0px",
-                    }}
+                    className="skill-bubble-slot absolute transform-gpu will-change-transform left-[var(--m-left)] top-[var(--m-top)] sm:left-[var(--d-left)] sm:top-[var(--d-top)]"
+                    style={
+                      {
+                        "--m-left": skill.pos.mobile.left,
+                        "--m-top": skill.pos.mobile.top,
+                        "--d-left": skill.pos.desktop.left,
+                        "--d-top": skill.pos.desktop.top,
+                      } as React.CSSProperties
+                    }
                   >
-                    {/* Inner Sphere: Ultra-slow zero-gravity continuous floating drift */}
+                    {/* Inner Sphere: Pronounced zero-gravity continuous floating drift */}
                     <div
                       onClick={() => handleBubbleClick(skill, idx)}
                       onMouseEnter={() => {
@@ -507,7 +565,7 @@ export default function Stage03TechLab({
 
                       {/* Pure Skill Text Typography - Crystal transparent bubble & razor-sharp text */}
                       <span
-                        className={`font-display font-extrabold uppercase transition-all duration-300 px-3 leading-tight select-none ${style.text}`}
+                        className={`font-display font-extrabold uppercase transition-all duration-300 px-2 leading-tight select-none ${style.text}`}
                       >
                         {skill.name}
                       </span>
