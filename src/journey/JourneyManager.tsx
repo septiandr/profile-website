@@ -7,7 +7,6 @@ import HUDMissionControl from "@/components/journey/HUDMissionControl";
 import Stage01VoidIntro from "@/components/journey/Stage01VoidIntro";
 import Stage02ExperienceWaypoints from "@/components/journey/Stage02ExperienceWaypoints";
 import Stage03TechLab from "@/components/journey/Stage03TechLab";
-import Stage04Projects from "@/components/journey/Stage04Projects";
 import Stage05AboutContact from "@/components/journey/Stage05AboutContact";
 import Stage06DepartureEnd from "@/components/journey/Stage06DepartureEnd";
 
@@ -80,7 +79,7 @@ export default function JourneyManager() {
           }}
         />
 
-        {/* Zone 2: Robot-guided Experience Waypoints */}
+        {/* Zone 2: Robot-guided Experience & Featured Projects Waypoints */}
         <Stage02ExperienceWaypoints
           activeWaypointIndex={activeWaypointIndex}
         />
@@ -91,15 +90,10 @@ export default function JourneyManager() {
           activeTechNode={activeTechNode}
         />
 
-        {/* Zone 4: Project Destinations with Orbiting Rocket */}
-        <Stage04Projects
-          activeProjectIndex={activeProjectIndex}
-        />
-
-        {/* Zone 5: Personnel Dossier & Contact */}
+        {/* Zone 4: Personnel Dossier & Contact */}
         <Stage05AboutContact />
 
-        {/* Zone 6: Final Departure & End Screen */}
+        {/* Zone 5: Final Departure & End Screen */}
         <Stage06DepartureEnd onRestart={handleRestart} />
       </main>
     </div>

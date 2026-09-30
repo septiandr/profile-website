@@ -7,7 +7,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { StarfieldRig } from "@/journey/three/StarfieldRig";
 import { TechLabRig } from "@/journey/three/TechLabRig";
-import { JourneyStage } from "@/journey/types";
+import { JourneyStage, EXPERIENCE_WAYPOINTS } from "@/journey/types";
 
 interface JourneyCanvasProps {
   onStageChange?: (stage: JourneyStage, progress: number) => void;
@@ -637,7 +637,10 @@ export default function JourneyCanvas({
           switchRobotAction("Wave");
         }, 500);
 
-        const waypointIndex = Math.min(Math.floor(p * 6), 5);
+        const waypointIndex = Math.min(
+          Math.floor(p * EXPERIENCE_WAYPOINTS.length),
+          EXPERIENCE_WAYPOINTS.length - 1
+        );
         onActiveWaypointChange?.(waypointIndex);
       },
       onEnter: () => {
@@ -678,28 +681,7 @@ export default function JourneyCanvas({
       onLeave: () => switchRobotAction("Walking"),
     });
 
-    // 4. PROJECTS DESTINATIONS STAGE (Robot on left margin)
-    addTrigger({
-      trigger: "#zone-projects",
-      start: "top center",
-      end: "bottom center",
-      scrub: 1.0,
-      onUpdate: (self) => {
-        const p = self.progress;
-        onStageChange?.("projects", p);
-
-        robotTargetPos.current = { x: isMobile ? -1.35 : -2.95, y: -0.8, z: 1.1 };
-        robotTargetScale.current = isMobile ? 0.7 : 1.0;
-        robotTargetRotY.current = 0.55;
-
-        const projectIdx = Math.min(Math.floor(p * 3), 2);
-        onActiveProjectChange?.(projectIdx);
-      },
-      onEnter: () => switchRobotAction("ThumbsUp"),
-      onLeave: () => switchRobotAction("Walking"),
-    });
-
-    // 5. ABOUT DOSSIER STAGE (Robot on right margin)
+    // 4. ABOUT DOSSIER STAGE (Robot on right margin)
     addTrigger({
       trigger: "#zone-about",
       start: "top center",

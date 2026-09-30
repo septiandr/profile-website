@@ -11,12 +11,16 @@ export type JourneyStage =
   | "end-screen";
 
 export interface ExperienceWaypoint {
+  id?: string;
+  type?: "milestone" | "featured-project";
+  projectNumber?: string;
   year: string;
   domain: string;
   company: string;
   role: string;
   description: string;
   tech: string[];
+  deliverables?: string[];
 }
 
 export interface TechNode {
@@ -39,6 +43,7 @@ export interface JourneyProject {
 
 export const EXPERIENCE_WAYPOINTS: ExperienceWaypoint[] = [
   {
+    type: "milestone",
     year: "2022",
     domain: "BANKING & FINANCE",
     company: "PT Infosys Solusi Terpadu",
@@ -48,6 +53,7 @@ export const EXPERIENCE_WAYPOINTS: ExperienceWaypoint[] = [
     tech: ["React", "TypeScript", "Redux", "REST APIs"],
   },
   {
+    type: "milestone",
     year: "2023",
     domain: "EDUCATION PLATFORMS",
     company: "PT Natieva Global International",
@@ -57,6 +63,7 @@ export const EXPERIENCE_WAYPOINTS: ExperienceWaypoint[] = [
     tech: ["Next.js", "Zustand", "Tailwind CSS", "Laravel"],
   },
   {
+    type: "milestone",
     year: "2024",
     domain: "EV CHARGING INFRASTRUCTURE",
     company: "CV Technopartner Indonesia",
@@ -66,6 +73,7 @@ export const EXPERIENCE_WAYPOINTS: ExperienceWaypoint[] = [
     tech: ["React Native", "Redux", "REST APIs", "IoT Telemetry"],
   },
   {
+    type: "milestone",
     year: "2024",
     domain: "LOYALTY & REWARDS",
     company: "CV Technopartner Indonesia",
@@ -75,6 +83,24 @@ export const EXPERIENCE_WAYPOINTS: ExperienceWaypoint[] = [
     tech: ["React.js", "React Native", "TypeScript", "Zustand"],
   },
   {
+    id: "behave",
+    type: "featured-project",
+    projectNumber: "01",
+    year: "2024",
+    domain: "FEATURED WORK · BEHAVE",
+    company: "CV Technopartner Indonesia",
+    role: "Senior Fullstack Developer",
+    description:
+      "A comprehensive digital enterprise platform for promotions, reservations, vouchers, and member transaction workflows.",
+    tech: ["React", "TypeScript", "Vite", "Tailwind CSS", "Go"],
+    deliverables: [
+      "Designed member reward workflows and voucher redemption engines",
+      "Integrated secure payment and merchant transaction handling",
+      "Engineered merchant CMS dashboards with exportable analytics",
+    ],
+  },
+  {
+    type: "milestone",
     year: "2025",
     domain: "FOOD SERVICE ECOSYSTEMS",
     company: "Independent Enterprise",
@@ -84,6 +110,24 @@ export const EXPERIENCE_WAYPOINTS: ExperienceWaypoint[] = [
     tech: ["React.js", "Socket.IO", "Node.js", "PostgreSQL"],
   },
   {
+    id: "shihlin",
+    type: "featured-project",
+    projectNumber: "02",
+    year: "2025",
+    domain: "FEATURED WORK · SHIHLIN",
+    company: "CV Technopartner Indonesia",
+    role: "Lead Frontend Engineer",
+    description:
+      "Fast-service dining mobile ordering app supporting menu exploration, queue tracking, and real-time counter notifications.",
+    tech: ["React Native", "TypeScript", "Redux Toolkit", "Socket.IO"],
+    deliverables: [
+      "Built fluid mobile UI optimized for high-traffic food ordering",
+      "Connected live socket channel for kitchen status updates",
+      "Handled offline state recovery and cart reconciliation",
+    ],
+  },
+  {
+    type: "milestone",
     year: "2026",
     domain: "DIGITAL COMMERCE & GAMING",
     company: "Independent Enterprise",
@@ -91,6 +135,23 @@ export const EXPERIENCE_WAYPOINTS: ExperienceWaypoint[] = [
     description:
       "Engineered end-to-end game top-up platform with Golang microservices and automated WhatsApp notification bots.",
     tech: ["Next.js", "Golang", "PostgreSQL", "WhatsApp API"],
+  },
+  {
+    id: "game-topup",
+    type: "featured-project",
+    projectNumber: "03",
+    year: "2026",
+    domain: "FEATURED WORK · GAME TOP-UP",
+    company: "Independent Enterprise",
+    role: "Fullstack Architect",
+    description:
+      "A high-throughput digital games marketplace integrated with Golang backend services and automated WhatsApp delivery bots.",
+    tech: ["Next.js", "TypeScript", "Golang", "PostgreSQL", "WhatsApp API"],
+    deliverables: [
+      "Built instant top-up checkout with asynchronous transaction processing",
+      "Engineered Golang REST microservice with PostgreSQL transactions",
+      "Deployed automated WhatsApp bot for payment verification & receipt dispatch",
+    ],
   },
 ];
 
