@@ -34,6 +34,7 @@ const config: Config = {
         "spin-slow": "spin 20s linear infinite",
         "float": "float 6s ease-in-out infinite",
         "radar": "radar 2s linear infinite",
+        "marquee": "marquee 35s linear infinite",
       },
       keyframes: {
         float: {
@@ -43,6 +44,10 @@ const config: Config = {
         radar: {
           "0%": { transform: "rotate(0deg)" },
           "100%": { transform: "rotate(360deg)" },
+        },
+        marquee: {
+          "0%": { transform: "translateX(0%)" },
+          "100%": { transform: "translateX(-50%)" },
         },
       },
       boxShadow: {

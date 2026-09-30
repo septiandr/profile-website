@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Code2, Cpu, Globe2, Layers, ShieldCheck, GraduationCap } from "lucide-react";
+import { Code2, Cpu, Globe2, Layers, ShieldCheck, GraduationCap, Award, Compass } from "lucide-react";
 import { profileData } from "@/data/profile";
 
 export default function AboutSection() {
@@ -79,7 +80,7 @@ export default function AboutSection() {
         </div>
 
         {/* Narrative Headline */}
-        <h2 className="about-title font-sans font-extrabold text-3xl sm:text-5xl md:text-6xl text-white tracking-tight mb-8 max-w-3xl">
+        <h2 className="about-title font-sans font-extrabold text-3xl sm:text-5xl md:text-6xl text-white tracking-tight mb-10 max-w-4xl">
           Translating complex enterprise requirements into{" "}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-purple-400">
             fluid, high-octane experiences.
@@ -88,31 +89,58 @@ export default function AboutSection() {
 
         {/* Narrative Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
-          {/* Main Dossier text */}
-          <div className="lg:col-span-7 space-y-5 text-slate-300 font-light text-base sm:text-lg leading-relaxed">
-            <p className="glass-panel p-6 rounded-2xl border border-white/10">
-              With over <strong className="text-cyan-300 font-semibold">4+ years of professional engineering</strong>, I take pride in owning frontend and fullstack delivery across mission-critical domains: electric vehicle charging infrastructures, high-frequency loyalty platforms, digital commerce, and interactive EdTech portals.
-            </p>
-            <p className="glass-panel p-6 rounded-2xl border border-white/10">
-              Currently driving frontend architecture at <strong className="text-white font-semibold">CV Technopartner Indonesia</strong>, shaping production web and React Native mobile codebases. Beyond the client layer, I design Golang microservices and high-throughput real-time systems that keep businesses humming without downtime.
-            </p>
-
-            {/* Education & Language Pills */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-              <div className="glass-panel p-4 rounded-xl border border-white/10 flex items-start gap-3">
-                <GraduationCap className="h-5 w-5 text-cyan-400 mt-1 shrink-0" />
+          {/* Main Dossier text & Profile Insight */}
+          <div className="lg:col-span-7 space-y-6">
+            {/* Editorial Agency Bio Card */}
+            <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/10 relative overflow-hidden">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="relative h-14 w-14 rounded-2xl overflow-hidden border border-cyan-400/40 shrink-0">
+                  <Image
+                    src="/profile.jpg"
+                    alt="Septian Dwi Risanggalih"
+                    fill
+                    className="object-cover object-center"
+                  />
+                </div>
                 <div>
-                  <div className="text-xs font-mono text-slate-400 uppercase">Degree</div>
-                  <div className="text-sm font-semibold text-white">BINUS UNIVERSITY</div>
-                  <div className="text-xs text-slate-400">B.Comp.Sc (2022–2025) • GPA 3.56</div>
+                  <div className="font-sans font-extrabold text-lg text-white">
+                    Septian Dwi Risanggalih
+                  </div>
+                  <div className="font-mono text-xs text-cyan-400">
+                    Lead Frontend / Fullstack Architect
+                  </div>
                 </div>
               </div>
-              <div className="glass-panel p-4 rounded-xl border border-white/10 flex items-start gap-3">
-                <Globe2 className="h-5 w-5 text-purple-400 mt-1 shrink-0" />
+
+              <p className="text-slate-300 font-light text-base sm:text-lg leading-relaxed mb-4">
+                With over <strong className="text-cyan-300 font-semibold">4+ years of professional engineering</strong>, I take pride in owning frontend and fullstack delivery across mission-critical domains: electric vehicle charging infrastructures, high-frequency loyalty platforms, digital commerce, and interactive EdTech portals.
+              </p>
+              <p className="text-slate-400 font-light text-sm sm:text-base leading-relaxed">
+                Currently driving frontend architecture at <strong className="text-white font-medium">CV Technopartner Indonesia</strong>, shaping production web and React Native mobile codebases. Beyond the client layer, I design Golang microservices and high-throughput real-time systems that keep businesses humming without downtime.
+              </p>
+            </div>
+
+            {/* Education & Language Pills */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="glass-panel p-5 rounded-2xl border border-white/10 flex items-start gap-3.5">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-400 shrink-0">
+                  <GraduationCap className="h-5 w-5" />
+                </div>
                 <div>
-                  <div className="text-xs font-mono text-slate-400 uppercase">Fluency</div>
-                  <div className="text-sm font-semibold text-white">Bahasa Indonesia & English</div>
-                  <div className="text-xs text-slate-400">Native & Professional Working</div>
+                  <div className="text-[11px] font-mono text-slate-400 uppercase">Degree & Academic</div>
+                  <div className="text-sm font-bold text-white">BINUS UNIVERSITY</div>
+                  <div className="text-xs text-cyan-300 font-mono mt-0.5">B.Comp.Sc (2022–2025) • GPA 3.56</div>
+                </div>
+              </div>
+
+              <div className="glass-panel p-5 rounded-2xl border border-white/10 flex items-start gap-3.5">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-400/10 text-purple-400 shrink-0">
+                  <Globe2 className="h-5 w-5" />
+                </div>
+                <div>
+                  <div className="text-[11px] font-mono text-slate-400 uppercase">Communication</div>
+                  <div className="text-sm font-bold text-white">Bilingual Engineering</div>
+                  <div className="text-xs text-purple-300 font-mono mt-0.5">Indonesian (Native) • English (Prof.)</div>
                 </div>
               </div>
             </div>
@@ -135,7 +163,7 @@ export default function AboutSection() {
                       {pillar.title}
                     </h3>
                   </div>
-                  <p className="text-xs text-slate-400 leading-relaxed pl-12">
+                  <p className="text-xs text-slate-400 leading-relaxed pl-12 font-light">
                     {pillar.desc}
                   </p>
                 </div>
