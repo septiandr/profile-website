@@ -681,16 +681,16 @@ export default function JourneyCanvas({
       onLeave: () => switchRobotAction("Walking"),
     });
 
-    // 4. ABOUT DOSSIER STAGE (Robot on right margin)
+    // 4. ABOUT DOSSIER STAGE (Robot stays on left margin!)
     addTrigger({
       trigger: "#zone-about",
       start: "top center",
       end: "bottom center",
       onEnter: () => {
         onStageChange?.("about", 0.5);
-        robotTargetPos.current = { x: isMobile ? 1.35 : 2.7, y: -0.7, z: 1.1 };
-        robotTargetScale.current = isMobile ? 0.7 : 1.0;
-        robotTargetRotY.current = -0.45;
+        robotTargetPos.current = { x: isMobile ? 0 : -2.85, y: -0.65, z: 1.25 };
+        robotTargetScale.current = isMobile ? 0.7 : 1.05;
+        robotTargetRotY.current = 0.50; // Angled towards the dossier on the right
         switchRobotAction("ThumbsUp");
       },
     });

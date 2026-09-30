@@ -10,12 +10,15 @@ export default function Stage05AboutContact() {
 
   return (
     <div className="w-full">
-      {/* SCENE 13: ABOUT (DOSSIER WITH ROBOT COMPANION) */}
+      {/* SCENE 13: ABOUT (DOSSIER WITH ROBOT COMPANION ON LEFT) */}
       <section
         id="zone-about"
-        className="relative min-h-screen w-full px-6 py-36 flex flex-col justify-center items-center select-none"
+        className="relative min-h-screen w-full px-6 py-36 flex items-center justify-center select-none"
       >
-        <div className="max-w-2xl mx-auto text-center z-20">
+        {/* Left Column Spacer for 3D Robot (340px - 380px) */}
+        <div className="hidden lg:block w-[320px] xl:w-[380px] shrink-0 pointer-events-none" />
+
+        <div className="flex-1 max-w-2xl text-center z-20 pr-0 lg:pr-12">
           <div className="font-sans text-[11px] sm:text-xs tracking-[0.25em] uppercase text-amber-300/90 font-medium mb-3 flex items-center justify-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b]" />
             <span>The Engineer · Philosophy & Background</span>
