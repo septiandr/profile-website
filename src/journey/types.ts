@@ -161,3 +161,4 @@ export const JOURNEY_PROJECTS: JourneyProject[] = [
     ],
   },
 ];
+

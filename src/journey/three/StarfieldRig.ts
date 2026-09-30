@@ -73,3 +73,4 @@ export class StarfieldRig {
     (this.points.material as THREE.Material).dispose();
   }
 }
+

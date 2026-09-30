@@ -119,3 +119,4 @@ export class TechLabRig {
     (this.portalRing.material as THREE.Material).dispose();
   }
 }
+

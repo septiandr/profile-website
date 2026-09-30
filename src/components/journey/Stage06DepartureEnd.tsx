@@ -60,3 +60,4 @@ export default function Stage06DepartureEnd({ onRestart }: Stage06Props) {
     </section>
   );
 }
+

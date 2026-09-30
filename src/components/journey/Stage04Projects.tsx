@@ -128,3 +128,4 @@ export default function Stage04Projects({ activeProjectIndex }: Stage04Props) {
     </section>
   );
 }
+
