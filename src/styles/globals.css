@@ -291,6 +291,61 @@ body {
   animation: bubble-drift-pulse 5.0s ease-in-out infinite;
 }
 
+/* Hero Avatar Orbital Spin & Satellite Badge Floating Keyframes */
+@keyframes spin-slow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes spin-slow-rev {
+  0% { transform: rotate(360deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes float-badge-1 {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-7px) rotate(1.5deg); }
+}
+
+@keyframes float-badge-2 {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(8px) rotate(-1.5deg); }
+}
+
+@keyframes float-badge-3 {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-6px) rotate(-1deg); }
+}
+
+@keyframes pulse-aura {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.06); }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 22s linear infinite;
+}
+
+.animate-spin-slow-rev {
+  animation: spin-slow-rev 28s linear infinite;
+}
+
+.animate-float-badge-1 {
+  animation: float-badge-1 4.5s ease-in-out infinite;
+}
+
+.animate-float-badge-2 {
+  animation: float-badge-2 5.2s ease-in-out infinite;
+}
+
+.animate-float-badge-3 {
+  animation: float-badge-3 4.8s ease-in-out infinite;
+}
+
+.animate-pulse-aura {
+  animation: pulse-aura 3.6s ease-in-out infinite;
+}
+
 @media (hover: hover) and (pointer: fine) {
   body, a, button, input, textarea, select, [role="button"], [data-cursor] {
     cursor: none !important;
