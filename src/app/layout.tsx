@@ -3,7 +3,6 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import "@/styles/globals.css";
 import SmoothScroll from "@/components/ui/SmoothScroll";
 import CustomCursor from "@/components/ui/CustomCursor";
-import HUDHeader from "@/components/ui/HUDHeader";
 
 const sansFont = Inter({
   subsets: ["latin"],
@@ -41,10 +40,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${sansFont.variable} ${monoFont.variable} dark`}>
-      <body className="bg-space-950 text-slate-100 antialiased selection:bg-cyan-500/30 selection:text-cyan-300">
+      <body className="bg-[#060709] text-zinc-100 antialiased selection:bg-amber-500/30 selection:text-amber-200">
         <SmoothScroll>
           <CustomCursor />
-          <HUDHeader />
           {children}
         </SmoothScroll>
       </body>

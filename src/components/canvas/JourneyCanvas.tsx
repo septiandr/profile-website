@@ -57,8 +57,15 @@ export default function JourneyCanvas({
     onRobotActionChangeRef.current = onRobotActionChange;
   }, [onRobotActionChange]);
 
-  // Rocket Engine Warm Amber Light
+  // Rocket Engine Warm Amber Light & Hot state ref (prevents re-mounting scene)
   const engineLightRef = useRef<THREE.PointLight | null>(null);
+  const isEngineHotRef = useRef(isEngineHot);
+  useEffect(() => {
+    isEngineHotRef.current = isEngineHot;
+  }, [isEngineHot]);
+
+  // Track created ScrollTriggers to only clean up our own triggers
+  const triggersRef = useRef<ScrollTrigger[]>([]);
 
   // Parallax & Smooth Target Lerping (Eliminates all blinking/teleporting)
   const mouse = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 });
@@ -361,7 +368,8 @@ export default function JourneyCanvas({
 
         // Engine light thruster flicker / pulse
         if (engineLightRef.current) {
-          engineLightRef.current.intensity = isEngineHot ? 3.8 : 2.2 + Math.sin(elapsed * 9) * 0.5;
+          const isHot = isEngineHotRef.current;
+          engineLightRef.current.intensity = isHot ? 3.8 : 2.2 + Math.sin(elapsed * 9) * 0.5;
         }
       }
 
@@ -407,12 +415,22 @@ export default function JourneyCanvas({
       renderer.dispose();
       starfield.dispose();
       techLab.dispose();
-      ScrollTrigger.getAll().forEach((st) => st.kill());
+      triggersRef.current.forEach((st) => st.kill());
+      triggersRef.current = [];
       if (container.contains(renderer.domElement)) {
         container.removeChild(renderer.domElement);
       }
     };
-  }, [switchRobotAction, isEngineHot]);
+  }, []); // Run once on mount! Never destroy WebGL scene on prop updates!
+
+  // Sync Hover Tech Node
+  useEffect(() => {
+    if (techLabRef.current && activeTechNode !== undefined) {
+      if (activeTechNode !== null) {
+        techLabRef.current.activateNode(activeTechNode);
+      }
+    }
+  }, [activeTechNode]);
 
   // Sync external robot action triggers (e.g. from companion HUD)
   useEffect(() => {
@@ -425,8 +443,14 @@ export default function JourneyCanvas({
   const setupDiscreteScrollChoreography = (techLab: THREE.Group) => {
     const isMobile = window.innerWidth < 768;
 
+    const addTrigger = (vars: ScrollTrigger.Vars) => {
+      const st = ScrollTrigger.create(vars);
+      triggersRef.current.push(st);
+      return st;
+    };
+
     // Track full scroll progress for continuous orbit
-    ScrollTrigger.create({
+    addTrigger({
       trigger: "body",
       start: "top top",
       end: "bottom bottom",
@@ -436,7 +460,7 @@ export default function JourneyCanvas({
     });
 
     // 1. INTRO / VOID STAGE
-    ScrollTrigger.create({
+    addTrigger({
       trigger: "#zone-void",
       start: "top top",
       end: "bottom top",
@@ -457,7 +481,7 @@ export default function JourneyCanvas({
     });
 
     // 2. EXPERIENCE WAYPOINTS STAGE
-    ScrollTrigger.create({
+    addTrigger({
       trigger: "#zone-experience",
       start: "top center",
       end: "bottom center",
@@ -490,7 +514,7 @@ export default function JourneyCanvas({
     });
 
     // 3. TECHNOLOGY LAB STAGE
-    ScrollTrigger.create({
+    addTrigger({
       trigger: "#zone-skills",
       start: "top center",
       end: "bottom center",
@@ -512,7 +536,7 @@ export default function JourneyCanvas({
     });
 
     // 4. PROJECTS DESTINATIONS STAGE
-    ScrollTrigger.create({
+    addTrigger({
       trigger: "#zone-projects",
       start: "top center",
       end: "bottom center",
@@ -533,7 +557,7 @@ export default function JourneyCanvas({
     });
 
     // 5. ABOUT DOSSIER STAGE
-    ScrollTrigger.create({
+    addTrigger({
       trigger: "#zone-about",
       start: "top center",
       end: "bottom center",
@@ -547,7 +571,7 @@ export default function JourneyCanvas({
     });
 
     // 6. CONTACT & VICTORY DANCE
-    ScrollTrigger.create({
+    addTrigger({
       trigger: "#zone-contact",
       start: "top center",
       end: "bottom bottom",
