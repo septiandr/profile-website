@@ -4,25 +4,27 @@ const config: Config = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/journey/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
       colors: {
-        space: {
-          950: "#030712",
-          900: "#060914",
-          850: "#0a0f1d",
-          800: "#0f172a",
-          700: "#1e293b",
+        obsidian: {
+          950: "#060709",
+          900: "#0b0d12",
+          850: "#10141c",
+          800: "#161b26",
+          700: "#222a3a",
         },
-        cyber: {
-          cyan: "#00f5d4",
-          teal: "#00bbf9",
-          violet: "#9d4edd",
-          purple: "#7b2cbf",
-          amber: "#fee440",
-          pink: "#f72585",
+        solar: {
+          50: "#fffbeb",
+          100: "#fef3c7",
+          200: "#fde68a",
+          300: "#fcd34d",
+          400: "#fbbf24",
+          500: "#f59e0b",
+          600: "#d97706",
         },
       },
       fontFamily: {
@@ -31,19 +33,14 @@ const config: Config = {
       },
       animation: {
         "pulse-slow": "pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-        "spin-slow": "spin 20s linear infinite",
-        "float": "float 6s ease-in-out infinite",
-        "radar": "radar 2s linear infinite",
-        "marquee": "marquee 35s linear infinite",
+        "spin-slow": "spin 25s linear infinite",
+        float: "float 6s ease-in-out infinite",
+        marquee: "marquee 35s linear infinite",
       },
       keyframes: {
         float: {
           "0%, 100%": { transform: "translateY(0px)" },
-          "50%": { transform: "translateY(-12px)" },
-        },
-        radar: {
-          "0%": { transform: "rotate(0deg)" },
-          "100%": { transform: "rotate(360deg)" },
+          "50%": { transform: "translateY(-10px)" },
         },
         marquee: {
           "0%": { transform: "translateX(0%)" },
@@ -51,13 +48,8 @@ const config: Config = {
         },
       },
       boxShadow: {
-        "glow-cyan": "0 0 25px rgba(0, 245, 212, 0.35)",
-        "glow-violet": "0 0 25px rgba(157, 78, 221, 0.35)",
-        "glow-pink": "0 0 25px rgba(247, 37, 133, 0.35)",
-      },
-      backgroundImage: {
-        "cyber-grid":
-          "linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px)",
+        "glow-solar": "0 0 25px rgba(245, 158, 11, 0.35)",
+        "glow-amber": "0 0 35px rgba(251, 191, 36, 0.25)",
       },
     },
   },

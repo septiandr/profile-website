@@ -4,6 +4,7 @@ import { useState, useCallback } from "react";
 import dynamic from "next/dynamic";
 import { JourneyStage } from "./types";
 import HUDMissionControl from "@/components/journey/HUDMissionControl";
+import RobotGuideCompanion from "@/components/journey/RobotGuideCompanion";
 import Stage01VoidIntro from "@/components/journey/Stage01VoidIntro";
 import Stage02ExperienceWaypoints from "@/components/journey/Stage02ExperienceWaypoints";
 import Stage03TechLab from "@/components/journey/Stage03TechLab";
@@ -22,6 +23,7 @@ export default function JourneyManager() {
   const [activeProjectIndex, setActiveProjectIndex] = useState<number>(0);
   const [activeTechNode, setActiveTechNode] = useState<number | null>(null);
   const [isEngineHot, setIsEngineHot] = useState<boolean>(false);
+  const [robotAction, setRobotAction] = useState<string>("Wave");
 
   const handleStageChange = useCallback((stage: JourneyStage) => {
     setCurrentStage(stage);
@@ -39,16 +41,21 @@ export default function JourneyManager() {
     setActiveTechNode(index);
   }, []);
 
+  const handleRobotActionChange = useCallback((action: string) => {
+    setRobotAction(action);
+  }, []);
+
   const handleRestart = useCallback(() => {
     setCurrentStage("the-void");
     setActiveWaypointIndex(0);
     setActiveProjectIndex(0);
     setActiveTechNode(null);
+    setRobotAction("Wave");
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-[#050507] text-zinc-100 overflow-x-hidden">
-      {/* Three.js Continuous Cinematic Canvas Rig */}
+    <div className="relative min-h-screen bg-[#060709] text-zinc-100 overflow-x-hidden">
+      {/* Three.js Continuous Cinematic Canvas (Rocket Orbit & Protagonist Robot) */}
       <JourneyCanvas
         onStageChange={handleStageChange}
         onActiveWaypointChange={handleActiveWaypointChange}
@@ -56,31 +63,43 @@ export default function JourneyManager() {
         activeTechNode={activeTechNode}
         onHoverTechNode={handleHoverTechNode}
         isEngineHot={isEngineHot}
+        robotAction={robotAction}
+        onRobotActionChange={handleRobotActionChange}
       />
 
       {/* Mission Control Minimal HUD */}
       <HUDMissionControl currentStage={currentStage} />
 
+      {/* Main Protagonist Robot Guide Companion (Always Explaining) */}
+      <RobotGuideCompanion
+        stage={currentStage}
+        currentAction={robotAction}
+        onActionChange={handleRobotActionChange}
+      />
+
       {/* The 6 Sequential Narrative Zones */}
       <main className="relative z-10">
-        {/* Zone 1: The Void & Rocket Interaction */}
+        {/* Zone 1: The Void & Robot Welcome */}
         <Stage01VoidIntro
           onEngineHover={setIsEngineHot}
-          onEnterJourney={() => setIsEngineHot(true)}
+          onEnterJourney={() => {
+            setIsEngineHot(true);
+            setRobotAction("Walking");
+          }}
         />
 
-        {/* Zone 2: Astronaut & Physical Experience Waypoints */}
+        {/* Zone 2: Robot-guided Experience Waypoints */}
         <Stage02ExperienceWaypoints
           activeWaypointIndex={activeWaypointIndex}
         />
 
-        {/* Zone 3: Technology Lab & Robot Activation */}
+        {/* Zone 3: Architectural Tech Lab & Robot Diagnostics */}
         <Stage03TechLab
           onHoverTechNode={handleHoverTechNode}
           activeTechNode={activeTechNode}
         />
 
-        {/* Zone 4: Project Destinations */}
+        {/* Zone 4: Project Destinations with Orbiting Rocket */}
         <Stage04Projects
           activeProjectIndex={activeProjectIndex}
         />

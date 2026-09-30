@@ -11,9 +11,6 @@ interface Stage04Props {
 export default function Stage04Projects({ activeProjectIndex }: Stage04Props) {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const activeProject: JourneyProject =
-    JOURNEY_PROJECTS[activeProjectIndex] || JOURNEY_PROJECTS[0];
-
   return (
     <section
       id="zone-projects"
@@ -22,10 +19,10 @@ export default function Stage04Projects({ activeProjectIndex }: Stage04Props) {
     >
       {/* Sticky Environmental Header */}
       <div className="sticky top-28 z-20 text-center max-w-xl mx-auto mb-16 pointer-events-none">
-        <div className="font-mono text-[10px] tracking-[0.3em] text-cyan-400 uppercase mb-2">
+        <div className="font-mono text-[10px] tracking-[0.35em] text-solar-400 uppercase mb-2">
           SECTOR 04 // PROJECT DESTINATIONS
         </div>
-        <div className="font-sans font-light text-sm tracking-[0.25em] text-zinc-400 uppercase">
+        <div className="font-sans font-light text-sm tracking-[0.25em] text-zinc-300 uppercase">
           DESTINATION [0{activeProjectIndex + 1} / 03]
         </div>
 
@@ -34,33 +31,35 @@ export default function Stage04Projects({ activeProjectIndex }: Stage04Props) {
           {JOURNEY_PROJECTS.map((p, idx) => (
             <span
               key={p.id}
-              className={`h-1 transition-all duration-500 rounded-full ${
-                activeProjectIndex === idx ? "w-8 bg-cyan-400" : "w-2 bg-zinc-800"
+              className={`h-1.5 transition-all duration-500 rounded-full ${
+                activeProjectIndex === idx
+                  ? "w-8 bg-solar-400 shadow-[0_0_10px_#f59e0b]"
+                  : "w-2.5 bg-zinc-800"
               }`}
             />
           ))}
         </div>
       </div>
 
-      {/* Sequential Project Destinations (One active at a time as scroll progresses) */}
+      {/* Sequential Project Destinations */}
       <div className="w-full max-w-3xl mx-auto space-y-[60vh] z-20 relative">
         {JOURNEY_PROJECTS.map((proj, idx) => {
           const isActive = activeProjectIndex === idx;
           return (
             <div
               key={proj.id}
-              className={`transition-all duration-700 p-8 sm:p-12 border backdrop-blur-md ${
+              className={`transition-all duration-700 p-8 sm:p-12 border backdrop-blur-xl ${
                 isActive
-                  ? "opacity-100 translate-y-0 border-zinc-700 bg-zinc-950/70"
-                  : "opacity-20 translate-y-8 border-zinc-900 bg-zinc-950/20 pointer-events-none"
+                  ? "opacity-100 translate-y-0 border-solar-500/40 bg-obsidian-950/80 shadow-[0_15px_40px_rgba(0,0,0,0.6)]"
+                  : "opacity-20 translate-y-8 border-zinc-900 bg-obsidian-950/20 pointer-events-none"
               }`}
             >
               {/* Destination Code */}
               <div className="flex items-center justify-between font-mono text-xs text-zinc-500 mb-6 border-b border-zinc-800 pb-3">
-                <span className="text-cyan-400 tracking-widest font-semibold">
-                  DESTINATION {proj.number}
+                <span className="text-solar-400 tracking-widest font-semibold">
+                  DESTINATION {proj.number} // ORBIT PATROL
                 </span>
-                <span>PRODUCTION SYSTEM</span>
+                <span className="text-zinc-400">ENTERPRISE SYSTEM</span>
               </div>
 
               {/* Title & Subtitle */}
@@ -68,7 +67,7 @@ export default function Stage04Projects({ activeProjectIndex }: Stage04Props) {
                 {proj.name}
               </h3>
 
-              <div className="font-mono text-xs text-zinc-400 tracking-[0.25em] uppercase mb-6">
+              <div className="font-mono text-xs text-solar-300 tracking-[0.25em] uppercase mb-6 font-medium">
                 {proj.subtitle}
               </div>
 
@@ -96,7 +95,7 @@ export default function Stage04Projects({ activeProjectIndex }: Stage04Props) {
                     {proj.stack.map((s, sIdx) => (
                       <span
                         key={sIdx}
-                        className="font-mono text-[11px] text-zinc-300 bg-zinc-900 border border-zinc-800 px-2.5 py-0.5"
+                        className="font-mono text-[11px] text-solar-200 bg-zinc-900 border border-zinc-800 px-2.5 py-0.5"
                       >
                         {s}
                       </span>
@@ -116,7 +115,7 @@ export default function Stage04Projects({ activeProjectIndex }: Stage04Props) {
                       key={dIdx}
                       className="text-xs text-zinc-400 font-light flex items-start gap-2"
                     >
-                      <span className="text-cyan-400 font-mono">›</span>
+                      <span className="text-solar-400 font-mono">›</span>
                       <span>{d}</span>
                     </li>
                   ))}

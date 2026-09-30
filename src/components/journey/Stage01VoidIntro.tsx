@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { ArrowDown, Compass } from "lucide-react";
+import { ArrowDown, Bot, Sparkles } from "lucide-react";
 
 interface Stage01Props {
   onEngineHover?: (hovered: boolean) => void;
@@ -14,47 +14,43 @@ export default function Stage01VoidIntro({
   onEnterJourney,
 }: Stage01Props) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const welcomeTextRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const subtextRef = useRef<HTMLParagraphElement>(null);
-  const ctaRef = useRef<HTMLButtonElement>(null);
+  const headlineRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Cinematic slow entrance
-      const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
+      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-      tl.from(welcomeTextRef.current, {
+      tl.from(".void-tag", {
         opacity: 0,
-        y: 15,
-        duration: 1.8,
-        delay: 0.5,
+        y: -15,
+        duration: 1.4,
+        delay: 0.3,
       })
         .from(
-          titleRef.current?.querySelectorAll(".title-part") || [],
+          ".kinetic-text-line",
           {
             opacity: 0,
-            y: 35,
-            stagger: 0.3,
-            duration: 1.6,
+            y: 45,
+            stagger: 0.2,
+            duration: 1.5,
           },
-          "-=1.0"
+          "-=0.9"
         )
         .from(
-          subtextRef.current,
-          {
-            opacity: 0,
-            y: 15,
-            duration: 1.4,
-          },
-          "-=0.8"
-        )
-        .from(
-          ctaRef.current,
+          ".void-sub",
           {
             opacity: 0,
             y: 20,
             duration: 1.2,
+          },
+          "-=0.8"
+        )
+        .from(
+          ".void-cta-box",
+          {
+            opacity: 0,
+            scale: 0.95,
+            duration: 1.0,
           },
           "-=0.6"
         );
@@ -75,58 +71,55 @@ export default function Stage01VoidIntro({
     <section
       id="zone-void"
       ref={containerRef}
-      className="relative min-h-[140vh] w-full flex flex-col justify-between items-center px-6 pt-36 pb-20 select-none pointer-events-none"
+      className="relative min-h-[140vh] w-full flex flex-col justify-between items-center px-6 pt-36 pb-24 select-none pointer-events-none"
     >
       {/* Editorial Cinematic Headline */}
-      <div className="text-center max-w-4xl mx-auto z-10 pointer-events-auto">
-        <div
-          ref={welcomeTextRef}
-          className="font-mono text-[11px] tracking-[0.35em] text-zinc-400 uppercase mb-6"
-        >
-          WELCOME TO
+      <div ref={headlineRef} className="text-center max-w-4xl mx-auto z-10 pointer-events-auto">
+        <div className="void-tag inline-flex items-center gap-2 border border-solar-500/30 bg-obsidian-950/80 px-4 py-1.5 rounded-full mb-6 backdrop-blur-md shadow-[0_0_20px_rgba(245,158,11,0.15)]">
+          <Bot className="h-3.5 w-3.5 text-solar-400" />
+          <span className="font-mono text-[10px] tracking-[0.3em] text-solar-300 uppercase">
+            AUTONOMOUS TOUR INITIALIZED
+          </span>
         </div>
 
-        <h1
-          ref={titleRef}
-          className="font-sans font-light tracking-tight text-4xl sm:text-6xl md:text-7xl lg:text-8xl text-zinc-100 uppercase leading-[0.98] mb-6"
-        >
-          <span className="title-part block font-bold tracking-tighter text-white">
+        <h1 className="font-sans font-light tracking-tight text-4xl sm:text-6xl md:text-7xl lg:text-8xl text-zinc-100 uppercase leading-[0.96] mb-6">
+          <span className="kinetic-text-line block text-zinc-400 font-extralight text-xs sm:text-sm tracking-[0.4em] uppercase mb-2">
+            WELCOME TO
+          </span>
+          <span className="kinetic-text-line block font-black tracking-tighter text-white">
             RISANGGALIH
           </span>
-          <span className="title-part block text-zinc-400 font-extralight tracking-widest text-3xl sm:text-5xl md:text-6xl mt-1">
+          <span className="kinetic-text-line block text-transparent bg-clip-text bg-gradient-to-r from-solar-400 via-solar-300 to-amber-200 font-extralight tracking-widest text-3xl sm:text-5xl md:text-6xl mt-1 text-glow-solar">
             PORTFOLIO
           </span>
         </h1>
 
-        <p
-          ref={subtextRef}
-          className="font-mono text-xs sm:text-sm text-zinc-400 tracking-[0.25em] uppercase"
-        >
-          Software Engineer
+        <p className="void-sub font-mono text-xs sm:text-sm text-solar-200 tracking-[0.25em] uppercase font-light">
+          SOFTWARE ENGINEER • SENIOR ARCHITECT
         </p>
       </div>
 
-      {/* Center Interactive prompt */}
-      <div className="font-mono text-[11px] text-zinc-500 tracking-widest uppercase my-auto hidden sm:block">
-        [ MOVE CURSOR TO INSPECT VESSEL ]
+      {/* Center Interactive Parallax Hint */}
+      <div className="font-mono text-[11px] text-zinc-500 tracking-widest uppercase my-auto hidden sm:flex items-center gap-2">
+        <Sparkles className="h-3 w-3 text-solar-400" />
+        <span>ROCKET CRUISING IN ORBIT • SCROLL OR ENTER TO COMMENCE</span>
       </div>
 
-      {/* Primary Takeoff Action */}
-      <div className="z-10 pointer-events-auto flex flex-col items-center gap-4">
+      {/* Primary Action Button */}
+      <div className="void-cta-box z-10 pointer-events-auto flex flex-col items-center gap-4">
         <button
-          ref={ctaRef}
           onClick={handleEnter}
           onMouseEnter={() => onEngineHover?.(true)}
           onMouseLeave={() => onEngineHover?.(false)}
-          className="group relative flex items-center gap-3 border border-zinc-700 bg-zinc-950/80 px-8 py-4 font-mono text-xs tracking-[0.25em] text-zinc-200 transition-all duration-500 hover:border-cyan-400 hover:text-cyan-300 hover:bg-zinc-900"
+          className="group relative flex items-center gap-3 border border-solar-500/50 bg-obsidian-950/80 px-8 py-4 font-mono text-xs tracking-[0.25em] text-solar-300 transition-all duration-500 hover:border-solar-400 hover:text-white hover:bg-solar-500/10 hover:shadow-[0_0_30px_rgba(245,158,11,0.3)]"
         >
-          <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 group-hover:animate-ping" />
+          <span className="h-2 w-2 rounded-full bg-solar-400 group-hover:animate-ping" />
           <span>ENTER JOURNEY</span>
-          <ArrowDown className="h-3.5 w-3.5 transition-transform group-hover:translate-y-0.5" />
+          <ArrowDown className="h-3.5 w-3.5 transition-transform group-hover:translate-y-1" />
         </button>
 
         <span className="font-mono text-[10px] text-zinc-500 tracking-widest uppercase">
-          OR SCROLL TO INITIATE TAKEOFF
+          OR SCROLL TO TRAVEL WITH ROBOT GUIDE
         </span>
       </div>
     </section>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { RotateCcw } from "lucide-react";
+import { RotateCcw, Bot } from "lucide-react";
 
 interface Stage06Props {
   onRestart?: () => void;
@@ -20,10 +20,11 @@ export default function Stage06DepartureEnd({ onRestart }: Stage06Props) {
     <section
       id="zone-end"
       ref={containerRef}
-      className="relative min-h-screen w-full px-6 py-32 flex flex-col justify-between items-center text-center select-none bg-zinc-950 z-30"
+      className="relative min-h-screen w-full px-6 py-32 flex flex-col justify-between items-center text-center select-none bg-obsidian-950 z-30"
     >
-      <div className="font-mono text-[10px] tracking-[0.35em] text-zinc-600 uppercase">
-        JOURNEY STATUS // CONCLUDED
+      <div className="font-mono text-[10px] tracking-[0.35em] text-solar-400 uppercase flex items-center gap-2">
+        <Bot className="h-3 w-3 text-solar-400" />
+        <span>JOURNEY LOG // TRANSMISSION COMPLETE</span>
       </div>
 
       {/* End Screen Credential */}
@@ -32,7 +33,7 @@ export default function Stage06DepartureEnd({ onRestart }: Stage06Props) {
           RISANGGALIH
         </h2>
 
-        <div className="font-mono text-xs sm:text-sm text-cyan-400 tracking-[0.25em] uppercase">
+        <div className="font-mono text-xs sm:text-sm text-solar-400 tracking-[0.25em] uppercase font-semibold">
           SOFTWARE ENGINEER
         </div>
 
@@ -45,16 +46,16 @@ export default function Stage06DepartureEnd({ onRestart }: Stage06Props) {
         <div className="pt-10">
           <button
             onClick={handleRestartClick}
-            className="group inline-flex items-center gap-2.5 border border-zinc-700 bg-zinc-900/60 px-6 py-3.5 font-mono text-xs tracking-[0.2em] text-zinc-200 hover:border-cyan-400 hover:text-cyan-300 transition-all duration-300"
+            className="group inline-flex items-center gap-2.5 border border-solar-500/50 bg-obsidian-900/90 px-8 py-4 font-mono text-xs tracking-[0.25em] text-solar-300 hover:border-solar-400 hover:text-white hover:bg-solar-500/10 transition-all duration-300 shadow-[0_0_25px_rgba(245,158,11,0.2)]"
           >
-            <RotateCcw className="h-3.5 w-3.5 transition-transform group-hover:-rotate-90" />
+            <RotateCcw className="h-3.5 w-3.5 transition-transform group-hover:-rotate-90 text-solar-400" />
             <span>RESTART JOURNEY</span>
           </button>
         </div>
       </div>
 
-      <div className="font-mono text-[11px] text-zinc-700 tracking-widest uppercase">
-        © 2026 RISANGGALIH. ALL MISSION LOGS ARCHIVED.
+      <div className="font-mono text-[11px] text-zinc-600 tracking-widest uppercase">
+        © 2026 SEPTIAN DWI RISANGGALIH. CRAFTED WITH THREE.JS & GSAP.
       </div>
     </section>
   );

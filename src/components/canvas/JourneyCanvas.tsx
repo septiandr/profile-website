@@ -6,7 +6,6 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { StarfieldRig } from "@/journey/three/StarfieldRig";
-import { PlanetRig } from "@/journey/three/PlanetRig";
 import { TechLabRig } from "@/journey/three/TechLabRig";
 import { JourneyStage } from "@/journey/types";
 
@@ -17,6 +16,8 @@ interface JourneyCanvasProps {
   activeTechNode?: number | null;
   onHoverTechNode?: (index: number | null) => void;
   isEngineHot?: boolean;
+  robotAction?: string;
+  onRobotActionChange?: (action: string) => void;
 }
 
 export default function JourneyCanvas({
@@ -26,6 +27,8 @@ export default function JourneyCanvas({
   activeTechNode,
   onHoverTechNode,
   isEngineHot = false,
+  robotAction = "Wave",
+  onRobotActionChange,
 }: JourneyCanvasProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -36,25 +39,41 @@ export default function JourneyCanvas({
 
   // Rigs
   const starfieldRef = useRef<StarfieldRig | null>(null);
-  const planetRef = useRef<PlanetRig | null>(null);
   const techLabRef = useRef<TechLabRig | null>(null);
 
-  // Characters
+  // Characters (ONLY Rocket and Robot - NO Astronaut!)
   const rocketGroupRef = useRef<THREE.Group | null>(null);
-  const astronautGroupRef = useRef<THREE.Group | null>(null);
   const robotGroupRef = useRef<THREE.Group | null>(null);
 
-  // Character animations
+  // Robot animation mixer
   const robotMixerRef = useRef<THREE.AnimationMixer | null>(null);
   const robotActionsRef = useRef<{ [name: string]: THREE.AnimationAction }>({});
+  const activeActionRef = useRef<THREE.AnimationAction | null>(null);
 
-  // Engine Light for Rocket
+  // Rocket Engine Warm Amber Light
   const engineLightRef = useRef<THREE.PointLight | null>(null);
 
-  // Mouse tracking (constrained)
+  // Parallax & Mouse Tracking
   const mouse = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 });
-  const isWarping = useRef(false);
-  const isVibrating = useRef(false);
+  const scrollProgressRef = useRef<number>(0);
+
+  // Play animation clip smoothly
+  const playRobotAnimation = useCallback((actionName: string) => {
+    const actions = robotActionsRef.current;
+    if (!actions[actionName]) return;
+
+    const prevAction = activeActionRef.current;
+    const nextAction = actions[actionName];
+
+    if (prevAction === nextAction) return;
+
+    if (prevAction) {
+      prevAction.fadeOut(0.35);
+    }
+    nextAction.reset().fadeIn(0.35).play();
+    activeActionRef.current = nextAction;
+    onRobotActionChange?.(actionName);
+  }, [onRobotActionChange]);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -64,18 +83,18 @@ export default function JourneyCanvas({
     const width = window.innerWidth;
     const height = window.innerHeight;
 
-    // 1. SCENE
+    // 1. SCENE (Warm deep obsidian void)
     const scene = new THREE.Scene();
     sceneRef.current = scene;
-    scene.background = new THREE.Color(0x050507); // Pure deep void
-    scene.fog = new THREE.FogExp2(0x050507, 0.025);
+    scene.background = new THREE.Color(0x060709);
+    scene.fog = new THREE.FogExp2(0x060709, 0.026);
 
-    // 2. CAMERA (Cinematic framing)
-    const camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 100);
-    camera.position.set(0, 0, 7.5);
+    // 2. CAMERA
+    const camera = new THREE.PerspectiveCamera(44, width / height, 0.1, 100);
+    camera.position.set(0, 0, 7.8);
     cameraRef.current = camera;
 
-    // 3. RENDERER (Clean, high-performance)
+    // 3. RENDERER
     const renderer = new THREE.WebGLRenderer({
       antialias: true,
       powerPreference: "high-performance",
@@ -83,69 +102,63 @@ export default function JourneyCanvas({
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.15;
+    renderer.toneMappingExposure = 1.25;
     container.appendChild(renderer.domElement);
     rendererRef.current = renderer;
 
-    // 4. RESTRAINED LIGHTING (Cinematic key + subtle silver rim)
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+    // 4. WARM SOLAR LIGHTING (Warm Key + Amber Accent + Neutral Rim)
+    const ambientLight = new THREE.AmbientLight(0xfef3c7, 0.85); // Warm ambient
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0xe2e8f0, 2.8); // Neutral silver key
-    keyLight.position.set(5, 7, 5);
+    const keyLight = new THREE.DirectionalLight(0xfffbeb, 3.2); // Warm white key
+    keyLight.position.set(6, 7, 5);
     scene.add(keyLight);
 
-    const rimLight = new THREE.DirectionalLight(0x38bdf8, 1.2); // Faint cyan rim
-    rimLight.position.set(-6, -3, -4);
+    const solarAccentLight = new THREE.DirectionalLight(0xf59e0b, 2.8); // Solar Amber Accent
+    solarAccentLight.position.set(-6, -3, 3);
+    scene.add(solarAccentLight);
+
+    const rimLight = new THREE.DirectionalLight(0xd4d4d8, 2.0); // Titanium Rim
+    rimLight.position.set(0, 8, -6);
     scene.add(rimLight);
 
-    // Rocket Engine Light
-    const engineLight = new THREE.PointLight(0x38bdf8, 1.0, 8);
-    engineLight.position.set(0, -1.2, 0);
+    // Rocket Thruster Point Light
+    const engineLight = new THREE.PointLight(0xf59e0b, 2.0, 10);
     scene.add(engineLight);
     engineLightRef.current = engineLight;
 
-    // 5. STARFIELD RIG
-    const starfield = new StarfieldRig(1000);
+    // 5. STARFIELD RIG (Warm Champagne & Amber)
+    const starfield = new StarfieldRig(1200);
     scene.add(starfield.points);
     starfieldRef.current = starfield;
 
-    // 6. PLANET RIG (Atmospheric arrival)
-    const planet = new PlanetRig();
-    scene.add(planet.group);
-    planetRef.current = planet;
-
-    // 7. TECH LAB RIG (Spatial skill nodes & subtle portal)
+    // 6. TECH LAB RIG (Spatial Nodes & Portal)
     const techLab = new TechLabRig();
     scene.add(techLab.group);
     techLabRef.current = techLab;
 
-    // 8. CHARACTER GROUPS
+    // 7. CHARACTERS: ROCKET & ROBOT ONLY (No Astronaut)
     const rocketGroup = new THREE.Group();
-    const astronautGroup = new THREE.Group();
     const robotGroup = new THREE.Group();
 
     scene.add(rocketGroup);
-    scene.add(astronautGroup);
     scene.add(robotGroup);
 
     rocketGroupRef.current = rocketGroup;
-    astronautGroupRef.current = astronautGroup;
     robotGroupRef.current = robotGroup;
 
-    // Initial Positions in The Void (Scene 01)
-    // Rocket is barely visible in distance, camera slowly glides into focus
-    rocketGroup.position.set(0, -0.1, 0.5);
-    rocketGroup.rotation.set(0.12, -0.3, 0.05);
-    rocketGroup.scale.setScalar(2.2);
+    // Initial Positions in Scene 01 (Intro)
+    // Robot is front and center protagonist!
+    robotGroup.position.set(1.4, -0.9, 1.2);
+    robotGroup.scale.setScalar(1.2);
+    robotGroup.rotation.set(0, -0.4, 0);
 
-    astronautGroup.position.set(0, -4, -15);
-    astronautGroup.scale.setScalar(0.001);
+    // Rocket is circling in mid-orbit
+    rocketGroup.position.set(-2.5, 1.2, -1.0);
+    rocketGroup.scale.setScalar(1.5);
+    rocketGroup.rotation.set(0.3, 0.8, -0.2);
 
-    robotGroup.position.set(0, -4, -15);
-    robotGroup.scale.setScalar(0.001);
-
-    // 9. LOAD GLTF ASSETS
+    // 8. LOAD GLTF ASSETS (RocketShip.glb and RobotExpressive.glb)
     const loader = new GLTFLoader();
 
     const loadGLB = (
@@ -170,7 +183,7 @@ export default function JourneyCanvas({
             root.position.y = -center.y * normalized;
             root.position.z = -center.z * normalized;
 
-            // Restrained PBR surface materials
+            // Enhance materials with warm titanium sheen
             root.traverse((node) => {
               if ((node as THREE.Mesh).isMesh) {
                 const mesh = node as THREE.Mesh;
@@ -178,8 +191,8 @@ export default function JourneyCanvas({
                 mesh.receiveShadow = true;
                 if (mesh.material) {
                   const m = mesh.material as THREE.MeshStandardMaterial;
-                  m.roughness = Math.max(0.3, m.roughness ?? 0.4);
-                  m.metalness = Math.min(0.7, m.metalness ?? 0.2);
+                  m.roughness = Math.max(0.2, m.roughness ?? 0.35);
+                  m.metalness = Math.min(0.8, m.metalness ?? 0.25);
                 }
               }
             });
@@ -190,9 +203,25 @@ export default function JourneyCanvas({
               gltf.animations.forEach((clip) => {
                 robotActionsRef.current[clip.name] = mixer.clipAction(clip);
               });
+
+              // Initial Protagonist Greeting Wave!
+              const waveAction = robotActionsRef.current["Wave"];
               const idleAction = robotActionsRef.current["Idle"] || robotActionsRef.current["Standing"];
-              if (idleAction) {
+
+              if (waveAction) {
+                waveAction.play();
+                activeActionRef.current = waveAction;
+
+                setTimeout(() => {
+                  if (idleAction && robotMixerRef.current) {
+                    waveAction.fadeOut(0.5);
+                    idleAction.reset().fadeIn(0.5).play();
+                    activeActionRef.current = idleAction;
+                  }
+                }, 3500);
+              } else if (idleAction) {
                 idleAction.play();
+                activeActionRef.current = idleAction;
               }
             }
 
@@ -201,7 +230,7 @@ export default function JourneyCanvas({
           },
           undefined,
           (err) => {
-            console.error("Asset load fallback", path, err);
+            console.error("Asset load error", path, err);
             resolve();
           }
         );
@@ -209,27 +238,20 @@ export default function JourneyCanvas({
     };
 
     Promise.all([
-      loadGLB("/models/RocketShip.glb", rocketGroup, 2.0),
-      loadGLB("/models/Astronaut.glb", astronautGroup, 2.2),
-      loadGLB("/models/RobotExpressive.glb", robotGroup, 1.9, true),
+      loadGLB("/models/RocketShip.glb", rocketGroup, 1.8),
+      loadGLB("/models/RobotExpressive.glb", robotGroup, 2.2, true),
     ]).then(() => {
-      setupContinuousScrollChoreography(
-        rocketGroup,
-        astronautGroup,
-        robotGroup,
-        planet.group,
-        techLab.group
-      );
+      setupScrollOrbitChoreography(rocketGroup, robotGroup, techLab.group);
     });
 
-    // 10. MOUSE MOVEMENT LISTENER (Restrained)
+    // 9. MOUSE TRACKING FOR PARALLAX
     const onMouseMove = (e: MouseEvent) => {
       mouse.current.targetX = (e.clientX / window.innerWidth - 0.5) * 2;
       mouse.current.targetY = -(e.clientY / window.innerHeight - 0.5) * 2;
     };
     window.addEventListener("mousemove", onMouseMove);
 
-    // 11. RESIZE LISTENER
+    // 10. RESIZE LISTENER
     const onResize = () => {
       const w = window.innerWidth;
       const h = window.innerHeight;
@@ -239,7 +261,7 @@ export default function JourneyCanvas({
     };
     window.addEventListener("resize", onResize);
 
-    // 12. RENDER LOOP
+    // 11. ANIMATION LOOP WITH PARALLAX & CONTINUOUS ROCKET ORBIT
     const clock = new THREE.Clock();
     let animId = 0;
 
@@ -249,45 +271,68 @@ export default function JourneyCanvas({
       const elapsed = clock.getElapsedTime();
 
       // Smooth mouse lerp
-      mouse.current.x += (mouse.current.targetX - mouse.current.x) * 0.06;
-      mouse.current.y += (mouse.current.targetY - mouse.current.y) * 0.06;
+      mouse.current.x += (mouse.current.targetX - mouse.current.x) * 0.05;
+      mouse.current.y += (mouse.current.targetY - mouse.current.y) * 0.05;
 
       // Update Rigs
       starfield.update(delta);
-      planet.update(delta);
       techLab.update(delta, elapsed);
 
       if (robotMixerRef.current) {
         robotMixerRef.current.update(delta);
       }
 
-      // Constrained Rocket Mouse Reaction in The Void (Scene 02)
-      // "The rocket reacts subtly to mouse movement. Mouse X controls small horizontal rotation.
-      // Mouse Y controls small vertical rotation. Movement must be constrained."
-      if (rocketGroup && window.scrollY < window.innerHeight * 0.7) {
-        const mouseRotY = mouse.current.x * 0.25;
-        const mouseRotX = -mouse.current.y * 0.18;
-        rocketGroup.rotation.y = -0.3 + mouseRotY;
-        rocketGroup.rotation.x = 0.12 + mouseRotX;
+      const p = scrollProgressRef.current;
 
-        // Subtle vibration during takeoff sequence
-        if (isVibrating.current) {
-          rocketGroup.position.x = (Math.random() - 0.5) * 0.04;
-          rocketGroup.position.y = -0.1 + (Math.random() - 0.5) * 0.04;
-        } else {
-          rocketGroup.position.y = -0.1 + Math.sin(elapsed * 1.5) * 0.03;
+      // ============================================================
+      // CONTINUOUS ROCKET ORBIT (Scroll-driven 3D circling & banking)
+      // "roket akan berputar berkeliling sesuai scroll"
+      // ============================================================
+      if (rocketGroup) {
+        const orbitAngle = p * Math.PI * 5 + elapsed * 0.3;
+        const radiusX = 3.2;
+        const radiusZ = 2.4;
+
+        // Position on 3D elliptical flight path
+        const targetX = Math.sin(orbitAngle) * radiusX;
+        const targetZ = Math.cos(orbitAngle) * radiusZ - 0.5;
+        const targetY = Math.sin(orbitAngle * 0.6) * 1.6 + 0.2;
+
+        rocketGroup.position.set(targetX, targetY, targetZ);
+
+        // Bank rocket smoothly into the direction of orbit velocity
+        const tangentX = Math.cos(orbitAngle);
+        const tangentZ = -Math.sin(orbitAngle);
+        const heading = Math.atan2(tangentX, tangentZ);
+
+        rocketGroup.rotation.y = heading + Math.PI;
+        rocketGroup.rotation.z = Math.sin(orbitAngle) * 0.35;
+        rocketGroup.rotation.x = -Math.cos(orbitAngle * 0.6) * 0.2;
+
+        // Rocket engine light follows the thruster
+        if (engineLightRef.current) {
+          engineLightRef.current.position.set(targetX, targetY - 0.5, targetZ);
+          engineLightRef.current.intensity = 2.0 + Math.sin(elapsed * 10) * 0.5;
         }
       }
 
-      // Subtle engine glow modulation
-      if (engineLightRef.current) {
-        const baseIntensity = isEngineHot ? 3.5 : 1.2;
-        engineLightRef.current.intensity = baseIntensity + Math.sin(elapsed * 8) * 0.3;
+      // ============================================================
+      // PROTAGONIST ROBOT MOUSE PARALLAX & ALIVE BREATHING
+      // ============================================================
+      if (robotGroup) {
+        // Robot looks slightly toward cursor (interactive spatial tracking)
+        robotGroup.rotation.y += (mouse.current.x * 0.4 - robotGroup.rotation.y * 0.1) * 0.05;
+        robotGroup.rotation.x += (-mouse.current.y * 0.2 - robotGroup.rotation.x * 0.1) * 0.05;
+
+        // Subtle breathing float
+        robotGroup.position.y += Math.sin(elapsed * 2) * 0.001;
       }
 
-      // Cinematic gentle camera tracking
-      camera.position.x = mouse.current.x * 0.18;
-      camera.position.y = mouse.current.y * 0.12;
+      // ============================================================
+      // CAMERA PARALLAX & CINEMATIC TRACKING
+      // ============================================================
+      camera.position.x = mouse.current.x * 0.25;
+      camera.position.y = mouse.current.y * 0.18;
       camera.lookAt(0, 0, 0);
 
       renderer.render(scene, camera);
@@ -301,7 +346,6 @@ export default function JourneyCanvas({
       window.removeEventListener("resize", onResize);
       renderer.dispose();
       starfield.dispose();
-      planet.dispose();
       techLab.dispose();
       ScrollTrigger.getAll().forEach((st) => st.kill());
       if (container.contains(renderer.domElement)) {
@@ -310,64 +354,48 @@ export default function JourneyCanvas({
     };
   }, []);
 
-  // Sync Engine Hot state from prop
+  // Sync external robot action triggers
   useEffect(() => {
-    if (engineLightRef.current) {
-      engineLightRef.current.intensity = isEngineHot ? 3.5 : 1.2;
+    if (robotAction) {
+      playRobotAnimation(robotAction);
     }
-  }, [isEngineHot]);
+  }, [robotAction, playRobotAnimation]);
 
-  // Sync Hover Tech Node
-  useEffect(() => {
-    if (techLabRef.current && activeTechNode !== undefined) {
-      if (activeTechNode !== null) {
-        techLabRef.current.activateNode(activeTechNode);
-      }
-    }
-  }, [activeTechNode]);
-
-  // Continuous Cinematic GSAP Timeline bound to scroll
-  const setupContinuousScrollChoreography = (
+  // Choreograph Robot Protagonist transitions across the sections
+  const setupScrollOrbitChoreography = (
     rocket: THREE.Group,
-    astro: THREE.Group,
     robot: THREE.Group,
-    planet: THREE.Group,
     techLab: THREE.Group
   ) => {
-    // ============================================================
-    // ZONE 1: THE VOID & TAKEOFF -> ATMOSPHERE (Scenes 01 - 04)
-    // ============================================================
-    const stTakeoff = ScrollTrigger.create({
+    const isMobile = window.innerWidth < 768;
+
+    // Track full journey scroll progress for continuous rocket orbit
+    ScrollTrigger.create({
+      trigger: "body",
+      start: "top top",
+      end: "bottom bottom",
+      onUpdate: (self) => {
+        scrollProgressRef.current = self.progress;
+      },
+    });
+
+    // 1. INTRO / VOID STAGE
+    ScrollTrigger.create({
       trigger: "#zone-void",
       start: "top top",
       end: "bottom top",
-      scrub: 1.2,
+      scrub: 1.0,
       onUpdate: (self) => {
         const p = self.progress;
         onStageChange?.(p > 0.4 ? "take-off" : "the-void", p);
-
-        // Rocket accelerates forward toward screen, starfield warps
-        rocket.position.z = p * 7.8;
-        rocket.rotation.x = 0.12 - p * 0.35;
-        rocket.scale.setScalar(2.2 + p * 1.5);
-
-        if (starfieldRef.current) {
-          starfieldRef.current.setWarp(1 + p * 6);
-        }
-
-        // Planet appears as rocket approaches atmosphere
-        if (planet) {
-          planet.scale.setScalar(Math.min(p * 1.8, 1.8));
-          planet.position.z = -25 + p * 15;
-          planet.position.y = -6 + p * 4;
+        if (p < 0.2) {
+          playRobotAnimation("Wave");
         }
       },
     });
 
-    // ============================================================
-    // ZONE 2: ASTRONAUT & WAYPOINTS EXPEDITION (Scenes 05 - 06)
-    // ============================================================
-    const stWaypoints = ScrollTrigger.create({
+    // 2. EXPERIENCE WAYPOINTS STAGE (Robot guides the milestones)
+    ScrollTrigger.create({
       trigger: "#zone-experience",
       start: "top bottom",
       end: "bottom top",
@@ -376,26 +404,28 @@ export default function JourneyCanvas({
         const p = self.progress;
         onStageChange?.("experience-waypoints", p);
 
-        // Rocket lands on surface and rests
-        rocket.position.set(2.4, -0.6, -1.0);
-        rocket.rotation.set(0, -0.4, 0);
-        rocket.scale.setScalar(1.2);
+        // Robot walks along with the user, guiding each milestone
+        if (isMobile) {
+          robot.position.set(0.6, -1.0, 0.8);
+          robot.scale.setScalar(0.75);
+        } else {
+          robot.position.set(-1.8 + p * 3.6, -0.8 + Math.sin(p * Math.PI) * 0.2, 1.2);
+          robot.scale.setScalar(1.1);
+        }
 
-        // Astronaut emerges, walks along the path
-        astro.position.set(-1.8 + p * 2.8, -0.8 + Math.sin(p * Math.PI) * 0.3, 1.2 - p * 0.4);
-        astro.rotation.set(0, 0.4 - p * 0.8, 0);
-        astro.scale.setScalar(1.0);
-
-        // Waypoint index (0 to 5)
         const waypointIndex = Math.min(Math.floor(p * 6), 5);
         onActiveWaypointChange?.(waypointIndex);
+
+        if (p > 0.1 && p < 0.8) {
+          playRobotAnimation("Walking");
+        } else {
+          playRobotAnimation("ThumbsUp");
+        }
       },
     });
 
-    // ============================================================
-    // ZONE 3: TECHNOLOGY LAB & ROBOT ACTIVATION (Scenes 07 - 10)
-    // ============================================================
-    const stTechLab = ScrollTrigger.create({
+    // 3. TECHNOLOGY LAB STAGE (Robot activates and scans skills)
+    ScrollTrigger.create({
       trigger: "#zone-skills",
       start: "top bottom",
       end: "bottom top",
@@ -404,31 +434,22 @@ export default function JourneyCanvas({
         const p = self.progress;
         onStageChange?.("tech-lab", p);
 
-        // Astronaut approaches console
-        astro.position.set(-2.0, -0.6, 0.8);
-        astro.rotation.set(0, 0.8, 0);
+        // Robot stands at the center telemetry podium
+        robot.position.set(isMobile ? 0 : 1.6, -0.7, 1.0);
+        robot.scale.setScalar(isMobile ? 0.8 : 1.15);
 
-        // Tech lab spatial nodes materialize
-        techLab.position.set(0, 0, -0.5);
-        techLab.scale.setScalar(Math.min(p * 1.4, 1.0));
+        // Tech lab nodes materialize in 3D
+        techLab.position.set(0, 0, -0.3);
+        techLab.scale.setScalar(Math.min(p * 1.3, 1.0));
 
-        // Robot activates
-        robot.position.set(1.8, -0.8, 0.6);
-        robot.rotation.set(0, -0.6, 0);
-        robot.scale.setScalar(Math.min(p * 1.3, 0.95));
-
-        // Form subtle circular portal in Scene 10
-        if (techLabRef.current) {
-          const portalScale = p > 0.65 ? (p - 0.65) * 3 : 0.001;
-          techLabRef.current.portalRing.scale.setScalar(portalScale);
+        if (p > 0.3) {
+          playRobotAnimation("ThumbsUp");
         }
       },
     });
 
-    // ============================================================
-    // ZONE 4: PROJECT DESTINATIONS (Scenes 11 - 12)
-    // ============================================================
-    const stProjects = ScrollTrigger.create({
+    // 4. PROJECTS DESTINATIONS (Robot celebrates project showcase)
+    ScrollTrigger.create({
       trigger: "#zone-projects",
       start: "top bottom",
       end: "bottom top",
@@ -437,20 +458,22 @@ export default function JourneyCanvas({
         const p = self.progress;
         onStageChange?.("projects", p);
 
-        // Rocket travels between project destinations
-        rocket.position.set(Math.sin(p * Math.PI * 2) * 1.5, 0.8 - p * 0.4, 0.5);
-        rocket.rotation.set(0.2, p * Math.PI, 0);
-        rocket.scale.setScalar(1.3);
+        robot.position.set(isMobile ? 0.7 : -1.9, -0.8, 1.2);
+        robot.scale.setScalar(isMobile ? 0.75 : 1.1);
 
         const projectIdx = Math.min(Math.floor(p * 3), 2);
         onActiveProjectChange?.(projectIdx);
+
+        if (p > 0.4 && p < 0.8) {
+          playRobotAnimation("Jump");
+        } else {
+          playRobotAnimation("Yes");
+        }
       },
     });
 
-    // ============================================================
-    // ZONE 5: CREW CONVERGENCE & ABOUT (Scene 13)
-    // ============================================================
-    const stAbout = ScrollTrigger.create({
+    // 5. ABOUT DOSSIER (Robot stands beside Risanggalih)
+    ScrollTrigger.create({
       trigger: "#zone-about",
       start: "top bottom",
       end: "bottom top",
@@ -459,17 +482,14 @@ export default function JourneyCanvas({
         const p = self.progress;
         onStageChange?.("about", p);
 
-        // All three characters assembled
-        rocket.position.set(2.2, 0.8, -0.5);
-        astro.position.set(-1.8, -0.5, 0.8);
-        robot.position.set(1.8, -0.7, 0.8);
+        robot.position.set(isMobile ? 0.8 : 1.8, -0.7, 1.2);
+        robot.scale.setScalar(isMobile ? 0.8 : 1.1);
+        playRobotAnimation("ThumbsUp");
       },
     });
 
-    // ============================================================
-    // ZONE 6: CONTACT & FINAL DEPARTURE (Scenes 14 - 16)
-    // ============================================================
-    const stContact = ScrollTrigger.create({
+    // 6. CONTACT & CELEBRATION (Robot dances with visitor!)
+    ScrollTrigger.create({
       trigger: "#zone-contact",
       start: "top bottom",
       end: "bottom top",
@@ -478,23 +498,11 @@ export default function JourneyCanvas({
         const p = self.progress;
         onStageChange?.(p > 0.65 ? "departure" : "contact", p);
 
-        if (p < 0.65) {
-          // Standing together
-          rocket.position.set(0, 0.6, 0);
-          rocket.rotation.set(-0.2, 0, 0);
-          astro.position.set(-1.6, -0.6, 1.0);
-          robot.position.set(1.6, -0.6, 1.0);
-        } else {
-          // Final departure: Rocket launches into deep space, shrinking into stars
-          const departureP = (p - 0.65) / 0.35;
-          rocket.position.y = 0.6 + departureP * 12;
-          rocket.position.z = -departureP * 25;
-          rocket.scale.setScalar(Math.max(1.3 - departureP * 1.2, 0.01));
+        robot.position.set(0, -0.5, 1.5);
+        robot.scale.setScalar(isMobile ? 0.9 : 1.3);
 
-          // Astro & robot boarded
-          astro.scale.setScalar(Math.max(1.0 - departureP * 3, 0.001));
-          robot.scale.setScalar(Math.max(0.95 - departureP * 3, 0.001));
-        }
+        // Victory Dance celebration at contact terminal!
+        playRobotAnimation("Dance");
       },
     });
   };

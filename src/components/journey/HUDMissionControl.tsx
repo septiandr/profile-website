@@ -30,25 +30,25 @@ export default function HUDMissionControl({ currentStage }: HUDMissionControlPro
   }, []);
 
   const stageTitles: Record<JourneyStage, string> = {
-    "the-void": "SECTOR 01 // THE VOID",
-    "take-off": "SECTOR 01 // TAKE OFF SEQUENCE",
+    "the-void": "SECTOR 01 // ORBITAL VOID",
+    "take-off": "SECTOR 01 // WARP CRUISE",
     "experience-waypoints": "SECTOR 02 // EXPEDITION WAYPOINTS",
-    "tech-lab": "SECTOR 03 // TECHNOLOGY LAB",
-    "project-portal": "SECTOR 03 // PROJECT PORTAL",
+    "tech-lab": "SECTOR 03 // ARCHITECTURAL LAB",
+    "project-portal": "SECTOR 03 // PORTAL ACTIVATION",
     projects: "SECTOR 04 // PROJECT DESTINATIONS",
     about: "SECTOR 05 // PERSONNEL DOSSIER",
     contact: "SECTOR 06 // MISSION CONTROL COMMS",
-    departure: "SECTOR 07 // FINAL DEPARTURE",
+    departure: "SECTOR 07 // CELEBRATION DANCE",
     "end-screen": "MISSION LOG // ARCHIVED",
   };
 
   const navLinks = [
-    { id: "zone-void", label: "INTRO" },
-    { id: "zone-experience", label: "EXPERIENCE" },
-    { id: "zone-skills", label: "SKILLS" },
-    { id: "zone-projects", label: "PROJECTS" },
-    { id: "zone-about", label: "ABOUT" },
-    { id: "zone-contact", label: "CONTACT" },
+    { id: "zone-void", label: "00 // INTRO" },
+    { id: "zone-experience", label: "01 // EXP" },
+    { id: "zone-skills", label: "02 // SKILLS" },
+    { id: "zone-projects", label: "03 // PROJECTS" },
+    { id: "zone-about", label: "04 // ABOUT" },
+    { id: "zone-contact", label: "05 // CONTACT" },
   ];
 
   const scrollToZone = (id: string, e: React.MouseEvent) => {
@@ -61,42 +61,45 @@ export default function HUDMissionControl({ currentStage }: HUDMissionControlPro
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 px-6 py-4 pointer-events-none select-none">
-      <div className="mx-auto flex max-w-7xl items-center justify-between pointer-events-auto border-b border-zinc-800/80 pb-3 backdrop-blur-md bg-zinc-950/40 px-4 rounded-xl">
-        {/* Left: Mission Brand & Active Sector */}
+      <div className="mx-auto flex max-w-7xl items-center justify-between pointer-events-auto border-b border-solar-500/20 pb-3 backdrop-blur-xl bg-obsidian-950/70 px-5 rounded-2xl shadow-[0_4px_25px_rgba(0,0,0,0.5)]">
+        {/* Brand & Sector Status */}
         <div className="flex items-center gap-4">
           <a
             href="#zone-void"
             onClick={(e) => scrollToZone("zone-void", e)}
-            className="font-mono text-xs tracking-[0.2em] font-semibold text-zinc-200 hover:text-white transition-colors"
+            className="font-mono text-xs tracking-[0.25em] font-bold text-zinc-100 hover:text-solar-400 transition-colors flex items-center gap-2"
           >
-            RISANGGALIH
+            <span className="h-2 w-2 rounded-full bg-solar-400 shadow-[0_0_8px_#f59e0b]" />
+            <span>RISANGGALIH</span>
+            <span className="text-solar-400 text-[10px] font-normal">.PORTO</span>
           </a>
-          <span className="hidden sm:inline text-zinc-700">/</span>
+          <span className="hidden sm:inline text-zinc-700">|</span>
           <div className="hidden sm:flex items-center gap-2 font-mono text-[11px] text-zinc-400">
-            <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 animate-pulse" />
-            <span className="text-zinc-300 font-medium">{stageTitles[currentStage]}</span>
+            <span className="text-solar-300 font-medium tracking-wider">
+              {stageTitles[currentStage]}
+            </span>
           </div>
         </div>
 
-        {/* Center: Restrained Nav HUD */}
+        {/* Minimal Navigation */}
         <nav className="hidden md:flex items-center gap-6">
           {navLinks.map((link) => (
             <a
               key={link.id}
               href={`#${link.id}`}
               onClick={(e) => scrollToZone(link.id, e)}
-              className="font-mono text-[11px] tracking-widest text-zinc-400 hover:text-white transition-colors"
+              className="font-mono text-[11px] tracking-widest text-zinc-400 hover:text-solar-300 transition-colors"
             >
               {link.label}
             </a>
           ))}
         </nav>
 
-        {/* Right: Timestamp & Audio */}
+        {/* Clock & Audio */}
         <div className="flex items-center gap-4">
           <div className="hidden lg:flex items-center gap-2 font-mono text-[11px] text-zinc-500">
-            <span>UTC+7</span>
-            <span className="text-zinc-300">{timeStr}</span>
+            <span className="text-zinc-600">KLATEN (WIB)</span>
+            <span className="text-solar-300 font-semibold">{timeStr}</span>
           </div>
           <AudioController />
         </div>
