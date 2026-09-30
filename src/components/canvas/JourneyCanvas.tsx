@@ -71,9 +71,9 @@ export default function JourneyCanvas({
   const mouse = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 });
   const scrollProgressRef = useRef<number>(0);
 
-  const robotTargetPos = useRef({ x: 1.3, y: -0.85, z: 1.2 });
-  const robotTargetScale = useRef<number>(1.2);
-  const robotTargetRotY = useRef<number>(-0.35);
+  const robotTargetPos = useRef({ x: 0, y: -0.42, z: 1.65 });
+  const robotTargetScale = useRef<number>(1.45);
+  const robotTargetRotY = useRef<number>(0);
 
   // Rock-solid Animation Switcher with smooth crossFade
   const switchRobotAction = useCallback((newActionName: string) => {
@@ -178,10 +178,11 @@ export default function JourneyCanvas({
     rocketInnerMeshRef.current = rocketInnerMesh;
     robotGroupRef.current = robotGroup;
 
-    // Initial Stage Coordinates
-    robotGroup.position.set(1.3, -0.85, 1.2);
-    robotGroup.scale.setScalar(1.2);
-    robotGroup.rotation.set(0, -0.35, 0);
+    // Initial Stage Coordinates: Robot prominently in CENTER facing forward waving
+    const isMobile = width < 768;
+    robotGroup.position.set(0, -0.42, 1.65);
+    robotGroup.scale.setScalar(isMobile ? 1.0 : 1.45);
+    robotGroup.rotation.set(0, 0, 0);
 
     rocketGroup.position.set(-2.5, 1.2, -1.0);
     rocketGroup.scale.setScalar(1.6);
@@ -268,25 +269,17 @@ export default function JourneyCanvas({
             robotActionsRef.current[clip.name] = mixer.clipAction(clip);
           });
 
-          // Play initial greeting Wave, then smooth transition to Idle
+          // Play initial greeting Wave and keep waving to welcome visitor
           const waveAction = robotActionsRef.current["Wave"];
-          const idleAction = robotActionsRef.current["Idle"] || robotActionsRef.current["Standing"];
-
           if (waveAction) {
             waveAction.reset().play();
             currentActionNameRef.current = "Wave";
-
-            setTimeout(() => {
-              if (idleAction && robotMixerRef.current && currentActionNameRef.current === "Wave") {
-                waveAction.crossFadeTo(idleAction, 0.6, true);
-                idleAction.play();
-                currentActionNameRef.current = "Idle";
-                onRobotActionChangeRef.current?.("Idle");
-              }
-            }, 3000);
-          } else if (idleAction) {
-            idleAction.reset().play();
-            currentActionNameRef.current = "Idle";
+          } else {
+            const idleAction = robotActionsRef.current["Idle"] || robotActionsRef.current["Standing"];
+            if (idleAction) {
+              idleAction.reset().play();
+              currentActionNameRef.current = "Idle";
+            }
           }
         }
 
@@ -459,24 +452,57 @@ export default function JourneyCanvas({
       },
     });
 
-    // 1. INTRO / VOID STAGE
+    // 1. INTRO / VOID STAGE (Robot in Center Waving -> Smooth Transition to Sector 02)
     addTrigger({
       trigger: "#zone-void",
       start: "top top",
       end: "bottom top",
+      scrub: 1.0,
+      onUpdate: (self) => {
+        const p = self.progress;
+
+        // Cinematic hyperspace warp stars as user scrolls between pages
+        if (starfieldRef.current) {
+          starfieldRef.current.setWarp(1 + p * 7);
+        }
+
+        if (p < 0.22) {
+          // Centered & actively waving to welcome visitor
+          onStageChange?.("the-void", p);
+          robotTargetPos.current = { x: 0, y: -0.42, z: 1.65 };
+          robotTargetScale.current = isMobile ? 1.0 : 1.45;
+          robotTargetRotY.current = 0;
+          switchRobotAction("Wave");
+        } else {
+          // Page transition: robot smoothly glides from center into Sector 02 walking guide
+          onStageChange?.("take-off", p);
+          const t = (p - 0.22) / 0.78;
+          robotTargetPos.current = {
+            x: isMobile ? 0.4 * t : -1.6 * t,
+            y: -0.42 - t * 0.38,
+            z: 1.65 - t * 0.55,
+          };
+          robotTargetScale.current = (isMobile ? 1.0 : 1.45) - t * 0.35;
+          robotTargetRotY.current = t * 0.35;
+          switchRobotAction("Walking");
+        }
+      },
       onEnter: () => {
         onStageChange?.("the-void", 0);
-        robotTargetPos.current = { x: isMobile ? 0 : 1.3, y: -0.85, z: 1.2 };
-        robotTargetScale.current = isMobile ? 0.85 : 1.2;
-        robotTargetRotY.current = -0.35;
+        robotTargetPos.current = { x: 0, y: -0.42, z: 1.65 };
+        robotTargetScale.current = isMobile ? 1.0 : 1.45;
+        robotTargetRotY.current = 0;
         switchRobotAction("Wave");
       },
       onLeaveBack: () => {
         onStageChange?.("the-void", 0);
-        robotTargetPos.current = { x: isMobile ? 0 : 1.3, y: -0.85, z: 1.2 };
-        robotTargetScale.current = isMobile ? 0.85 : 1.2;
-        robotTargetRotY.current = -0.35;
+        robotTargetPos.current = { x: 0, y: -0.42, z: 1.65 };
+        robotTargetScale.current = isMobile ? 1.0 : 1.45;
+        robotTargetRotY.current = 0;
         switchRobotAction("Wave");
+        if (starfieldRef.current) {
+          starfieldRef.current.setWarp(1.0);
+        }
       },
     });
 

@@ -11,7 +11,19 @@
 html {
   background-color: var(--bg-space);
   color: #f4f4f5;
-  scroll-behavior: auto;
+  scroll-behavior: auto !important;
+}
+
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
 }
 
 body {
