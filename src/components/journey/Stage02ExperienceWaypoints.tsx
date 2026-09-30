@@ -14,6 +14,7 @@ export default function Stage02ExperienceWaypoints({
   activeWaypointIndex: propActiveIndex,
 }: Stage02Props) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const frameRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const [internalIndex, setInternalIndex] = useState(0);
   const [selectedWaypoint, setSelectedWaypoint] = useState<ExperienceWaypoint | null>(null);
@@ -26,30 +27,36 @@ export default function Stage02ExperienceWaypoints({
     const ctx = gsap.context(() => {
       const track = trackRef.current;
       const container = containerRef.current;
-      if (!track || !container) return;
+      const frame = frameRef.current;
+      if (!track || !container || !frame) return;
 
       // Calculate horizontal translation distance safely
       const getScrollAmount = () => {
-        const overflow = track.scrollWidth - window.innerWidth + 140;
-        return overflow > 0 ? -overflow : 0;
+        const overflow = track.scrollWidth - window.innerWidth + 180;
+        return overflow > 0 ? overflow : 0;
       };
 
-      gsap.to(track, {
-        x: getScrollAmount,
-        ease: "none",
-        scrollTrigger: {
-          trigger: container,
-          start: "top top",
-          end: "bottom bottom",
-          scrub: 1.0,
-          invalidateOnRefresh: true,
-          onUpdate: (self) => {
-            const idx = Math.min(
-              Math.floor(self.progress * EXPERIENCE_WAYPOINTS.length),
-              EXPERIENCE_WAYPOINTS.length - 1
-            );
-            setInternalIndex(idx);
-          },
+      // When horizontal scroll happens, vertical scroll stops ("scroll vertical berhenti")
+      // pin: frame locks the viewport vertically until all cards have glided across
+      ScrollTrigger.create({
+        id: "exp-horizontal-pin",
+        trigger: container,
+        pin: frame,
+        start: "top top",
+        end: () => `+=${getScrollAmount()}`,
+        scrub: 1.0,
+        invalidateOnRefresh: true,
+        anticipatePin: 1,
+        animation: gsap.to(track, {
+          x: () => -getScrollAmount(),
+          ease: "none",
+        }),
+        onUpdate: (self) => {
+          const idx = Math.min(
+            Math.floor(self.progress * EXPERIENCE_WAYPOINTS.length),
+            EXPERIENCE_WAYPOINTS.length - 1
+          );
+          setInternalIndex(idx);
         },
       });
 
@@ -79,12 +86,15 @@ export default function Stage02ExperienceWaypoints({
     <section
       id="zone-experience"
       ref={containerRef}
-      className="relative min-h-[350vh] w-full select-none"
+      className="relative w-full select-none bg-transparent"
     >
-      {/* Sticky Fullscreen Frame for Horizontal Scroll Experience */}
-      <div className="sticky top-0 h-screen w-full flex flex-col justify-between py-12 sm:py-16 px-6 sm:px-12 overflow-hidden pointer-events-none">
+      {/* Pinned Fullscreen Frame: Vertical scroll halts while cards glide horizontally */}
+      <div
+        ref={frameRef}
+        className="h-screen w-full flex flex-col justify-between py-10 sm:py-14 px-6 sm:px-12 overflow-hidden pointer-events-none"
+      >
         {/* Environmental Header & Timeline Status */}
-        <div className="z-20 text-center max-w-3xl mx-auto pt-6 pointer-events-auto">
+        <div className="z-20 text-center max-w-3xl mx-auto pt-4 pointer-events-auto">
           <div className="inline-flex items-center gap-2 font-mono text-[10px] tracking-[0.35em] text-solar-400 uppercase mb-2 border border-solar-500/30 bg-obsidian-950/80 px-4 py-1 rounded-full backdrop-blur-md">
             <Sparkles className="h-3 w-3 text-solar-400" />
             <span>SECTOR 02 // EXPEDITION MILESTONES (HORIZONTAL ARCHIVE)</span>
@@ -102,16 +112,11 @@ export default function Stage02ExperienceWaypoints({
                 key={idx}
                 onClick={() => {
                   setInternalIndex(idx);
-                  const container = containerRef.current;
-                  if (container) {
-                    const st = ScrollTrigger.getAll().find(
-                      (s) => s.trigger === container
-                    );
-                    if (st) {
-                      const progress = idx / (EXPERIENCE_WAYPOINTS.length - 1);
-                      const targetY = st.start + progress * (st.end - st.start);
-                      window.scrollTo({ top: targetY, behavior: "smooth" });
-                    }
+                  const st = ScrollTrigger.getById("exp-horizontal-pin");
+                  if (st) {
+                    const progress = idx / (EXPERIENCE_WAYPOINTS.length - 1);
+                    const targetY = st.start + progress * (st.end - st.start);
+                    window.scrollTo({ top: targetY, behavior: "smooth" });
                   }
                 }}
                 className={`group flex items-center gap-1.5 transition-all duration-300 py-1 px-1.5 rounded cursor-pointer ${
