@@ -5,7 +5,7 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Sparkles, Activity, Layers } from "lucide-react";
+import { Compass, Sparkles, Activity } from "lucide-react";
 
 export default function SpaceCanvas() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -13,23 +13,30 @@ export default function SpaceCanvas() {
   const [loadedCount, setLoadedCount] = useState(0);
   const [robotActionName, setRobotActionName] = useState<string>("Wave");
 
-  // Three.js object references
+  // Three.js core references
   const sceneRef = useRef<THREE.Scene | null>(null);
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
 
-  // Model groups
+  // Model group references
   const rocketGroupRef = useRef<THREE.Group | null>(null);
   const astronautGroupRef = useRef<THREE.Group | null>(null);
   const robotGroupRef = useRef<THREE.Group | null>(null);
 
-  // Animation mixer for Robot
+  // User interactive drag rotation state for Rocket
+  const isDragging = useRef(false);
+  const previousPointerPos = useRef({ x: 0, y: 0 });
+  const rocketUserRotation = useRef({ x: 0, y: 0 });
+  const rocketInertia = useRef({ x: 0, y: 0 });
+
+  // Robot animations
   const robotMixerRef = useRef<THREE.AnimationMixer | null>(null);
   const robotActionsRef = useRef<{ [name: string]: THREE.AnimationAction }>({});
   const activeActionRef = useRef<THREE.AnimationAction | null>(null);
 
-  // Starfield
+  // Starfield & Warp particles
   const starPointsRef = useRef<THREE.Points | null>(null);
+  const warpSpeedRef = useRef(1);
   const mousePos = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 });
   const triggersRef = useRef<ScrollTrigger[]>([]);
 
@@ -62,14 +69,14 @@ export default function SpaceCanvas() {
     // 1. Scene
     const scene = new THREE.Scene();
     sceneRef.current = scene;
-    scene.fog = new THREE.FogExp2(0x030712, 0.035);
+    scene.fog = new THREE.FogExp2(0x030712, 0.03);
 
     // 2. Camera
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
     camera.position.set(0, 0, 7.5);
     cameraRef.current = camera;
 
-    // 3. Renderer
+    // 3. High-performance WebGL Renderer
     const renderer = new THREE.WebGLRenderer({
       antialias: true,
       alpha: true,
@@ -78,36 +85,28 @@ export default function SpaceCanvas() {
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.35;
+    renderer.toneMappingExposure = 1.4;
     container.appendChild(renderer.domElement);
     rendererRef.current = renderer;
 
-    // 4. Lighting System (Awwwards sci-fi studio aesthetic)
+    // 4. Lighting System
     const ambientLight = new THREE.AmbientLight(0xffffff, 1.4);
     scene.add(ambientLight);
 
-    // Primary Neon Cyan Key Light
-    const keyLight = new THREE.DirectionalLight(0x00f5d4, 4.0);
-    keyLight.position.set(6, 6, 5);
+    const keyLight = new THREE.DirectionalLight(0x00f5d4, 4.0); // Neon Cyan
+    keyLight.position.set(6, 6, 6);
     scene.add(keyLight);
 
-    // Electric Violet Fill Light
-    const fillLight = new THREE.DirectionalLight(0x9d4edd, 3.0);
-    fillLight.position.set(-6, -4, 2);
+    const fillLight = new THREE.DirectionalLight(0x9d4edd, 3.2); // Electric Violet
+    fillLight.position.set(-6, -4, 3);
     scene.add(fillLight);
 
-    // Pure White Top/Rim Accent
-    const rimLight = new THREE.DirectionalLight(0xffffff, 2.5);
+    const rimLight = new THREE.DirectionalLight(0xffffff, 2.5); // Top Crisp
     rimLight.position.set(0, 8, -6);
     scene.add(rimLight);
 
-    // Bottom Cyber Warm Light
-    const groundLight = new THREE.PointLight(0x00bbf9, 2.0, 15);
-    groundLight.position.set(0, -5, 2);
-    scene.add(groundLight);
-
-    // 5. Starfield Particles (Deep Space Dust)
-    const starCount = 1500;
+    // 5. Starfield & Cosmic Dust Particles
+    const starCount = 1800;
     const starGeometry = new THREE.BufferGeometry();
     const starPositions = new Float32Array(starCount * 3);
     const starColors = new Float32Array(starCount * 3);
@@ -117,12 +116,12 @@ export default function SpaceCanvas() {
     const colorWhite = new THREE.Color(0xffffff);
 
     for (let i = 0; i < starCount; i++) {
-      starPositions[i * 3] = (Math.random() - 0.5) * 50;
-      starPositions[i * 3 + 1] = (Math.random() - 0.5) * 50;
-      starPositions[i * 3 + 2] = (Math.random() - 0.5) * 50;
+      starPositions[i * 3] = (Math.random() - 0.5) * 60;
+      starPositions[i * 3 + 1] = (Math.random() - 0.5) * 60;
+      starPositions[i * 3 + 2] = (Math.random() - 0.5) * 60;
 
       const rand = Math.random();
-      const col = rand > 0.65 ? colorCyan : rand > 0.35 ? colorViolet : colorWhite;
+      const col = rand > 0.6 ? colorCyan : rand > 0.35 ? colorViolet : colorWhite;
       starColors[i * 3] = col.r;
       starColors[i * 3 + 1] = col.g;
       starColors[i * 3 + 2] = col.b;
@@ -132,7 +131,7 @@ export default function SpaceCanvas() {
     starGeometry.setAttribute("color", new THREE.BufferAttribute(starColors, 3));
 
     const starMaterial = new THREE.PointsMaterial({
-      size: 0.065,
+      size: 0.07,
       vertexColors: true,
       transparent: true,
       opacity: 0.85,
@@ -142,7 +141,7 @@ export default function SpaceCanvas() {
     scene.add(starPoints);
     starPointsRef.current = starPoints;
 
-    // 6. Three Independent Model Groups
+    // 6. Independent Model Groups
     const rocketGroup = new THREE.Group();
     const astronautGroup = new THREE.Group();
     const robotGroup = new THREE.Group();
@@ -155,7 +154,20 @@ export default function SpaceCanvas() {
     astronautGroupRef.current = astronautGroup;
     robotGroupRef.current = robotGroup;
 
-    // 7. Load all 3 GLTF Models
+    // Initial stage positions:
+    // Rocket is centered in Launchpad
+    rocketGroup.position.set(0, 0, 0);
+    rocketGroup.rotation.set(0.15, -0.4, 0.1);
+    rocketGroup.scale.setScalar(2.3);
+
+    // Astro and Robot are initially scaled down & waiting in the deep sectors
+    astronautGroup.position.set(2.5, -2, -10);
+    astronautGroup.scale.setScalar(0.001);
+
+    robotGroup.position.set(-2.5, -2, -10);
+    robotGroup.scale.setScalar(0.001);
+
+    // 7. Load GLTF Models
     const loader = new GLTFLoader();
 
     const loadModel = (
@@ -170,7 +182,6 @@ export default function SpaceCanvas() {
           (gltf) => {
             const root = gltf.scene;
 
-            // Auto-compute bounding box for perfect normalized centering
             const box = new THREE.Box3().setFromObject(root);
             const size = box.getSize(new THREE.Vector3());
             const maxDim = Math.max(size.x, size.y, size.z);
@@ -183,7 +194,6 @@ export default function SpaceCanvas() {
             root.position.y = -center.y * normalizedScale;
             root.position.z = -center.z * normalizedScale;
 
-            // Enhance materials for PBR glow
             root.traverse((child) => {
               if ((child as THREE.Mesh).isMesh) {
                 const mesh = child as THREE.Mesh;
@@ -197,7 +207,6 @@ export default function SpaceCanvas() {
               }
             });
 
-            // Handle Robot animations
             if (isRobot && gltf.animations && gltf.animations.length > 0) {
               const mixer = new THREE.AnimationMixer(root);
               robotMixerRef.current = mixer;
@@ -206,7 +215,6 @@ export default function SpaceCanvas() {
                 robotActionsRef.current[clip.name] = mixer.clipAction(clip);
               });
 
-              // Play initial greeting Wave, then switch to Idle
               const waveAction = robotActionsRef.current["Wave"];
               const idleAction = robotActionsRef.current["Idle"];
 
@@ -214,16 +222,6 @@ export default function SpaceCanvas() {
                 waveAction.play();
                 activeActionRef.current = waveAction;
                 setRobotActionName("Wave");
-
-                // Switch to Idle after 3.5 seconds
-                setTimeout(() => {
-                  if (idleAction && robotMixerRef.current) {
-                    waveAction.fadeOut(0.5);
-                    idleAction.reset().fadeIn(0.5).play();
-                    activeActionRef.current = idleAction;
-                    setRobotActionName("Idle");
-                  }
-                }, 3500);
               } else if (idleAction) {
                 idleAction.play();
                 activeActionRef.current = idleAction;
@@ -237,14 +235,13 @@ export default function SpaceCanvas() {
           },
           undefined,
           (err) => {
-            console.error("Failed to load model", path, err);
+            console.error("Model load error", path, err);
             reject(err);
           }
         );
       });
     };
 
-    // Load all three simultaneously
     Promise.all([
       loadModel("/models/RocketShip.glb", rocketGroup, 1.8),
       loadModel("/models/Astronaut.glb", astronautGroup, 2.2),
@@ -252,18 +249,44 @@ export default function SpaceCanvas() {
     ])
       .then(() => {
         setLoading(false);
-        setupTriChoreography(rocketGroup, astronautGroup, robotGroup);
+        setupJourneyChoreography(rocketGroup, astronautGroup, robotGroup);
       })
       .catch(() => setLoading(false));
 
-    // Mouse listener
-    const onMouseMove = (e: MouseEvent) => {
+    // Pointer Drag Listeners to allow user to freely rotate the rocket in the launchpad stage!
+    const onPointerDown = (e: PointerEvent) => {
+      // Only drag rocket when near top launchpad
+      if (window.scrollY < window.innerHeight * 0.8) {
+        isDragging.current = true;
+        previousPointerPos.current = { x: e.clientX, y: e.clientY };
+      }
+    };
+
+    const onPointerMove = (e: PointerEvent) => {
       mousePos.current.targetX = (e.clientX / window.innerWidth - 0.5) * 2;
       mousePos.current.targetY = -(e.clientY / window.innerHeight - 0.5) * 2;
-    };
-    window.addEventListener("mousemove", onMouseMove);
 
-    // Resize listener
+      if (!isDragging.current) return;
+      const deltaX = e.clientX - previousPointerPos.current.x;
+      const deltaY = e.clientY - previousPointerPos.current.y;
+
+      rocketInertia.current.x = deltaX * 0.008;
+      rocketInertia.current.y = deltaY * 0.008;
+
+      rocketUserRotation.current.y += rocketInertia.current.x;
+      rocketUserRotation.current.x += rocketInertia.current.y;
+
+      previousPointerPos.current = { x: e.clientX, y: e.clientY };
+    };
+
+    const onPointerUp = () => {
+      isDragging.current = false;
+    };
+
+    window.addEventListener("pointerdown", onPointerDown);
+    window.addEventListener("pointermove", onPointerMove);
+    window.addEventListener("pointerup", onPointerUp);
+
     const onResize = () => {
       const w = window.innerWidth;
       const h = window.innerHeight;
@@ -273,7 +296,7 @@ export default function SpaceCanvas() {
     };
     window.addEventListener("resize", onResize);
 
-    // Render loop
+    // Animation Loop
     const clock = new THREE.Clock();
     let animId = 0;
 
@@ -282,7 +305,6 @@ export default function SpaceCanvas() {
       const delta = clock.getDelta();
       const elapsed = clock.getElapsedTime();
 
-      // Update robot skeletal animations
       if (robotMixerRef.current) {
         robotMixerRef.current.update(delta);
       }
@@ -291,27 +313,37 @@ export default function SpaceCanvas() {
       mousePos.current.x += (mousePos.current.targetX - mousePos.current.x) * 0.05;
       mousePos.current.y += (mousePos.current.targetY - mousePos.current.y) * 0.05;
 
-      // Slow starfield rotation
-      if (starPoints) {
-        starPoints.rotation.y += 0.0003;
-        starPoints.rotation.x += 0.0001;
+      // Apply drag inertia to rocket when near launchpad
+      if (!isDragging.current) {
+        rocketInertia.current.x *= 0.92;
+        rocketInertia.current.y *= 0.92;
+        rocketUserRotation.current.y += rocketInertia.current.x;
+        rocketUserRotation.current.x += rocketInertia.current.y;
       }
 
-      // Parallax depths for all 3 models:
-      // Rocket is agile (fastest parallax), Astronaut floats freely (medium), Robot operates stably (subtle)
-      if (rocketGroup) {
-        rocketGroup.position.x += (mousePos.current.x * 0.25 - rocketGroup.position.x * 0.05) * 0.02;
-        rocketGroup.rotation.z += Math.sin(elapsed * 2) * 0.001;
+      // Starfield slow movement & warp acceleration
+      if (starPoints) {
+        starPoints.rotation.y += 0.0003 * warpSpeedRef.current;
+        starPoints.rotation.x += 0.0001 * warpSpeedRef.current;
       }
-      if (astronautGroup) {
+
+      // Idle float for rocket when in Launchpad stage
+      if (rocketGroup && window.scrollY < window.innerHeight * 0.5) {
+        rocketGroup.rotation.y = rocketUserRotation.current.y + Math.sin(elapsed * 1.5) * 0.05;
+        rocketGroup.rotation.x = rocketUserRotation.current.x + Math.cos(elapsed * 1.2) * 0.03;
+        rocketGroup.position.y = Math.sin(elapsed * 2) * 0.08;
+      }
+
+      // Idle drift for Astronaut and Robot
+      if (astronautGroup && astronautGroup.scale.x > 0.05) {
         astronautGroup.position.y += Math.sin(elapsed * 1.4) * 0.0015;
         astronautGroup.rotation.y += 0.0015;
       }
-      if (robotGroup) {
-        robotGroup.position.y += Math.sin(elapsed * 1.8 + 1) * 0.001;
+      if (robotGroup && robotGroup.scale.x > 0.05) {
+        robotGroup.position.y += Math.sin(elapsed * 1.8) * 0.001;
       }
 
-      // Subtle camera tilt
+      // Camera subtle parallax
       camera.position.x = mousePos.current.x * 0.2;
       camera.position.y = mousePos.current.y * 0.15;
       camera.lookAt(0, 0, 0);
@@ -323,7 +355,9 @@ export default function SpaceCanvas() {
 
     return () => {
       cancelAnimationFrame(animId);
-      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("pointerdown", onPointerDown);
+      window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("pointerup", onPointerUp);
       window.removeEventListener("resize", onResize);
       renderer.dispose();
       starGeometry.dispose();
@@ -335,8 +369,9 @@ export default function SpaceCanvas() {
     };
   }, []);
 
-  // Choreograph all 3 models with GSAP ScrollTrigger across the full page!
-  const setupTriChoreography = (
+  // Choreograph the Game Journey:
+  // Launchpad -> Rocket warps directly into the screen and disappears -> Next sectors reveal Astronaut & Robot!
+  const setupJourneyChoreography = (
     rocket: THREE.Group,
     astro: THREE.Group,
     robot: THREE.Group
@@ -347,167 +382,127 @@ export default function SpaceCanvas() {
     const isMobile = window.innerWidth < 768;
 
     // ==========================================
-    // INITIAL POSE (HERO SECTION)
-    // Three models form a dramatic sci-fi formation:
-    // - Rocket cruising high at top-right
-    // - Astronaut floating mid-right beside profile card
-    // - Robot perched on mid-left/bottom welcoming user
+    // STAGE 1: LAUNCH FROM #welcome TO #hero
+    // Rocket accelerates forward directly toward the camera/screen (z: 0 -> 9.0),
+    // zooms right past the screen, slowly and dramatically, then disappears!
     // ==========================================
-    if (isMobile) {
-      gsap.set(rocket.position, { x: 1.2, y: 1.8, z: -1.0 });
-      gsap.set(rocket.rotation, { x: 0.3, y: -0.6, z: 0.2 });
-      gsap.set(rocket.scale, { x: 0.6, y: 0.6, z: 0.6 });
-
-      gsap.set(astro.position, { x: 0.8, y: -0.8, z: 0.2 });
-      gsap.set(astro.rotation, { x: 0.1, y: -0.4, z: 0.1 });
-      gsap.set(astro.scale, { x: 0.65, y: 0.65, z: 0.65 });
-
-      gsap.set(robot.position, { x: -1.0, y: -1.2, z: 0.0 });
-      gsap.set(robot.rotation, { x: 0.0, y: 0.5, z: 0.0 });
-      gsap.set(robot.scale, { x: 0.6, y: 0.6, z: 0.6 });
-    } else {
-      // Desktop Grand Trio Composition
-      gsap.set(rocket.position, { x: 2.8, y: 1.4, z: -0.5 });
-      gsap.set(rocket.rotation, { x: 0.35, y: -0.8, z: 0.25 });
-      gsap.set(rocket.scale, { x: 1.1, y: 1.1, z: 1.1 });
-
-      gsap.set(astro.position, { x: 2.0, y: -0.7, z: 0.8 });
-      gsap.set(astro.rotation, { x: 0.15, y: -0.5, z: 0.1 });
-      gsap.set(astro.scale, { x: 1.0, y: 1.0, z: 1.0 });
-
-      gsap.set(robot.position, { x: -2.7, y: -1.1, z: 0.5 });
-      gsap.set(robot.rotation, { x: 0.0, y: 0.7, z: 0.0 });
-      gsap.set(robot.scale, { x: 0.95, y: 0.95, z: 0.95 });
-    }
-
-    // ==========================================
-    // 1. SCROLL TO ABOUT SECTION
-    // Rocket swoops across, Astronaut comes close to left bio, Robot stands on right
-    // ==========================================
-    const tAboutRocket = gsap.to(rocket.position, {
-      x: isMobile ? -1.0 : -2.6,
-      y: isMobile ? 1.5 : 1.6,
-      z: -0.8,
-      ease: "power1.inOut",
-      scrollTrigger: { trigger: "#about", start: "top bottom", end: "top center", scrub: 1.2 },
-    });
-    const rAboutRocket = gsap.to(rocket.rotation, {
-      x: 0.2,
-      y: 0.6,
-      z: -0.3,
-      ease: "power1.inOut",
-      scrollTrigger: { trigger: "#about", start: "top bottom", end: "top center", scrub: 1.2 },
-    });
-
-    const tAboutAstro = gsap.to(astro.position, {
-      x: isMobile ? 0.9 : -1.8,
-      y: isMobile ? -0.4 : -0.2,
-      z: 1.0,
-      ease: "power1.inOut",
-      scrollTrigger: { trigger: "#about", start: "top bottom", end: "top center", scrub: 1.2 },
-    });
-    const rAboutAstro = gsap.to(astro.rotation, {
-      x: -0.1,
-      y: 0.8,
-      z: -0.1,
-      ease: "power1.inOut",
-      scrollTrigger: { trigger: "#about", start: "top bottom", end: "top center", scrub: 1.2 },
-    });
-
-    const tAboutRobot = gsap.to(robot.position, {
-      x: isMobile ? -0.8 : 2.6,
-      y: isMobile ? -1.3 : -0.8,
-      z: 0.6,
-      ease: "power1.inOut",
+    const launchTimeline = gsap.timeline({
       scrollTrigger: {
-        trigger: "#about",
-        start: "top bottom",
-        end: "top center",
+        trigger: "#welcome",
+        start: "top top",
+        end: "bottom top",
         scrub: 1.2,
-        onEnter: () => switchRobotAction("ThumbsUp"),
-        onLeaveBack: () => switchRobotAction("Idle"),
+        onUpdate: (self) => {
+          // Accelerate warp speed lines
+          warpSpeedRef.current = 1 + self.progress * 8;
+        },
       },
     });
-    const rAboutRobot = gsap.to(robot.rotation, {
-      x: 0.05,
-      y: -0.7,
-      z: 0.0,
-      ease: "power1.inOut",
-      scrollTrigger: { trigger: "#about", start: "top bottom", end: "top center", scrub: 1.2 },
-    });
+
+    launchTimeline
+      .to(rocket.position, {
+        x: 0,
+        y: 0.1,
+        z: 8.8, // Flies right towards the viewer and past the camera lens (camera at 7.5)!
+        ease: "power2.in",
+      }, 0)
+      .to(rocket.rotation, {
+        x: -0.3, // Tilts forward in flight
+        y: 0,
+        z: 0,
+        ease: "power1.inOut",
+      }, 0)
+      .to(rocket.scale, {
+        x: 3.5,
+        y: 3.5,
+        z: 3.5,
+        ease: "power2.in",
+      }, 0);
 
     // ==========================================
-    // 2. SCROLL TO EXPERIENCE SECTION
-    // Rocket banks high right escorting the timeline; Astro glides; Robot walks along
+    // STAGE 2: ARRIVAL AT #hero & #about (THE DOSSIER SECTOR)
+    // As rocket vanishes past the screen, Astronaut floats in gracefully from deep space!
     // ==========================================
-    const tExpRocket = gsap.to(rocket.position, {
-      x: isMobile ? 1.0 : 2.8,
-      y: isMobile ? 0.5 : 0.8,
-      z: 0.0,
-      ease: "power1.inOut",
-      scrollTrigger: { trigger: "#experience", start: "top bottom", end: "top center", scrub: 1.2 },
-    });
-    const rExpRocket = gsap.to(rocket.rotation, {
-      x: 0.5,
-      y: -0.9,
-      z: 0.4,
-      ease: "power1.inOut",
-      scrollTrigger: { trigger: "#experience", start: "top bottom", end: "top center", scrub: 1.2 },
+    const tHeroAstro = gsap.timeline({
+      scrollTrigger: {
+        trigger: "#hero",
+        start: "top bottom",
+        end: "center center",
+        scrub: 1.2,
+      },
     });
 
+    tHeroAstro
+      .to(astro.position, {
+        x: isMobile ? 1.0 : 2.5,
+        y: isMobile ? -0.8 : -0.5,
+        z: 0.8,
+        ease: "power1.out",
+      }, 0)
+      .to(astro.scale, {
+        x: isMobile ? 0.7 : 1.1,
+        y: isMobile ? 0.7 : 1.1,
+        z: isMobile ? 0.7 : 1.1,
+        ease: "power1.out",
+      }, 0)
+      .to(astro.rotation, {
+        x: 0.1,
+        y: -0.5,
+        z: 0.1,
+        ease: "power1.out",
+      }, 0);
+
+    // ==========================================
+    // STAGE 3: #experience (MISSION HISTORY SECTOR)
+    // Astronaut glides alongside timeline; Robot emerges from deep space into sector!
+    // ==========================================
     const tExpAstro = gsap.to(astro.position, {
-      x: isMobile ? -0.9 : -2.4,
-      y: isMobile ? 0.2 : 0.4,
-      z: 0.2,
-      ease: "power1.inOut",
-      scrollTrigger: { trigger: "#experience", start: "top bottom", end: "top center", scrub: 1.2 },
-    });
-    const rExpAstro = gsap.to(astro.rotation, {
-      x: 0.2,
-      y: 0.5,
-      z: 0.0,
+      x: isMobile ? -0.8 : -2.4,
+      y: isMobile ? 0.2 : 0.3,
+      z: 0.5,
       ease: "power1.inOut",
       scrollTrigger: { trigger: "#experience", start: "top bottom", end: "top center", scrub: 1.2 },
     });
 
-    const tExpRobot = gsap.to(robot.position, {
-      x: isMobile ? 0.8 : -2.6,
-      y: isMobile ? -1.2 : -1.2,
-      z: 0.4,
-      ease: "power1.inOut",
+    const tExpRobot = gsap.timeline({
       scrollTrigger: {
         trigger: "#experience",
         start: "top bottom",
         end: "top center",
         scrub: 1.2,
         onEnter: () => switchRobotAction("Walking"),
-        onLeaveBack: () => switchRobotAction("ThumbsUp"),
+        onLeaveBack: () => switchRobotAction("Wave"),
       },
     });
 
-    // ==========================================
-    // 3. SCROLL TO PROJECTS SECTION
-    // Triad constellation orbiting around the project showcase!
-    // ==========================================
-    const tProjRocket = gsap.to(rocket.position, {
-      x: isMobile ? 0 : 0.0,
-      y: isMobile ? 1.6 : 1.9,
-      z: -0.8,
-      ease: "power1.inOut",
-      scrollTrigger: { trigger: "#projects", start: "top bottom", end: "top center", scrub: 1.2 },
-    });
-    const rProjRocket = gsap.to(rocket.rotation, {
-      x: 0.6,
-      y: 0.0,
-      z: 0.0,
-      ease: "power1.inOut",
-      scrollTrigger: { trigger: "#projects", start: "top bottom", end: "top center", scrub: 1.2 },
-    });
+    tExpRobot
+      .to(robot.position, {
+        x: isMobile ? 0.8 : 2.6,
+        y: isMobile ? -1.0 : -0.8,
+        z: 0.6,
+        ease: "power1.out",
+      }, 0)
+      .to(robot.scale, {
+        x: isMobile ? 0.65 : 0.95,
+        y: isMobile ? 0.65 : 0.95,
+        z: isMobile ? 0.65 : 0.95,
+        ease: "power1.out",
+      }, 0)
+      .to(robot.rotation, {
+        x: 0.05,
+        y: -0.6,
+        z: 0,
+        ease: "power1.out",
+      }, 0);
 
+    // ==========================================
+    // STAGE 4: #projects (FULLSTACK ARCHITECTURES SECTOR)
+    // Astronaut and Robot form an orbital flank around the projects!
+    // ==========================================
     const tProjAstro = gsap.to(astro.position, {
       x: isMobile ? 0.9 : 2.5,
       y: isMobile ? -1.0 : -1.2,
-      z: 0.5,
+      z: 0.4,
       ease: "power1.inOut",
       scrollTrigger: { trigger: "#projects", start: "top bottom", end: "top center", scrub: 1.2 },
     });
@@ -515,7 +510,7 @@ export default function SpaceCanvas() {
     const tProjRobot = gsap.to(robot.position, {
       x: isMobile ? -0.9 : -2.5,
       y: isMobile ? -1.0 : -1.2,
-      z: 0.5,
+      z: 0.4,
       ease: "power1.inOut",
       scrollTrigger: {
         trigger: "#projects",
@@ -528,35 +523,12 @@ export default function SpaceCanvas() {
     });
 
     // ==========================================
-    // 4. SCROLL TO SKILLS SECTION
-    // Flanking the telemetry matrix with inspection angles
+    // STAGE 5: #skills (TELEMETRY MATRIX SECTOR)
+    // Robot inspects and gives ThumbsUp to the tech stack!
     // ==========================================
-    const tSkillsRocket = gsap.to(rocket.position, {
-      x: isMobile ? 0 : 0.0,
-      y: isMobile ? -1.5 : -1.8,
-      z: -1.2,
-      ease: "power1.inOut",
-      scrollTrigger: { trigger: "#skills", start: "top bottom", end: "top center", scrub: 1.2 },
-    });
-
-    const tSkillsAstro = gsap.to(astro.position, {
-      x: isMobile ? -0.8 : -2.6,
-      y: isMobile ? 0.2 : 0.0,
-      z: 0.6,
-      ease: "power1.inOut",
-      scrollTrigger: { trigger: "#skills", start: "top bottom", end: "top center", scrub: 1.2 },
-    });
-    const rSkillsAstro = gsap.to(astro.rotation, {
-      x: 0.0,
-      y: 1.2,
-      z: 0.0,
-      ease: "power1.inOut",
-      scrollTrigger: { trigger: "#skills", start: "top bottom", end: "top center", scrub: 1.2 },
-    });
-
     const tSkillsRobot = gsap.to(robot.position, {
       x: isMobile ? 0.8 : 2.6,
-      y: isMobile ? 0.0 : 0.0,
+      y: 0,
       z: 0.6,
       ease: "power1.inOut",
       scrollTrigger: {
@@ -570,35 +542,20 @@ export default function SpaceCanvas() {
     });
 
     // ==========================================
-    // 5. SCROLL TO CONTACT SECTION (FINALE MISSION LAUNCH)
-    // Rocket points straight up ready for launch; Astro & Robot salute/dance
+    // STAGE 6: #contact (TERMINAL / LAUNCH RE-DOCK)
+    // Robot and Astronaut celebrate contact!
     // ==========================================
-    const tContactRocket = gsap.to(rocket.position, {
-      x: 0,
-      y: isMobile ? 1.2 : 1.4,
-      z: 0.6,
-      ease: "power1.inOut",
-      scrollTrigger: { trigger: "#contact", start: "top bottom", end: "top center", scrub: 1.2 },
-    });
-    const rContactRocket = gsap.to(rocket.rotation, {
-      x: -0.2,
-      y: 0.0,
-      z: 0.0,
-      ease: "power1.inOut",
-      scrollTrigger: { trigger: "#contact", start: "top bottom", end: "top center", scrub: 1.2 },
-    });
-
     const tContactAstro = gsap.to(astro.position, {
-      x: isMobile ? -0.9 : -2.2,
-      y: isMobile ? -0.7 : -0.5,
+      x: isMobile ? -0.8 : -2.2,
+      y: isMobile ? -0.6 : -0.4,
       z: 1.2,
       ease: "power1.inOut",
       scrollTrigger: { trigger: "#contact", start: "top bottom", end: "top center", scrub: 1.2 },
     });
 
     const tContactRobot = gsap.to(robot.position, {
-      x: isMobile ? 0.9 : 2.2,
-      y: isMobile ? -0.7 : -0.5,
+      x: isMobile ? 0.8 : 2.2,
+      y: isMobile ? -0.6 : -0.4,
       z: 1.2,
       ease: "power1.inOut",
       scrollTrigger: {
@@ -612,27 +569,13 @@ export default function SpaceCanvas() {
     });
 
     triggersRef.current = [
-      tAboutRocket.scrollTrigger!,
-      rAboutRocket.scrollTrigger!,
-      tAboutAstro.scrollTrigger!,
-      rAboutAstro.scrollTrigger!,
-      tAboutRobot.scrollTrigger!,
-      rAboutRobot.scrollTrigger!,
-      tExpRocket.scrollTrigger!,
-      rExpRocket.scrollTrigger!,
+      launchTimeline.scrollTrigger!,
+      tHeroAstro.scrollTrigger!,
       tExpAstro.scrollTrigger!,
-      rExpAstro.scrollTrigger!,
       tExpRobot.scrollTrigger!,
-      tProjRocket.scrollTrigger!,
-      rProjRocket.scrollTrigger!,
       tProjAstro.scrollTrigger!,
       tProjRobot.scrollTrigger!,
-      tSkillsRocket.scrollTrigger!,
-      tSkillsAstro.scrollTrigger!,
-      rSkillsAstro.scrollTrigger!,
       tSkillsRobot.scrollTrigger!,
-      tContactRocket.scrollTrigger!,
-      rContactRocket.scrollTrigger!,
       tContactAstro.scrollTrigger!,
       tContactRobot.scrollTrigger!,
     ].filter(Boolean);
@@ -640,44 +583,43 @@ export default function SpaceCanvas() {
 
   return (
     <>
-      {/* Pinned 3D Three.js canvas container */}
+      {/* 3D Canvas element */}
       <div
         ref={containerRef}
         aria-hidden="true"
-        className="fixed inset-0 pointer-events-none z-0 overflow-hidden"
+        className="fixed inset-0 z-0 overflow-hidden cursor-grab active:cursor-grabbing"
       />
 
-      {/* Floating Agency Telemetry Widget */}
-      <div className="fixed bottom-6 left-6 z-40 hidden sm:flex items-center gap-3">
+      {/* Floating HUD status indicator */}
+      <div className="fixed bottom-6 left-6 z-40 hidden sm:flex items-center gap-3 pointer-events-auto">
         <div className="flex items-center gap-2 rounded-full border border-white/10 bg-space-950/80 px-3.5 py-1.5 backdrop-blur-xl shadow-2xl">
-          <Layers className="h-3.5 w-3.5 text-cyan-400" />
+          <Compass className="h-3.5 w-3.5 text-cyan-400 animate-spin-slow" />
           <span className="font-mono text-[11px] text-slate-300 tracking-wider">
-            3D TRIAD SYNC:
+            MISSION RIG:
           </span>
-          <span className="flex items-center gap-1.5 font-mono text-[10px] text-cyan-300">
-            <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 animate-pulse" />
-            ROCKET • ASTRONAUT • ROBOT ({robotActionName.toUpperCase()})
+          <span className="font-mono text-[10px] text-cyan-300">
+            WARP DRIVE READY • DRAG ROCKET TO ROTATE
           </span>
         </div>
 
-        {/* Quick trigger for visitor to interact with robot */}
+        {/* Robot quick dance trigger */}
         <button
           onClick={() => {
-            const nextList = ["Dance", "Wave", "ThumbsUp", "Jump", "WalkJump"];
+            const nextList = ["Dance", "Wave", "ThumbsUp", "Jump"];
             const currentIdx = nextList.indexOf(robotActionName);
             const next = nextList[(currentIdx + 1) % nextList.length];
             switchRobotAction(next);
           }}
-          className="rounded-full border border-purple-500/30 bg-purple-950/40 px-3 py-1.5 font-mono text-[10px] text-purple-300 backdrop-blur-xl hover:border-purple-400 hover:text-white transition-all shadow-lg flex items-center gap-1.5 group"
+          className="rounded-full border border-purple-500/30 bg-purple-950/40 px-3 py-1.5 font-mono text-[10px] text-purple-300 backdrop-blur-xl hover:border-purple-400 hover:text-white transition-all shadow-lg flex items-center gap-1.5"
         >
-          <Activity className="h-3 w-3 text-purple-400 group-hover:scale-125 transition-transform" />
+          <Activity className="h-3 w-3 text-purple-400" />
           <span>ROBOT: {robotActionName.toUpperCase()}</span>
         </button>
 
         {loading && (
           <div className="flex items-center gap-2 rounded-full border border-cyan-500/30 bg-space-950/90 px-3 py-1 font-mono text-[10px] text-cyan-300 backdrop-blur-md">
             <span className="h-2 w-2 rounded-full bg-cyan-400 animate-ping" />
-            <span>SYNCING 3D ASSETS ({loadedCount}/3)...</span>
+            <span>CALIBRATING 3D SHIPS ({loadedCount}/3)...</span>
           </div>
         )}
       </div>

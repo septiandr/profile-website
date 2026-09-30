@@ -5,7 +5,7 @@ import AudioController from "./AudioController";
 
 export default function HUDHeader() {
   const [timeStr, setTimeStr] = useState<string>("");
-  const [activeSection, setActiveSection] = useState<string>("hero");
+  const [activeSection, setActiveSection] = useState<string>("welcome");
 
   useEffect(() => {
     const updateTime = () => {
@@ -26,7 +26,7 @@ export default function HUDHeader() {
   }, []);
 
   useEffect(() => {
-    const sections = ["hero", "about", "experience", "projects", "skills", "contact"];
+    const sections = ["welcome", "hero", "about", "experience", "projects", "skills", "contact"];
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -35,7 +35,7 @@ export default function HUDHeader() {
           }
         });
       },
-      { threshold: 0.3 }
+      { threshold: 0.25 }
     );
 
     sections.forEach((id) => {
@@ -47,34 +47,34 @@ export default function HUDHeader() {
   }, []);
 
   const navItems = [
-    { id: "about", label: "01 // ABOUT" },
+    { id: "welcome", label: "00 // LAUNCH" },
+    { id: "hero", label: "01 // HERO" },
     { id: "experience", label: "02 // EXP" },
-    { id: "projects", label: "03 // PROJECTS" },
-    { id: "skills", label: "04 // SKILLS" },
-    { id: "contact", label: "05 // CONTACT" },
+    { id: "skills", label: "03 // SKILLS" },
+    { id: "contact", label: "04 // CONTACT" },
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-40 px-4 py-3 md:px-8 md:py-4">
-      <div className="mx-auto flex max-w-7xl items-center justify-between rounded-full border border-white/10 bg-space-950/70 px-4 py-2.5 backdrop-blur-xl md:px-6">
+    <header className="fixed top-0 left-0 right-0 z-40 px-4 py-3 md:px-8 md:py-4 pointer-events-none">
+      <div className="mx-auto flex max-w-7xl items-center justify-between rounded-full border border-white/10 bg-space-950/70 px-4 py-2.5 backdrop-blur-xl md:px-6 pointer-events-auto">
         {/* Brand / Telemetry */}
         <div className="flex items-center gap-3">
           <a
-            href="#hero"
+            href="#welcome"
             className="flex items-center gap-2 font-mono text-sm font-bold tracking-wider text-slate-100 transition-colors hover:text-cyan-400"
           >
             <span className="flex h-2.5 w-2.5 relative">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500"></span>
             </span>
-            <span className="text-white">SEPTIAN</span>
-            <span className="text-cyan-400 text-xs font-normal">.DEV</span>
+            <span className="text-white">RISANGGALIH</span>
+            <span className="text-cyan-400 text-xs font-normal">.PORTO</span>
           </a>
 
           {/* Location & Time */}
           <div className="hidden lg:flex items-center gap-2 border-l border-white/10 pl-3 text-xs font-mono text-slate-400">
             <span className="text-slate-500">LOC:</span>
-            <span className="text-slate-300">KLATEN, ID (UTC+7)</span>
+            <span className="text-slate-300">KLATEN, ID (WIB)</span>
             <span className="text-cyan-400 font-semibold">{timeStr}</span>
           </div>
         </div>
