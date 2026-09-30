@@ -566,10 +566,10 @@ export default function JourneyCanvas({
         }
 
         if (p < 0.12) {
-          // Centered & actively waving at intro: slightly smaller per user request
+          // Centered & actively waving at intro: enlarged and heroic per user request
           onStageChange?.("the-void", p);
-          robotTargetPos.current = { x: 0, y: -0.42, z: 1.65 };
-          robotTargetScale.current = isMobile ? 0.45 : 0.65;
+          robotTargetPos.current = { x: 0, y: -0.48, z: 1.65 };
+          robotTargetScale.current = isMobile ? 0.62 : 0.90;
           robotTargetRotY.current = 0;
           switchRobotAction("Wave");
         } else {
@@ -577,26 +577,26 @@ export default function JourneyCanvas({
           onStageChange?.("take-off", p);
           const t = (p - 0.12) / 0.88;
           robotTargetPos.current = {
-            x: isMobile ? -1.35 * t : -2.95 * t,
-            y: -0.42 - t * 0.23,
+            x: isMobile ? -1.35 * t : -2.85 * t,
+            y: -0.48 - t * 0.17,
             z: 1.65 - t * 0.4,
           };
-          robotTargetScale.current = (isMobile ? 0.45 : 0.65) + t * 0.4;
-          robotTargetRotY.current = t * 0.55;
+          robotTargetScale.current = (isMobile ? 0.62 : 0.90) + t * 0.15;
+          robotTargetRotY.current = t * 0.50;
           switchRobotAction("Walking");
         }
       },
       onEnter: () => {
         onStageChange?.("the-void", 0);
-        robotTargetPos.current = { x: 0, y: -0.42, z: 1.65 };
-        robotTargetScale.current = isMobile ? 0.45 : 0.65;
+        robotTargetPos.current = { x: 0, y: -0.48, z: 1.65 };
+        robotTargetScale.current = isMobile ? 0.62 : 0.90;
         robotTargetRotY.current = 0;
         switchRobotAction("Wave");
       },
       onLeaveBack: () => {
         onStageChange?.("the-void", 0);
-        robotTargetPos.current = { x: 0, y: -0.42, z: 1.65 };
-        robotTargetScale.current = isMobile ? 0.45 : 0.65;
+        robotTargetPos.current = { x: 0, y: -0.48, z: 1.65 };
+        robotTargetScale.current = isMobile ? 0.62 : 0.90;
         robotTargetRotY.current = 0;
         switchRobotAction("Wave");
         if (starfieldRef.current) {
@@ -621,9 +621,9 @@ export default function JourneyCanvas({
           robotTargetScale.current = 0.72;
           robotTargetRotY.current = 0.45;
         } else {
-          robotTargetPos.current = { x: -2.95, y: -0.65, z: 1.25 };
+          robotTargetPos.current = { x: -2.85, y: -0.65, z: 1.25 };
           robotTargetScale.current = 1.05;
-          robotTargetRotY.current = 0.55;
+          robotTargetRotY.current = 0.50;
         }
 
         // When actively scrolling, robot performs dynamic Walking stride!
@@ -649,9 +649,9 @@ export default function JourneyCanvas({
           robotTargetScale.current = 0.72;
           robotTargetRotY.current = 0.45;
         } else {
-          robotTargetPos.current = { x: -2.95, y: -0.65, z: 1.25 };
+          robotTargetPos.current = { x: -2.85, y: -0.65, z: 1.25 };
           robotTargetScale.current = 1.05;
-          robotTargetRotY.current = 0.55;
+          robotTargetRotY.current = 0.50;
         }
         switchRobotAction("Wave");
       },
@@ -659,7 +659,7 @@ export default function JourneyCanvas({
       onLeave: () => switchRobotAction("Walking"),
     });
 
-    // 3. TECHNOLOGY LAB STAGE (Prominent protagonist guide on right margin)
+    // 3. TECHNOLOGY LAB STAGE (Protagonist robot safely on left margin, looking at skills on the right)
     addTrigger({
       trigger: "#zone-skills",
       start: "top center",
@@ -669,12 +669,12 @@ export default function JourneyCanvas({
         const p = self.progress;
         onStageChange?.("tech-lab", p);
 
-        robotTargetPos.current = { x: isMobile ? 1.35 : 2.7, y: -0.7, z: 1.05 };
-        robotTargetScale.current = isMobile ? 0.72 : 1.0;
-        robotTargetRotY.current = -0.55;
+        robotTargetPos.current = { x: isMobile ? 0 : -2.85, y: -0.65, z: 1.25 };
+        robotTargetScale.current = isMobile ? 0.65 : 1.05;
+        robotTargetRotY.current = 0.50;
 
-        // Materialize tech lab
-        techLab.position.set(0, 0, -0.3);
+        // Materialize tech lab 3D nodes on the right
+        techLab.position.set(isMobile ? 0 : 0.8, 0, -0.3);
         techLab.scale.setScalar(Math.min(p * 1.3, 1.0));
       },
       onEnter: () => switchRobotAction("ThumbsUp"),

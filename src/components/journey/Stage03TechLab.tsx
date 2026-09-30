@@ -59,8 +59,8 @@ export default function Stage03TechLab({
       ref={containerRef}
       className="relative min-h-[200vh] w-full px-6 py-32 flex flex-col justify-start items-center select-none"
     >
-      {/* Environmental Header */}
-      <div className="sticky top-28 z-20 text-center max-w-2xl mx-auto mb-16 pointer-events-none">
+      {/* Environmental Header (Pushed right to balance with robot on the left) */}
+      <div className="sticky top-28 z-20 text-center max-w-2xl mx-auto lg:ml-auto lg:mr-16 mb-16 pointer-events-none">
         <div className="font-sans text-[11px] sm:text-xs tracking-[0.25em] uppercase text-amber-300/90 font-medium mb-2 flex items-center justify-center gap-2">
           <span className="h-1.5 w-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b]" />
           <span>Technical Capabilities · Systems & Engines</span>
@@ -76,60 +76,66 @@ export default function Stage03TechLab({
         </p>
       </div>
 
-      {/* Spatial Environmental Node Grid */}
-      <div className="w-full max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-6 z-20 pointer-events-auto">
-        {categories.map((cat) => {
-          const categoryNodes = TECH_NODES.filter((n) => n.category === cat);
-          return (
-            <div
-              key={cat}
-              className="pt-2 flex flex-col justify-between"
-            >
-              <div>
-                <div className="font-display text-xs tracking-[0.2em] text-amber-300 font-semibold uppercase mb-4 flex items-center gap-2 border-b border-white/[0.08] pb-2.5">
-                  <span className="h-1 w-3 bg-amber-400 rounded-full" />
-                  <span>{cat}</span>
-                </div>
+      {/* Two-Column Staging Layout: Dedicated Left Space for 3D Robot */}
+      <div className="w-full flex items-start justify-center z-20 pointer-events-auto">
+        {/* Left Column Spacer for 3D Robot (340px - 380px clear area) */}
+        <div className="hidden lg:block w-[320px] xl:w-[380px] shrink-0 pointer-events-none" />
 
-                <div className="space-y-3">
-                  {categoryNodes.map((node) => {
-                    const globalIdx = TECH_NODES.findIndex((n) => n.name === node.name);
-                    const isHovered = activeTechNode === globalIdx;
-                    return (
-                      <div
-                        key={node.name}
-                        onClick={() => handleNodeHover(globalIdx, node)}
-                        onMouseEnter={() => handleNodeHover(globalIdx, node)}
-                        onMouseLeave={handleNodeLeave}
-                        className={`tech-card p-4 rounded-xl border transition-all duration-300 cursor-pointer active:scale-95 ${
-                          isHovered
-                            ? "border-amber-400/70 bg-gradient-to-b from-[#171c36] via-[#101429] to-[#0a0d1d] text-white shadow-[0_15px_35px_rgba(0,0,0,0.8),0_0_25px_rgba(245,158,11,0.2)] -translate-y-1 scale-[1.02]"
-                            : "border-white/[0.08] bg-gradient-to-b from-[#101426]/90 via-[#0b0e1b]/95 to-[#070912]/98 text-zinc-300 hover:border-amber-400/40 hover:-translate-y-1 hover:shadow-[0_10px_25px_rgba(0,0,0,0.6)]"
-                        } backdrop-blur-xl`}
-                      >
-                        <div className="flex items-center justify-between font-display text-xs mb-1.5">
-                          <span className="font-bold text-white tracking-wide">{node.name}</span>
-                          <span className="text-[10px] font-sans font-medium text-amber-300/80 uppercase tracking-widest">
-                            Production
-                          </span>
+        {/* Right Skills Grid Arena (Cards live here and NEVER overlap the robot) */}
+        <div className="flex-1 max-w-4xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 pr-0 lg:pr-8">
+          {categories.map((cat) => {
+            const categoryNodes = TECH_NODES.filter((n) => n.category === cat);
+            return (
+              <div
+                key={cat}
+                className="pt-2 flex flex-col justify-between"
+              >
+                <div>
+                  <div className="font-display text-xs tracking-[0.2em] text-amber-300 font-semibold uppercase mb-4 flex items-center gap-2 border-b border-white/[0.08] pb-2.5">
+                    <span className="h-1 w-3 bg-amber-400 rounded-full" />
+                    <span>{cat}</span>
+                  </div>
+
+                  <div className="space-y-3">
+                    {categoryNodes.map((node) => {
+                      const globalIdx = TECH_NODES.findIndex((n) => n.name === node.name);
+                      const isHovered = activeTechNode === globalIdx;
+                      return (
+                        <div
+                          key={node.name}
+                          onClick={() => handleNodeHover(globalIdx, node)}
+                          onMouseEnter={() => handleNodeHover(globalIdx, node)}
+                          onMouseLeave={handleNodeLeave}
+                          className={`tech-card p-4 rounded-xl border transition-all duration-300 cursor-pointer active:scale-95 ${
+                            isHovered
+                              ? "border-amber-400/70 bg-gradient-to-b from-[#171c36] via-[#101429] to-[#0a0d1d] text-white shadow-[0_15px_35px_rgba(0,0,0,0.8),0_0_25px_rgba(245,158,11,0.2)] -translate-y-1 scale-[1.02]"
+                              : "border-white/[0.08] bg-gradient-to-b from-[#101426]/90 via-[#0b0e1b]/95 to-[#070912]/98 text-zinc-300 hover:border-amber-400/40 hover:-translate-y-1 hover:shadow-[0_10px_25px_rgba(0,0,0,0.6)]"
+                          } backdrop-blur-xl`}
+                        >
+                          <div className="flex items-center justify-between font-display text-xs mb-1.5">
+                            <span className="font-bold text-white tracking-wide">{node.name}</span>
+                            <span className="text-[10px] font-sans font-medium text-amber-300/80 uppercase tracking-widest">
+                              Production
+                            </span>
+                          </div>
+                          <p className="font-sans text-xs text-zinc-300 font-light leading-relaxed">
+                            {node.detail}
+                          </p>
                         </div>
-                        <p className="font-sans text-xs text-zinc-300 font-light leading-relaxed">
-                          {node.detail}
-                        </p>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
 
       {/* Subtle Navigation Prompt */}
       <div className="mt-auto mb-16 text-center z-20 pointer-events-none pt-16">
         <div className="inline-flex items-center gap-2 font-sans text-xs text-zinc-500 tracking-[0.2em] uppercase">
-          <span>Scroll to explore featured project destinations</span>
+          <span>Scroll to explore architectural mindset & contact</span>
         </div>
       </div>
     </section>
