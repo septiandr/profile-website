@@ -1,0 +1,416 @@
+{
+  "personalInfo": {
+    "name": "SEPTIAN DWI RISANGGALIH",
+    "title": "Senior Frontend / Fullstack JavaScript & TypeScript Developer",
+    "location": {
+      "city": "Klaten",
+      "region": "Central Java",
+      "country": "Indonesia",
+      "raw": "Klaten, Central Java, Indonesia"
+    },
+    "phone": "+62 856 4644 4805",
+    "email": "sdwirisanggalih@gmail.com"
+  },
+  "summary": "Senior Frontend / Fullstack JavaScript & TypeScript Developer with 4+ years of professional experience building and maintaining production web and mobile applications across financial services, education, EV, loyalty, food service, and digital commerce.\nSpecialized in JavaScript, TypeScript, React.js, Next.js, and React Native, with additional backend experience using Node.js, Golang, and Laravel. Experienced in developing scalable frontend architectures, reusable component systems, RESTful API integrations, database-driven applications, and complex business workflows.\nCurrently working as a Senior Frontend Developer at CV Technopartner Indonesia, taking ownership of frontend development across production web and mobile applications. Experienced throughout the software development lifecycle, including requirements analysis, UI implementation, API integration, state management, debugging, performance optimization, code review, CI/CD, and production delivery.\nAlso experienced in fullstack development, including a game top-up platform built with Next.js and Golang, real-time restaurant ordering systems using Socket.IO, and backend-integrated applications using Laravel and Node.js.",
+  "technicalSkills": {
+    "coreTechnologies": [
+      "JavaScript (ES6+)",
+      "TypeScript",
+      "Golang",
+      "HTML5",
+      "CSS3"
+    ],
+    "frontendDevelopment": [
+      "React.js",
+      "Next.js",
+      "React Native",
+      "Redux",
+      "Zustand",
+      "Jotai",
+      "TanStack Query",
+      "Tailwind CSS",
+      "Material UI",
+      "Ant Design",
+      "Reactstrap",
+      "React Bootstrap"
+    ],
+    "frontendEngineering": [
+      "Frontend Architecture",
+      "Component Architecture",
+      "Reusable Components",
+      "Design Systems",
+      "State Management",
+      "REST API Integration",
+      "Responsive Web Design",
+      "Performance Optimization",
+      "Application Debugging"
+    ],
+    "backendDevelopment": [
+      "Node.js",
+      "Hono",
+      "Express.js",
+      "Golang",
+      "Laravel",
+      "RESTful APIs",
+      "Authentication & Authorization"
+    ],
+    "database": [
+      "PostgreSQL",
+      "MySQL",
+      "MongoDB"
+    ],
+    "realTimeAndIntegrations": [
+      "Socket.IO",
+      "WebSocket",
+      "WhatsApp Chatbot Integration",
+      "REST API Integration"
+    ],
+    "mobileDevelopment": [
+      "React Native",
+      "Capacitor"
+    ],
+    "developmentAndDevopsTools": [
+      "Git",
+      "GitLab",
+      "Docker",
+      "Postman",
+      "Jira",
+      "VS Code",
+      "CI/CD"
+    ],
+    "engineeringPractices": [
+      "Code Review",
+      "Agile",
+      "Scrum",
+      "API Contract Collaboration",
+      "Application Maintenance",
+      "Production Debugging"
+    ]
+  },
+  "professionalExperience": [
+    {
+      "company": "CV Technopartner Indonesia",
+      "role": "SENIOR FRONTEND DEVELOPER",
+      "period": "2024 – Present",
+      "description": "Software development company delivering digital products across EV services, loyalty platforms, and enterprise applications.",
+      "keyResponsibilities": [
+        "Lead frontend development for production web and mobile applications using React.js, React Native, JavaScript, and TypeScript.",
+        "Own frontend feature development from requirements analysis and UI implementation through API integration, debugging, optimization, and production delivery.",
+        "Design and maintain reusable components, shared UI patterns, and scalable frontend architecture.",
+        "Integrate frontend applications with RESTful backend services and collaborate with backend engineers on API contracts and application data flows.",
+        "Implement state management and asynchronous data workflows for complex business applications.",
+        "Review code and maintain frontend coding standards, maintainability, and consistency.",
+        "Diagnose production issues and implement reliable solutions for application bugs and performance problems.",
+        "Translate Figma designs and product requirements into production-ready applications.",
+        "Collaborate with backend engineers, QA engineers, UI/UX designers, and product teams throughout the software development lifecycle."
+      ],
+      "projects": [
+        {
+          "name": "Casion Mobile App",
+          "technologies": [
+            "React Native",
+            "Redux",
+            "REST API"
+          ],
+          "highlights": [
+            "Developed and maintained a mobile application for EV users to discover and interact with charging station services.",
+            "Implemented reusable and responsive mobile UI components.",
+            "Integrated application features with RESTful backend APIs.",
+            "Implemented application data flows and state management using Redux.",
+            "Handled asynchronous API workflows and application-level error states.",
+            "Diagnosed application issues and contributed to improving application reliability."
+          ]
+        },
+        {
+          "name": "DDT Mobile App",
+          "technologies": [
+            "React Native",
+            "Redux",
+            "REST API"
+          ],
+          "highlights": [
+            "Developed a loyalty and rewards mobile application supporting voucher, promotion, points, and redemption workflows.",
+            "Implemented reusable React Native components and application state management.",
+            "Integrated mobile features with RESTful backend services.",
+            "Developed application data flows for loyalty and reward-related features.",
+            "Contributed to debugging, maintenance, and production feature delivery."
+          ]
+        },
+        {
+          "name": "Cover Clearance",
+          "technologies": [
+            "React.js",
+            "REST API"
+          ],
+          "highlights": [
+            "Developed React.js interfaces supporting royalty management workflows.",
+            "Implemented royalty product management functionality.",
+            "Integrated frontend functionality with backend services and APIs.",
+            "Developed reusable UI components for business workflows."
+          ]
+        },
+        {
+          "name": "Zu Point Website",
+          "technologies": [
+            "React.js",
+            "REST API"
+          ],
+          "highlights": [
+            "Developed and maintained a React.js-based loyalty CMS platform.",
+            "Implemented business management and analytics interfaces.",
+            "Developed reusable components and frontend patterns for scalable CMS functionality.",
+            "Integrated frontend applications with backend APIs.",
+            "Contributed to application maintenance and feature development."
+          ]
+        }
+      ]
+    },
+    {
+      "company": "PT Natieva Global International",
+      "role": "IT PROGRAMMER",
+      "period": "2023 – 2024",
+      "description": "Online learning platform focused on language education and professional certification. Worked across web and mobile products as a Frontend Developer with additional Fullstack development responsibilities.",
+      "keyContributions": [
+        "Developed reusable frontend components and Design System patterns across web and mobile applications.",
+        "Integrated RESTful APIs across multiple production applications.",
+        "Contributed to backend functionality and fullstack application development.",
+        "Worked with database-backed business workflows.",
+        "Maintained CI/CD workflows using GitLab.",
+        "Debugged and optimized frontend and application performance.",
+        "Implemented SEO improvements for web applications.",
+        "Collaborated with cross-functional teams throughout the software development lifecycle."
+      ],
+      "projects": [
+        {
+          "name": "Luna by Sinarmas",
+          "technologies": [
+            "React.js",
+            "Reactstrap",
+            "Jotai",
+            "REST API"
+          ],
+          "highlights": [
+            "Developed course and certification management modules using React.js.",
+            "Built responsive interfaces for trainers and trainees.",
+            "Implemented application state management using Jotai.",
+            "Integrated frontend applications with backend APIs.",
+            "Developed reusable components for learning and certification workflows."
+          ]
+        },
+        {
+          "name": "Natieva.com",
+          "technologies": [
+            "Laravel",
+            "Tailwind CSS"
+          ],
+          "highlights": [
+            "Developed landing pages and promotional websites using Laravel and Tailwind CSS.",
+            "Implemented responsive layouts and reusable UI components.",
+            "Developed SEO-focused interfaces and landing page improvements.",
+            "Contributed to frontend and backend functionality within Laravel applications."
+          ]
+        },
+        {
+          "name": "Kelas.Natieva.com",
+          "technologies": [
+            "Next.js",
+            "Zustand",
+            "Tailwind CSS"
+          ],
+          "highlights": [
+            "Developed a student learning platform using Next.js.",
+            "Implemented dashboards, chat, scheduling, and certification management features.",
+            "Implemented application state management using Zustand.",
+            "Developed reusable and scalable frontend components.",
+            "Integrated application features with backend APIs."
+          ]
+        },
+        {
+          "name": "Natieva App & Natieva for Kids App",
+          "technologies": [
+            "React Native",
+            "Zustand",
+            "REST API"
+          ],
+          "highlights": [
+            "Developed cross-platform mobile applications using React Native.",
+            "Implemented account management, payment, and scheduling functionality.",
+            "Implemented application state management using Zustand.",
+            "Integrated mobile applications with backend APIs.",
+            "Contributed to application deployment and Google Play Store releases."
+          ]
+        },
+        {
+          "name": "Natieva Admin & Teacher Web",
+          "technologies": [
+            "React.js",
+            "Laravel",
+            "REST API",
+            "Database"
+          ],
+          "highlights": [
+            "Developed administration and teacher dashboard applications.",
+            "Implemented class monitoring, payroll, and reporting functionality.",
+            "Contributed to frontend and backend development using Laravel.",
+            "Worked with APIs, backend data flows, and database-backed business workflows.",
+            "Implemented application features supporting administrative and teacher operations."
+          ]
+        }
+      ]
+    },
+    {
+      "company": "PT Infosys Solusi Terpadu",
+      "role": "FRONTEND DEVELOPER",
+      "period": "23 March 2022 – 2023",
+      "description": "Enterprise technology company providing digital solutions for financial services, including applications supporting CIMB Niaga platforms.",
+      "keyResponsibilities": [
+        "Developed and maintained enterprise web applications.",
+        "Integrated frontend applications with backend RESTful services.",
+        "Implemented responsive interfaces for financial applications.",
+        "Developed reusable frontend components.",
+        "Debugged application issues and improved transaction workflows.",
+        "Collaborated with backend developers, QA engineers, UI/UX designers, and product teams."
+      ],
+      "projects": [
+        {
+          "name": "E-Debit",
+          "technologies": [
+            "React.js",
+            "Redux",
+            "Material UI",
+            "Ant Design"
+          ],
+          "highlights": [
+            "Developed web interfaces supporting online savings and financial transaction workflows.",
+            "Implemented responsive interfaces for financial applications.",
+            "Developed reusable React.js components for enterprise web applications.",
+            "Integrated frontend functionality with backend services.",
+            "Implemented application state management using Redux.",
+            "Debugged application issues and supported improvements to transaction workflows."
+          ]
+        },
+        {
+          "name": "Poin Xtra",
+          "technologies": [
+            "React.js",
+            "REST API"
+          ],
+          "highlights": [
+            "Developed interfaces for reward and payment-related features.",
+            "Integrated frontend components with backend services.",
+            "Implemented reusable UI components and application functionality."
+          ]
+        },
+        {
+          "name": "Multibiller",
+          "technologies": [
+            "React.js",
+            "REST API"
+          ],
+          "highlights": [
+            "Developed payment channel interfaces using React.js.",
+            "Implemented responsive layouts and reusable UI components.",
+            "Integrated application functionality with backend APIs.",
+            "Supported debugging and maintenance of financial application workflows."
+          ]
+        }
+      ]
+    }
+  ],
+  "selectedFullstackProjects": [
+    {
+      "name": "Game Top-Up Platform",
+      "role": "Fullstack Developer",
+      "technologies": [
+        "Next.js",
+        "TypeScript",
+        "Golang",
+        "REST API",
+        "Database",
+        "WhatsApp Chatbot"
+      ],
+      "highlights": [
+        "Designed and developed a fullstack game top-up platform using Next.js and Golang.",
+        "Built customer-facing web interfaces using Next.js and TypeScript.",
+        "Developed backend services and RESTful APIs using Golang.",
+        "Implemented product, customer, and transaction-related business workflows.",
+        "Developed database-backed application functionality for digital products and transactions.",
+        "Integrated frontend applications with Golang backend services.",
+        "Developed WhatsApp chatbot functionality integrated with backend services.",
+        "Implemented automated customer interactions and transaction-related communication through WhatsApp.",
+        "Integrated frontend, backend, database, chatbot, and external services into end-to-end application workflows.",
+        "Implemented application validation, error handling, and data flow management."
+      ]
+    },
+    {
+      "name": "Web Order System – Steak Restaurant",
+      "role": "Fullstack Developer",
+      "technologies": [
+        "React.js",
+        "Socket.IO",
+        "REST API"
+      ],
+      "highlights": [
+        "Developed a web-based ordering system for a steak restaurant.",
+        "Built customer-facing ordering interfaces using React.js.",
+        "Implemented order management and application data flows.",
+        "Integrated frontend functionality with backend RESTful APIs.",
+        "Implemented real-time order communication using Socket.IO.",
+        "Developed real-time updates for order creation and order status changes.",
+        "Implemented event-driven communication between web applications and restaurant operations.",
+        "Developed responsive interfaces for restaurant ordering workflows."
+      ]
+    },
+    {
+      "name": "iXobox Application",
+      "role": "Frontend Developer / Application Maintenance",
+      "technologies": [
+        "React.js",
+        "Capacitor",
+        "JavaScript",
+        "TypeScript"
+      ],
+      "highlights": [
+        "Maintained and enhanced the iXobox application built with React.js and Capacitor.",
+        "Implemented application improvements and bug fixes based on product requirements.",
+        "Diagnosed and resolved frontend application issues.",
+        "Maintained existing React components and application functionality.",
+        "Integrated frontend functionality with backend APIs.",
+        "Worked with Capacitor for mobile application functionality and native platform integration.",
+        "Supported application maintenance across web and mobile environments."
+      ]
+    }
+  ],
+  "additionalProjectExperience": [
+    {
+      "name": "Hono",
+      "description": "Used Hono for personal web development and landing page projects using JavaScript/TypeScript."
+    },
+    {
+      "name": "Node.js",
+      "description": "Used Node.js for personal bot development and backend-related application functionality."
+    },
+    {
+      "name": "Express.js",
+      "description": "Used Express.js for personal backend projects and REST API development."
+    }
+  ],
+  "education": [
+    {
+      "institution": "BINUS UNIVERSITY",
+      "degree": "Bachelor of Computer Science",
+      "period": "2022 – 2025",
+      "gpa": "3.56 / 4.00"
+    }
+  ],
+  "languages": [
+    {
+      "language": "Bahasa Indonesia",
+      "proficiency": "Native"
+    },
+    {
+      "language": "English",
+      "proficiency": "Professional Working Proficiency"
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-space: #030712;
+  --cyber-cyan: #00f5d4;
+  --cyber-violet: #9d4edd;
+  --cyber-amber: #fee440;
+}
+
+html {
+  background-color: var(--bg-space);
+  color: #f8fafc;
+  scroll-behavior: auto; /* Lenis handles smooth scroll */
+}
+
+body {
+  background-color: var(--bg-space);
+  color: #f8fafc;
+  overflow-x: hidden;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+/* Custom Selection */
+::selection {
+  background: rgba(0, 245, 212, 0.3);
+  color: #00f5d4;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #030712;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 245, 212, 0.25);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 245, 212, 0.6);
+}
+
+/* Cyber Utilities */
+.glass-panel {
+  background: rgba(10, 15, 29, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-panel-hover {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-panel-hover:hover {
+  background: rgba(15, 23, 42, 0.75);
+  border-color: rgba(0, 245, 212, 0.4);
+  box-shadow: 0 10px 30px -10px rgba(0, 245, 212, 0.2);
+}
+
+.text-glow-cyan {
+  text-shadow: 0 0 20px rgba(0, 245, 212, 0.5);
+}
+
+.text-glow-violet {
+  text-shadow: 0 0 20px rgba(157, 78, 221, 0.5);
+}
+
+/* Subtle Film Grain */
+.bg-grain {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+/* Hide default cursor on desktop when custom cursor active */
+@media (hover: hover) and (pointer: fine) {
+  body {
+    cursor: none;
+  }
+  a, button, input, [role="button"] {
+    cursor: none;
+  }
+}
