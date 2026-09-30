@@ -63,6 +63,14 @@ body {
   text-shadow: 0 0 24px rgba(245, 158, 11, 0.5);
 }
 
+.text-glow-cyan {
+  text-shadow: 0 0 24px rgba(6, 182, 212, 0.5);
+}
+
+.text-glow-purple {
+  text-shadow: 0 0 24px rgba(168, 85, 247, 0.5);
+}
+
 .panel-obsidian {
   background: rgba(11, 13, 18, 0.75);
   backdrop-filter: blur(16px);
@@ -83,6 +91,51 @@ body {
 .bg-grain {
   background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 0);
   background-size: 28px 28px;
+}
+
+/* High-Tech Cyber Grid Overlay */
+.bg-cyber-grid {
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* Holographic Laser Scanline */
+@keyframes scanline {
+  0% { transform: translateY(-100%); opacity: 0; }
+  25% { opacity: 1; }
+  75% { opacity: 1; }
+  100% { transform: translateY(300%); opacity: 0; }
+}
+
+.animate-scanline {
+  animation: scanline 3.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Shimmering Metallic Text & Borders */
+@keyframes text-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-shimmer {
+  background-size: 200% auto;
+  animation: text-shimmer 6s linear infinite;
+}
+
+/* Border Beam Rotation */
+@keyframes border-beam {
+  100% {
+    offset-distance: 100%;
+  }
+}
+
+/* Chromatic Glass Card Utilities */
+.glass-card-ambient {
+  box-shadow: 
+    0 20px 50px rgba(0, 0, 0, 0.75),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 -1px 1px 0 rgba(0, 0, 0, 0.4);
 }
 
 @media (hover: hover) and (pointer: fine) {

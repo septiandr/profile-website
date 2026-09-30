@@ -5,6 +5,136 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { EXPERIENCE_WAYPOINTS, ExperienceWaypoint } from "@/journey/types";
 import { Briefcase, Calendar, ChevronRight, Sparkles, X, Star } from "lucide-react";
+import TiltSpotlightCard from "@/components/ui/TiltSpotlightCard";
+
+const WAYPOINT_THEMES = [
+  // 0: 2022 CIMB Niaga Digital Banking
+  {
+    themeColor: "cyan",
+    badgeLabel: "FINTECH ENTERPRISE",
+    telemetry: "HIGH-SECURITY E-DEBIT",
+    bgGradient: "from-[#081f33]/98 via-[#061421]/98 to-[#03090f]/98",
+    spotlight: "rgba(6, 182, 212, 0.32)",
+    borderGlow: "rgba(6, 182, 212, 0.65)",
+    accentText: "text-cyan-300",
+    accentBg: "bg-cyan-400/15 border-cyan-400/40 text-cyan-200",
+    tagStyle: "text-cyan-200 bg-cyan-950/40 border-cyan-800/40",
+    topBeam: "via-cyan-400",
+    ambientAura: "radial-gradient(circle, rgba(6,182,212,0.25) 0%, transparent 70%)",
+  },
+  // 1: 2023 Education / Luna Sinarmas
+  {
+    themeColor: "indigo",
+    badgeLabel: "EDUTECH PLATFORM",
+    telemetry: "LIVE LEARNING ENGINE",
+    bgGradient: "from-[#11173d]/98 via-[#0b0e26]/98 to-[#050714]/98",
+    spotlight: "rgba(99, 102, 241, 0.32)",
+    borderGlow: "rgba(99, 102, 241, 0.65)",
+    accentText: "text-indigo-300",
+    accentBg: "bg-indigo-400/15 border-indigo-400/40 text-indigo-200",
+    tagStyle: "text-indigo-200 bg-indigo-950/40 border-indigo-800/40",
+    topBeam: "via-indigo-400",
+    ambientAura: "radial-gradient(circle, rgba(99,102,241,0.25) 0%, transparent 70%)",
+  },
+  // 2: 2024 Casion EV Charging IoT
+  {
+    themeColor: "emerald",
+    badgeLabel: "IOT TELEMETRY",
+    telemetry: "LIVE STATION PROTOCOL",
+    bgGradient: "from-[#06261c]/98 via-[#041a13]/98 to-[#020d09]/98",
+    spotlight: "rgba(16, 185, 129, 0.32)",
+    borderGlow: "rgba(16, 185, 129, 0.65)",
+    accentText: "text-emerald-300",
+    accentBg: "bg-emerald-400/15 border-emerald-400/40 text-emerald-200",
+    tagStyle: "text-emerald-200 bg-emerald-950/40 border-emerald-800/40",
+    topBeam: "via-emerald-400",
+    ambientAura: "radial-gradient(circle, rgba(16,185,129,0.25) 0%, transparent 70%)",
+  },
+  // 3: 2024 Loyalty & Rewards (DDT & Zu Point)
+  {
+    themeColor: "amber",
+    badgeLabel: "MULTI-TIER REWARDS",
+    telemetry: "ATOMIC REDEMPTION",
+    bgGradient: "from-[#291b07]/98 via-[#1c1204]/98 to-[#0a0601]/98",
+    spotlight: "rgba(245, 158, 11, 0.32)",
+    borderGlow: "rgba(245, 158, 11, 0.65)",
+    accentText: "text-amber-300",
+    accentBg: "bg-amber-400/15 border-amber-400/40 text-amber-200",
+    tagStyle: "text-amber-200 bg-amber-950/40 border-amber-800/40",
+    topBeam: "via-amber-400",
+    ambientAura: "radial-gradient(circle, rgba(245,158,11,0.25) 0%, transparent 70%)",
+  },
+  // 4: 2024 Featured Behave.id
+  {
+    themeColor: "purple",
+    badgeLabel: "FLAGSHIP WORK 01",
+    telemetry: "ENTERPRISE LOYALTY SAAS",
+    bgGradient: "from-[#280d3d]/98 via-[#180726]/98 to-[#0a0312]/98",
+    spotlight: "rgba(168, 85, 247, 0.4)",
+    borderGlow: "rgba(168, 85, 247, 0.75)",
+    accentText: "text-purple-300",
+    accentBg: "bg-purple-400/20 border-purple-400/50 text-purple-200",
+    tagStyle: "text-purple-200 bg-purple-950/45 border-purple-700/40",
+    topBeam: "via-purple-400",
+    ambientAura: "radial-gradient(circle, rgba(168,85,247,0.35) 0%, transparent 70%)",
+  },
+  // 5: 2025 Food Service Ecosystem
+  {
+    themeColor: "orange",
+    badgeLabel: "WEBSOCKET STREAM",
+    telemetry: "ZERO-LATENCY KITCHEN",
+    bgGradient: "from-[#2e110a]/98 via-[#1d0a06]/98 to-[#0c0402]/98",
+    spotlight: "rgba(249, 115, 22, 0.32)",
+    borderGlow: "rgba(249, 115, 22, 0.65)",
+    accentText: "text-orange-300",
+    accentBg: "bg-orange-400/15 border-orange-400/40 text-orange-200",
+    tagStyle: "text-orange-200 bg-orange-950/40 border-orange-800/40",
+    topBeam: "via-orange-400",
+    ambientAura: "radial-gradient(circle, rgba(249,115,22,0.25) 0%, transparent 70%)",
+  },
+  // 6: 2025 Featured Shihlin
+  {
+    themeColor: "gold",
+    badgeLabel: "FLAGSHIP WORK 02",
+    telemetry: "OMNICHANNEL 99.99% UPSTREAM",
+    bgGradient: "from-[#301f07]/98 via-[#1e1303]/98 to-[#0d0801]/98",
+    spotlight: "rgba(251, 191, 36, 0.42)",
+    borderGlow: "rgba(251, 191, 36, 0.75)",
+    accentText: "text-amber-300",
+    accentBg: "bg-amber-400/20 border-amber-400/50 text-amber-200",
+    tagStyle: "text-amber-200 bg-amber-950/45 border-amber-700/40",
+    topBeam: "via-amber-400",
+    ambientAura: "radial-gradient(circle, rgba(251,191,36,0.35) 0%, transparent 70%)",
+  },
+  // 7: 2026 Golang Microservices
+  {
+    themeColor: "cyan",
+    badgeLabel: "HIGH CONCURRENCY",
+    telemetry: "GOLANG REST PIPELINE",
+    bgGradient: "from-[#071f2b]/98 via-[#04131b]/98 to-[#02080c]/98",
+    spotlight: "rgba(6, 182, 212, 0.32)",
+    borderGlow: "rgba(6, 182, 212, 0.65)",
+    accentText: "text-cyan-300",
+    accentBg: "bg-cyan-400/15 border-cyan-400/40 text-cyan-200",
+    tagStyle: "text-cyan-200 bg-cyan-950/40 border-cyan-800/40",
+    topBeam: "via-cyan-400",
+    ambientAura: "radial-gradient(circle, rgba(6,182,212,0.25) 0%, transparent 70%)",
+  },
+  // 8: 2026 Featured Game Top-Up
+  {
+    themeColor: "emerald",
+    badgeLabel: "FLAGSHIP WORK 03",
+    telemetry: "AUTOMATED WHATSAPP BOT",
+    bgGradient: "from-[#06281e]/98 via-[#031913]/98 to-[#010c09]/98",
+    spotlight: "rgba(16, 185, 129, 0.42)",
+    borderGlow: "rgba(16, 185, 129, 0.75)",
+    accentText: "text-emerald-300",
+    accentBg: "bg-emerald-400/20 border-emerald-400/50 text-emerald-200",
+    tagStyle: "text-emerald-200 bg-emerald-950/45 border-emerald-700/40",
+    topBeam: "via-emerald-400",
+    ambientAura: "radial-gradient(circle, rgba(16,185,129,0.35) 0%, transparent 70%)",
+  },
+];
 
 interface Stage02Props {
   activeWaypointIndex?: number;
@@ -183,26 +313,30 @@ export default function Stage02ExperienceWaypoints({
             {EXPERIENCE_WAYPOINTS.map((wp, idx) => {
               const isActive = activeIndex === idx;
               const isFeatured = wp.type === "featured-project";
+              const theme = WAYPOINT_THEMES[idx] || WAYPOINT_THEMES[0];
 
               return (
-                <div
+                <TiltSpotlightCard
                   key={idx}
                   onClick={() => setSelectedWaypoint(wp)}
-                  className={`exp-card group relative w-[310px] sm:w-[380px] lg:w-[400px] h-[390px] sm:h-[420px] shrink-0 border rounded-2xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 cursor-pointer active:scale-95 ${
+                  spotlightColor={theme.spotlight}
+                  borderColor={theme.borderGlow}
+                  accentGlow={theme.ambientAura}
+                  className={`exp-card group relative w-[320px] sm:w-[390px] lg:w-[410px] h-[400px] sm:h-[430px] shrink-0 border rounded-2xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 active:scale-95 bg-gradient-to-b ${
+                    theme.bgGradient
+                  } ${
                     isFeatured
                       ? isActive
-                        ? "border-amber-400 bg-gradient-to-b from-[#181d38]/98 via-[#0e1224]/98 to-[#070914]/98 shadow-[0_25px_65px_rgba(0,0,0,0.9),0_0_35px_rgba(245,158,11,0.28)] scale-[1.01]"
-                        : "border-amber-400/40 bg-gradient-to-b from-[#13172e]/90 via-[#0a0d1d]/90 to-[#070813]/95 shadow-xl hover:border-amber-400/70 hover:-translate-y-1.5 hover:shadow-[0_20px_45px_rgba(245,158,11,0.2)]"
+                        ? "border-amber-400/80 shadow-[0_25px_65px_rgba(0,0,0,0.9),0_0_35px_rgba(245,158,11,0.25)]"
+                        : "border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.85)] hover:border-amber-400/60 hover:shadow-[0_25px_60px_rgba(245,158,11,0.2)]"
                       : isActive
-                      ? "border-amber-400/60 bg-gradient-to-b from-[#13172c]/95 via-[#0d1020]/95 to-[#070914]/98 shadow-[0_25px_60px_rgba(0,0,0,0.85),0_0_30px_rgba(245,158,11,0.18)] scale-[1.01]"
-                      : "border-white/[0.08] bg-gradient-to-b from-[#0f1326]/90 via-[#0a0d1b]/90 to-[#070813]/95 shadow-[0_15px_40px_rgba(0,0,0,0.7)] hover:border-amber-400/40 hover:-translate-y-1.5 hover:shadow-[0_20px_45px_rgba(245,158,11,0.15)]"
-                  } backdrop-blur-2xl`}
+                      ? "border-white/25 shadow-[0_25px_60px_rgba(0,0,0,0.85)]"
+                      : "border-white/[0.08] shadow-[0_15px_45px_rgba(0,0,0,0.7)] hover:border-white/20"
+                  } backdrop-blur-2xl bg-cyber-grid overflow-hidden`}
                 >
-                  {/* Subtle Top Accent Highlight */}
+                  {/* Subtle Top Animated Light Beam */}
                   <div
-                    className={`absolute top-0 left-6 right-6 h-0.5 bg-gradient-to-r from-transparent ${
-                      isFeatured ? "via-amber-400" : "via-amber-400/70"
-                    } to-transparent opacity-80 group-hover:opacity-100 transition-opacity`}
+                    className={`absolute top-0 left-6 right-6 h-0.5 bg-gradient-to-r from-transparent ${theme.topBeam} to-transparent opacity-75 group-hover:opacity-100 group-hover:scale-x-110 transition-all duration-500`}
                   />
 
                   {/* Card Header: Type Badge & Top-Right Time / Year Badge */}
@@ -210,19 +344,19 @@ export default function Stage02ExperienceWaypoints({
                     <div className="flex items-center justify-between mb-3 border-b border-white/[0.08] pb-2.5">
                       <div className="flex items-center gap-2">
                         {isFeatured ? (
-                          <div className="inline-flex items-center gap-1.5 font-display text-[11px] font-bold text-amber-300 bg-amber-400/15 border border-amber-400/35 px-2.5 py-0.5 rounded-full">
-                            <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
-                            <span>FEATURED WORK 0{wp.projectNumber}</span>
+                          <div className={`inline-flex items-center gap-1.5 font-display text-[11px] font-bold px-2.5 py-0.5 rounded-full border shadow-sm ${theme.accentBg}`}>
+                            <Star className="h-3 w-3 fill-current" />
+                            <span>{theme.badgeLabel}</span>
                           </div>
                         ) : (
                           <div className="flex items-center gap-2">
                             <span
                               className={`h-2 w-2 rounded-full ${
-                                isActive ? "bg-amber-400 shadow-[0_0_8px_#f59e0b]" : "bg-zinc-600"
+                                isActive ? "bg-amber-400 shadow-[0_0_8px_#f59e0b] animate-ping" : "bg-zinc-600"
                               }`}
                             />
-                            <span className="font-display text-xs text-amber-300/90 font-bold tracking-widest">
-                              0{idx + 1} // MILESTONE
+                            <span className="font-display text-xs text-zinc-300 font-bold tracking-widest uppercase">
+                              0{idx + 1} // {theme.badgeLabel}
                             </span>
                           </div>
                         )}
@@ -235,12 +369,18 @@ export default function Stage02ExperienceWaypoints({
                       </div>
                     </div>
 
-                    {/* Domain Title */}
+                    {/* Live Telemetry Micro-Badge */}
+                    <div className="flex items-center gap-1.5 font-mono text-[10px] text-zinc-400 uppercase tracking-widest mb-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#10b981]" />
+                      <span className={theme.accentText}>{theme.telemetry}</span>
+                    </div>
+
+                    {/* Domain Title with Gradient Hover */}
                     <h3
                       className={`font-display font-bold tracking-tight uppercase leading-tight mb-1.5 line-clamp-1 transition-colors ${
                         isFeatured
                           ? "text-xl sm:text-2xl text-white group-hover:text-amber-200"
-                          : "text-lg sm:text-xl text-white group-hover:text-amber-200"
+                          : "text-lg sm:text-xl text-white group-hover:text-white"
                       }`}
                     >
                       {wp.domain}
@@ -249,13 +389,13 @@ export default function Stage02ExperienceWaypoints({
                     {/* Role & Company */}
                     <div className="flex items-center gap-2 font-sans text-xs text-zinc-300 font-normal mb-3">
                       <Briefcase className="h-3.5 w-3.5 text-amber-400 shrink-0" />
-                      <span className="text-amber-200 font-medium">{wp.role}</span>
+                      <span className="text-zinc-200 font-medium">{wp.role}</span>
                       <span className="text-zinc-600">·</span>
                       <span className="text-zinc-400 line-clamp-1">{wp.company}</span>
                     </div>
 
                     {/* Description */}
-                    <p className="text-xs text-zinc-300 font-light leading-relaxed mb-3 border-l-2 border-amber-400/40 pl-3 bg-white/[0.02] py-1 rounded-r line-clamp-3">
+                    <p className="text-xs text-zinc-300 font-light leading-relaxed mb-3 border-l-2 border-white/20 pl-3 bg-white/[0.02] py-1 rounded-r line-clamp-3 group-hover:border-amber-400/60 transition-colors">
                       {wp.description}
                     </p>
 
@@ -263,7 +403,7 @@ export default function Stage02ExperienceWaypoints({
                     {isFeatured && wp.deliverables && (
                       <div className="mb-2 space-y-1">
                         {wp.deliverables.slice(0, 2).map((d, dIdx) => (
-                          <div key={dIdx} className="text-[11px] text-zinc-400 flex items-start gap-1.5">
+                          <div key={dIdx} className="text-[11px] text-zinc-300 flex items-start gap-1.5">
                             <span className="text-amber-400 font-bold">›</span>
                             <span className="line-clamp-1">{d}</span>
                           </div>
@@ -278,11 +418,7 @@ export default function Stage02ExperienceWaypoints({
                       {wp.tech.slice(0, 4).map((t, tIdx) => (
                         <span
                           key={tIdx}
-                          className={`font-sans text-[10px] sm:text-[11px] tracking-wide px-2 py-0.5 rounded-md ${
-                            isFeatured
-                              ? "text-amber-200 bg-amber-400/10 border border-amber-400/25"
-                              : "text-zinc-200 bg-white/[0.05] border border-white/10"
-                          }`}
+                          className={`font-sans text-[10px] sm:text-[11px] tracking-wide px-2.5 py-0.5 rounded-md border ${theme.tagStyle}`}
                         >
                           {t}
                         </span>
@@ -296,11 +432,11 @@ export default function Stage02ExperienceWaypoints({
 
                     {/* Click Indicator */}
                     <div className="flex items-center justify-between text-zinc-400 group-hover:text-amber-300 font-sans text-xs tracking-wider transition-colors pt-0.5">
-                      <span>View Full Case Study</span>
-                      <ChevronRight className="h-3.5 w-3.5 transform group-hover:translate-x-1 transition-transform text-amber-400" />
+                      <span className="group-hover:translate-x-0.5 transition-transform font-medium">Explore Case Dossier</span>
+                      <ChevronRight className="h-3.5 w-3.5 transform group-hover:translate-x-1.5 transition-transform text-amber-400" />
                     </div>
                   </div>
-                </div>
+                </TiltSpotlightCard>
               );
             })}
           </div>
