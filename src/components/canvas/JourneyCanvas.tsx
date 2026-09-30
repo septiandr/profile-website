@@ -506,7 +506,7 @@ export default function JourneyCanvas({
       },
     });
 
-    // 2. EXPERIENCE WAYPOINTS STAGE
+    // 2. EXPERIENCE WAYPOINTS STAGE (Robot stands stationary and waves at visitor)
     addTrigger({
       trigger: "#zone-experience",
       start: "top center",
@@ -516,25 +516,33 @@ export default function JourneyCanvas({
         const p = self.progress;
         onStageChange?.("experience-waypoints", p);
 
-        // Smoothly glide robot target across waypoints
+        // User requested: "robot diam melambai" (stands stationary and waves)
         if (isMobile) {
-          robotTargetPos.current = { x: 0.6, y: -0.9, z: 1.0 };
+          robotTargetPos.current = { x: 0.75, y: -0.85, z: 1.1 };
           robotTargetScale.current = 0.8;
-          robotTargetRotY.current = -0.4;
+          robotTargetRotY.current = -0.3;
         } else {
-          robotTargetPos.current = {
-            x: -1.6 + p * 3.2,
-            y: -0.8 + Math.sin(p * Math.PI) * 0.15,
-            z: 1.1,
-          };
-          robotTargetScale.current = 1.1;
-          robotTargetRotY.current = p < 0.5 ? -0.3 : 0.3;
+          robotTargetPos.current = { x: -1.55, y: -0.65, z: 1.3 };
+          robotTargetScale.current = 1.15;
+          robotTargetRotY.current = 0.35;
         }
+        switchRobotAction("Wave");
 
         const waypointIndex = Math.min(Math.floor(p * 6), 5);
         onActiveWaypointChange?.(waypointIndex);
       },
-      onEnter: () => switchRobotAction("Walking"),
+      onEnter: () => {
+        if (isMobile) {
+          robotTargetPos.current = { x: 0.75, y: -0.85, z: 1.1 };
+          robotTargetScale.current = 0.8;
+          robotTargetRotY.current = -0.3;
+        } else {
+          robotTargetPos.current = { x: -1.55, y: -0.65, z: 1.3 };
+          robotTargetScale.current = 1.15;
+          robotTargetRotY.current = 0.35;
+        }
+        switchRobotAction("Wave");
+      },
       onLeaveBack: () => switchRobotAction("Wave"),
       onLeave: () => switchRobotAction("ThumbsUp"),
     });
