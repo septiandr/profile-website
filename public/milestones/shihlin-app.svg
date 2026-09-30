@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 340" width="100%" height="100%" fill="none">
+  <defs>
+    <linearGradient id="shihlin-bg" x1="0" y1="0" x2="600" y2="340" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#241403"/>
+      <stop offset="50%" stop-color="#3b2005"/>
+      <stop offset="100%" stop-color="#120a01"/>
+    </linearGradient>
+    <linearGradient id="gold-cta" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <filter id="shihlin-glow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#f59e0b" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="600" height="340" rx="16" fill="url(#shihlin-bg)"/>
+  
+  <!-- Subtle Grid -->
+  <path d="M0 60 H600 M0 120 H600 M0 180 H600 M0 240 H600 M0 300 H600" stroke="#f59e0b" stroke-opacity="0.08" stroke-width="1"/>
+  <path d="M100 0 V340 M200 0 V340 M300 0 V340 M400 0 V340 M500 0 V340" stroke="#f59e0b" stroke-opacity="0.08" stroke-width="1"/>
+
+  <!-- Window Header Bar -->
+  <rect x="24" y="20" width="552" height="34" rx="8" fill="#422509" fill-opacity="0.6" stroke="#b45309" stroke-opacity="0.3"/>
+  <circle cx="44" cy="37" r="4.5" fill="#ef4444" fill-opacity="0.8"/>
+  <circle cx="58" cy="37" r="4.5" fill="#eab308" fill-opacity="0.8"/>
+  <circle cx="72" cy="37" r="4.5" fill="#10b981" fill-opacity="0.8"/>
+  <text x="94" y="41" fill="#fef3c7" font-family="monospace" font-size="11" letter-spacing="1">SHIHLIN // MOBILE FAST DINING & ORDERING EXPERIENCE</text>
+  <rect x="430" y="27" width="134" height="20" rx="10" fill="#f59e0b" fill-opacity="0.2" stroke="#fbbf24" stroke-opacity="0.4"/>
+  <circle cx="442" cy="37" r="3" fill="#fde68a"/>
+  <text x="452" y="41" fill="#fffbeb" font-family="monospace" font-size="9" font-weight="bold">FLAGSHIP WORK 02</text>
+
+  <!-- Left: Mobile Smartphone Frame Mockup -->
+  <g transform="translate(45, 68)" filter="url(#shihlin-glow)">
+    <!-- Phone Bezel -->
+    <rect width="180" height="200" rx="20" fill="#140c03" stroke="#f59e0b" stroke-width="1.8"/>
+    <!-- Speaker & Camera Notch -->
+    <rect x="65" y="8" width="50" height="5" rx="2.5" fill="#3b2005"/>
+    
+    <!-- Screen Viewport -->
+    <g transform="translate(10, 20)">
+      <!-- App Header -->
+      <rect width="160" height="28" fill="#2d1704"/>
+      <text x="8" y="18" fill="#ffffff" font-family="sans-serif" font-size="10" font-weight="900">SHIHLIN APP</text>
+      <text x="152" y="18" text-anchor="end" fill="#fbbf24" font-size="10">🛒 (2)</text>
+
+      <!-- Food Menu Item 1 -->
+      <rect x="6" y="36" width="148" height="60" rx="8" fill="#3b2005" stroke="#92400e" stroke-width="1"/>
+      <rect x="12" y="42" width="46" height="46" rx="6" fill="#78350f"/>
+      <text x="35" y="70" text-anchor="middle" fill="#fef3c7" font-size="18">🍗</text>
+      <text x="64" y="55" fill="#ffffff" font-family="sans-serif" font-size="9" font-weight="bold">XXL Crispy Chicken</text>
+      <text x="64" y="68" fill="#fbbf24" font-family="monospace" font-size="8">Extra Spicy · Cut</text>
+      <text x="64" y="82" fill="#86efac" font-family="sans-serif" font-size="9" font-weight="bold">IDR 55,000</text>
+
+      <!-- Food Menu Item 2 -->
+      <rect x="6" y="102" width="148" height="60" rx="8" fill="#3b2005" stroke="#92400e" stroke-width="1"/>
+      <rect x="12" y="108" width="46" height="46" rx="6" fill="#78350f"/>
+      <text x="35" y="136" text-anchor="middle" fill="#fef3c7" font-size="18">🥟</text>
+      <text x="64" y="121" fill="#ffffff" font-family="sans-serif" font-size="9" font-weight="bold">Seafood Tempura</text>
+      <text x="64" y="134" fill="#fbbf24" font-family="monospace" font-size="8">Sweet Plum</text>
+      <text x="64" y="148" fill="#86efac" font-family="sans-serif" font-size="9" font-weight="bold">IDR 38,000</text>
+    </g>
+  </g>
+
+  <!-- Right: Live Counter Queue Ticket & Offline Cache State -->
+  <g transform="translate(255, 75)">
+    <!-- Queue Ticket Card -->
+    <rect width="305" height="98" rx="12" fill="#3b2005" stroke="#d97706" stroke-opacity="0.4"/>
+    <text x="20" y="28" fill="#fbbf24" font-family="monospace" font-size="10" letter-spacing="1">LIVE PICKUP QUEUE TICKET</text>
+    
+    <g transform="translate(20, 42)">
+      <text x="0" y="32" fill="#ffffff" font-family="monospace" font-size="34" font-weight="900">#B-042</text>
+      <rect x="140" y="6" width="130" height="28" rx="14" fill="#15803d" fill-opacity="0.4" stroke="#22c55e" stroke-width="1"/>
+      <circle cx="154" cy="20" r="4" fill="#22c55e"/>
+      <text x="164" y="24" fill="#86efac" font-family="sans-serif" font-size="10" font-weight="bold">READY AT PICKUP</text>
+    </g>
+    <text x="20" y="88" fill="#fde68a" font-family="monospace" font-size="9">Counter #2 · Mall Kelapa Gading Outlet</text>
+
+    <!-- State Reconciliation & Sync -->
+    <g transform="translate(0, 108)">
+      <rect width="305" height="77" rx="12" fill="#3b2005" stroke="#d97706" stroke-opacity="0.4"/>
+      <text x="20" y="24" fill="#fbbf24" font-family="monospace" font-size="10" letter-spacing="1">OFFLINE RECONCILIATION</text>
+      <circle cx="28" cy="46" r="4" fill="#10b981"/>
+      <text x="40" y="50" fill="#e2e8f0" font-family="monospace" font-size="10">Cart Cache State: Redux-Persist Sync</text>
+      <text x="20" y="68" fill="#a3a3a3" font-family="monospace" font-size="9">Zero Data Loss on Signal Drop</text>
+    </g>
+  </g>
+
+  <!-- Bottom Terminal Bar -->
+  <rect x="24" y="280" width="552" height="38" rx="8" fill="#170c02" stroke="#b45309" stroke-opacity="0.25"/>
+  <text x="40" y="303" fill="#fde68a" font-family="monospace" font-size="10">> SHIHLIN // REACT NATIVE CORE + SOCKET ENGINE CONNECTED</text>
+  <text x="500" y="303" fill="#fbbf24" font-family="monospace" font-size="10" font-weight="bold">● OPTIMIZED</text>
+</svg>

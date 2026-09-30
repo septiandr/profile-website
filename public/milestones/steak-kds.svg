@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 340" width="100%" height="100%" fill="none">
+  <defs>
+    <linearGradient id="steak-bg" x1="0" y1="0" x2="600" y2="340" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1f0a04"/>
+      <stop offset="50%" stop-color="#381308"/>
+      <stop offset="100%" stop-color="#100502"/>
+    </linearGradient>
+    <linearGradient id="ticket-header" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#ea580c"/>
+      <stop offset="100%" stop-color="#f97316"/>
+    </linearGradient>
+    <filter id="steak-glow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#ea580c" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="600" height="340" rx="16" fill="url(#steak-bg)"/>
+  
+  <!-- Subtle Grid -->
+  <path d="M0 60 H600 M0 120 H600 M0 180 H600 M0 240 H600 M0 300 H600" stroke="#f97316" stroke-opacity="0.08" stroke-width="1"/>
+  <path d="M100 0 V340 M200 0 V340 M300 0 V340 M400 0 V340 M500 0 V340" stroke="#f97316" stroke-opacity="0.08" stroke-width="1"/>
+
+  <!-- Window Header Bar -->
+  <rect x="24" y="20" width="552" height="34" rx="8" fill="#3f1609" fill-opacity="0.6" stroke="#c2410c" stroke-opacity="0.3"/>
+  <circle cx="44" cy="37" r="4.5" fill="#ef4444" fill-opacity="0.8"/>
+  <circle cx="58" cy="37" r="4.5" fill="#eab308" fill-opacity="0.8"/>
+  <circle cx="72" cy="37" r="4.5" fill="#10b981" fill-opacity="0.8"/>
+  <text x="94" y="41" fill="#fed7aa" font-family="monospace" font-size="11" letter-spacing="1">STEAK HOUSE // REAL-TIME KITCHEN DISPLAY SYSTEM (KDS)</text>
+  <rect x="430" y="27" width="134" height="20" rx="10" fill="#ea580c" fill-opacity="0.2" stroke="#f97316" stroke-opacity="0.4"/>
+  <circle cx="442" cy="37" r="3" fill="#fb923c"/>
+  <text x="452" y="41" fill="#ffedd5" font-family="monospace" font-size="9" font-weight="bold">WEBSOCKET: 14MS</text>
+
+  <!-- Main KDS Orders Viewport -->
+  <g transform="translate(40, 75)" filter="url(#steak-glow)">
+    <!-- Ticket 1 (Active Cooking) -->
+    <g transform="translate(0, 0)">
+      <rect width="250" height="190" rx="10" fill="#2b0e06" stroke="#ea580c" stroke-width="1.5"/>
+      <rect width="250" height="36" rx="10" fill="url(#ticket-header)"/>
+      <text x="14" y="23" fill="#ffffff" font-family="sans-serif" font-size="12" font-weight="bold">TABLE #14 · DINE IN</text>
+      <text x="236" y="23" text-anchor="end" fill="#ffffff" font-family="monospace" font-size="11" font-weight="bold">04:18</text>
+
+      <!-- Items List -->
+      <g transform="translate(14, 52)">
+        <text x="0" y="14" fill="#ffffff" font-family="sans-serif" font-size="12" font-weight="bold">1x Wagyu Ribeye MB9+ (300g)</text>
+        <text x="0" y="28" fill="#fb923c" font-family="monospace" font-size="10">→ Medium Rare · Truffle Butter</text>
+
+        <text x="0" y="52" fill="#ffffff" font-family="sans-serif" font-size="12" font-weight="bold">1x Truffle Fries w/ Parmesan</text>
+        <text x="0" y="66" fill="#fb923c" font-family="monospace" font-size="10">→ Extra Crispy · Aioli Dip</text>
+
+        <text x="0" y="90" fill="#ffffff" font-family="sans-serif" font-size="12" font-weight="bold">2x House Vintage Cabernet</text>
+      </g>
+
+      <!-- Order Status Pill -->
+      <rect x="14" y="152" width="95" height="24" rx="12" fill="#ea580c" fill-opacity="0.3" stroke="#f97316" stroke-width="1"/>
+      <circle cx="26" cy="164" r="3.5" fill="#f97316"/>
+      <text x="35" y="168" fill="#fed7aa" font-family="monospace" font-size="9" font-weight="bold">ON GRILL</text>
+
+      <text x="236" y="168" text-anchor="end" fill="#9ca3af" font-family="monospace" font-size="9">CHEF MARCO</text>
+    </g>
+
+    <!-- Ticket 2 (Ready for Expedite) -->
+    <g transform="translate(270, 0)">
+      <rect width="250" height="190" rx="10" fill="#201008" stroke="#10b981" stroke-width="1.5"/>
+      <rect width="250" height="36" rx="10" fill="#059669"/>
+      <text x="14" y="23" fill="#ffffff" font-family="sans-serif" font-size="12" font-weight="bold">TABLE #08 · EXPEDITE</text>
+      <text x="236" y="23" text-anchor="end" fill="#ffffff" font-family="monospace" font-size="11" font-weight="bold">READY</text>
+
+      <!-- Items List -->
+      <g transform="translate(14, 52)">
+        <text x="0" y="14" fill="#ffffff" font-family="sans-serif" font-size="12" font-weight="bold">1x Prime Dry-Aged Striploin</text>
+        <text x="0" y="28" fill="#34d399" font-family="monospace" font-size="10">→ Medium · Chimichurri</text>
+
+        <text x="0" y="52" fill="#ffffff" font-family="sans-serif" font-size="12" font-weight="bold">1x Grilled Asparagus Spear</text>
+        <text x="0" y="66" fill="#34d399" font-family="monospace" font-size="10">→ Lemon Zest & Olive Oil</text>
+      </g>
+
+      <!-- Ready Button Pill -->
+      <rect x="14" y="152" width="110" height="24" rx="12" fill="#10b981" fill-opacity="0.3" stroke="#34d399" stroke-width="1"/>
+      <circle cx="26" cy="164" r="3.5" fill="#34d399"/>
+      <text x="35" y="168" fill="#d1fae5" font-family="monospace" font-size="9" font-weight="bold">CALL SERVER</text>
+
+      <text x="236" y="168" text-anchor="end" fill="#34d399" font-family="monospace" font-size="9">PASS COMPLETED</text>
+    </g>
+  </g>
+
+  <!-- Bottom Terminal Bar -->
+  <rect x="24" y="280" width="552" height="38" rx="8" fill="#180703" stroke="#ea580c" stroke-opacity="0.25"/>
+  <text x="40" y="303" fill="#fb923c" font-family="monospace" font-size="10">> RESTAURANT KDS // WEBSOCKET ZERO-LATENCY EVENT BUS OK</text>
+  <text x="500" y="303" fill="#10b981" font-family="monospace" font-size="10" font-weight="bold">● DISPATCHED</text>
+</svg>

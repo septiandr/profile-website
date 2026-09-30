@@ -21,6 +21,7 @@ export interface ExperienceWaypoint {
   description: string;
   tech: string[];
   deliverables?: string[];
+  image?: string;
 }
 
 export interface TechNode {
@@ -51,6 +52,7 @@ export const EXPERIENCE_WAYPOINTS: ExperienceWaypoint[] = [
     description:
       "Built enterprise digital banking portals, high-security transaction interfaces, and e-debit platforms for CIMB Niaga.",
     tech: ["React", "TypeScript", "Redux", "REST APIs"],
+    image: "/milestones/cimb-edebit.svg",
   },
   {
     type: "milestone",
@@ -61,6 +63,7 @@ export const EXPERIENCE_WAYPOINTS: ExperienceWaypoint[] = [
     description:
       "Architected course certification hubs (Luna Sinarmas) and student live learning platforms with real-time scheduling.",
     tech: ["Next.js", "Zustand", "Tailwind CSS", "Laravel"],
+    image: "/milestones/luna-lms.svg",
   },
   {
     type: "milestone",
@@ -71,6 +74,7 @@ export const EXPERIENCE_WAYPOINTS: ExperienceWaypoint[] = [
     description:
       "Spearheaded mobile development for Casion EV, managing charging station telemetry and live driver interaction.",
     tech: ["React Native", "Redux", "REST APIs", "IoT Telemetry"],
+    image: "/milestones/casion-ev.svg",
   },
   {
     type: "milestone",
@@ -81,6 +85,7 @@ export const EXPERIENCE_WAYPOINTS: ExperienceWaypoint[] = [
     description:
       "Engineered multi-tier reward engines, voucher redemption pipelines, and business analytics dashboards (DDT & Zu Point).",
     tech: ["React.js", "React Native", "TypeScript", "Zustand"],
+    image: "/milestones/ddt-rewards.svg",
   },
   {
     id: "behave",
@@ -98,6 +103,7 @@ export const EXPERIENCE_WAYPOINTS: ExperienceWaypoint[] = [
       "Integrated secure payment and merchant transaction handling",
       "Engineered merchant CMS dashboards with exportable analytics",
     ],
+    image: "/milestones/behave-saas.svg",
   },
   {
     type: "milestone",
@@ -108,6 +114,7 @@ export const EXPERIENCE_WAYPOINTS: ExperienceWaypoint[] = [
     description:
       "Constructed a high-concurrency steak restaurant web ordering architecture with live kitchen displays via WebSockets.",
     tech: ["React.js", "Socket.IO", "Node.js", "PostgreSQL"],
+    image: "/milestones/steak-kds.svg",
   },
   {
     id: "shihlin",
@@ -125,6 +132,7 @@ export const EXPERIENCE_WAYPOINTS: ExperienceWaypoint[] = [
       "Connected live socket channel for kitchen status updates",
       "Handled offline state recovery and cart reconciliation",
     ],
+    image: "/milestones/shihlin-app.svg",
   },
   {
     type: "milestone",
@@ -135,6 +143,7 @@ export const EXPERIENCE_WAYPOINTS: ExperienceWaypoint[] = [
     description:
       "Engineered end-to-end game top-up platform with Golang microservices and automated WhatsApp notification bots.",
     tech: ["Next.js", "Golang", "PostgreSQL", "WhatsApp API"],
+    image: "/milestones/golang-microservices.svg",
   },
   {
     id: "game-topup",
@@ -152,6 +161,7 @@ export const EXPERIENCE_WAYPOINTS: ExperienceWaypoint[] = [
       "Engineered Golang REST microservice with PostgreSQL transactions",
       "Deployed automated WhatsApp bot for payment verification & receipt dispatch",
     ],
+    image: "/milestones/game-topup.svg",
   },
 ];
 

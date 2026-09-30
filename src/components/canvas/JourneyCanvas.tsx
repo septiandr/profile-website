@@ -577,12 +577,12 @@ export default function JourneyCanvas({
           onStageChange?.("take-off", p);
           const t = (p - 0.12) / 0.88;
           robotTargetPos.current = {
-            x: isMobile ? 1.35 * t : 2.85 * t,
-            y: -0.48 - t * 0.17,
-            z: 1.65 - t * 0.4,
+            x: isMobile ? 1.35 * t : 3.25 * t,
+            y: -0.48 - t * 0.14,
+            z: 1.65 - t * 0.45,
           };
           robotTargetScale.current = (isMobile ? 0.62 : 0.90) + t * 0.15;
-          robotTargetRotY.current = -t * 0.50; // Angled left towards the cards
+          robotTargetRotY.current = -t * 0.55; // Angled left towards the cards
           switchRobotAction("Walking");
         }
       },
@@ -615,15 +615,15 @@ export default function JourneyCanvas({
         const p = self.progress;
         onStageChange?.("experience-waypoints", p);
 
-        // Robot stands on the RIGHT edge facing left towards the cards
+        // Robot stands on the RIGHT edge with generous space facing left towards the cards
         if (isMobile) {
           robotTargetPos.current = { x: 1.35, y: -0.85, z: 1.1 };
           robotTargetScale.current = 0.72;
           robotTargetRotY.current = -0.45;
         } else {
-          robotTargetPos.current = { x: 2.85, y: -0.65, z: 1.25 };
+          robotTargetPos.current = { x: 3.25, y: -0.62, z: 1.15 };
           robotTargetScale.current = 1.05;
-          robotTargetRotY.current = -0.50;
+          robotTargetRotY.current = -0.55;
         }
 
         // When actively scrolling, robot performs dynamic Walking stride!
@@ -649,9 +649,9 @@ export default function JourneyCanvas({
           robotTargetScale.current = 0.72;
           robotTargetRotY.current = -0.45;
         } else {
-          robotTargetPos.current = { x: 2.85, y: -0.65, z: 1.25 };
+          robotTargetPos.current = { x: 3.25, y: -0.62, z: 1.15 };
           robotTargetScale.current = 1.05;
-          robotTargetRotY.current = -0.50;
+          robotTargetRotY.current = -0.55;
         }
         switchRobotAction("Wave");
       },
