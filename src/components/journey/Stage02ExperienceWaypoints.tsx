@@ -416,13 +416,13 @@ export default function Stage02ExperienceWaypoints({
       <div className="z-20 text-center max-w-4xl mx-auto pt-0.5 pointer-events-auto">
         <div className="font-sans text-[10px] sm:text-xs tracking-[0.25em] uppercase text-amber-300/90 font-medium mb-1 flex items-center justify-center gap-2">
           <span className="h-1.5 w-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b]" />
-          <span>Engineering Milestones & Featured Projects · 2022 — 2026</span>
+          <span>Shipped Digital Products & Enterprise Case Studies · 2022 — 2026</span>
         </div>
 
         <h2 className="font-display font-light text-2xl sm:text-4xl md:text-5xl text-white tracking-tight uppercase">
-          Engineering{" "}
+          Shipped{" "}
           <span className="font-serif italic font-normal text-transparent bg-clip-text bg-gradient-to-r from-champagne-300 via-amber-200 to-amber-400">
-            Trajectory
+            Products
           </span>
         </h2>
 

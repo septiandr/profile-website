@@ -43,23 +43,23 @@ export default function HUDMissionControl({ currentStage }: HUDMissionControlPro
   const isVisible = scrolledPastVoid && currentStage !== "the-void";
 
   const stageTitles: Record<JourneyStage, string> = {
-    "the-void": "Prologue · Introduction",
-    "take-off": "The Architect · Hero",
-    "experience-waypoints": "Experience & Featured Works",
-    "tech-lab": "Arsenal · Capabilities",
-    "project-portal": "Showcase · Enterprise",
-    projects: "Experience & Featured Works",
-    about: "Philosophy · The Engineer",
-    contact: "Inquiries · Collaboration",
-    departure: "Epilogue · Celebration",
+    "the-void": "Prologue · Welcome",
+    "take-off": "Studio · Products Overview",
+    "experience-waypoints": "Shipped Products & Case Studies",
+    "tech-lab": "Capabilities · Production Engines",
+    "project-portal": "Enterprise Systems",
+    projects: "Shipped Products & Case Studies",
+    about: "Studio Philosophy · Leadership",
+    contact: "Commission Studio · Inquiries",
+    departure: "Epilogue · Mission Success",
     "end-screen": "Archive · Complete",
   };
 
   const navLinks = [
-    { id: "zone-void", label: "Intro" },
-    { id: "zone-hero", label: "Hero" },
-    { id: "zone-experience", label: "Experience" },
-    { id: "zone-skills", label: "Arsenal" },
+    { id: "zone-void", label: "Studio" },
+    { id: "zone-hero", label: "Overview" },
+    { id: "zone-experience", label: "Products" },
+    { id: "zone-skills", label: "Capabilities" },
     { id: "zone-contact", label: "Contact" },
   ];
 

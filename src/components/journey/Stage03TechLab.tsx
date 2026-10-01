@@ -423,19 +423,19 @@ export default function Stage03TechLab({
                 <span className="h-2 w-2 rounded-full bg-amber-400 shadow-[0_0_12px_#f59e0b] animate-ping" />
                 <span className="bg-amber-400/10 px-3.5 py-1 rounded-full border border-amber-400/30 flex items-center gap-2">
                   <Cpu className="h-4 w-4 text-amber-400" />
-                  Sector 03 · Technical Arsenal
+                  Sector 03 · Production Capability Engines
                 </span>
               </div>
 
               <h2 className="font-display font-light text-4xl sm:text-5xl lg:text-6xl text-white tracking-tight uppercase leading-[1.05] mb-2">
-                Technical{" "}
+                Capability{" "}
                 <span className="font-serif italic font-normal text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-amber-300 to-purple-400 drop-shadow-[0_0_35px_rgba(245,158,11,0.35)] animate-shimmer">
-                  Arsenal
+                  Engines
                 </span>
               </h2>
 
               <p className="font-sans text-xs sm:text-sm text-zinc-300 tracking-[0.16em] uppercase font-light max-w-2xl mb-5">
-                Floating skill cosmos. Gelembung bergerak perlahan, muncul & pergi satu persatu onScroll.
+                The core architectural frameworks, language runtimes & client engineering engines in active production.
               </p>
 
               {/* Minimal Category Color Legend & Filter Tabs */}
