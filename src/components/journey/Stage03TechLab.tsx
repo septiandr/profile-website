@@ -427,9 +427,9 @@ export default function Stage03TechLab({
                 </span>
               </div>
 
-              <h2 className="font-display font-light text-4xl sm:text-5xl lg:text-6xl text-white tracking-tight uppercase leading-[1.05] mb-2">
+              <h2 className="font-display font-black text-4xl sm:text-6xl lg:text-7xl text-white tracking-tight uppercase leading-[1.05] mb-2">
                 Capability{" "}
-                <span className="font-serif italic font-normal text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-amber-300 to-purple-400 drop-shadow-[0_0_35px_rgba(245,158,11,0.35)] animate-shimmer">
+                <span className="font-serif italic font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-amber-300 to-purple-400 drop-shadow-[0_0_35px_rgba(245,158,11,0.35)] animate-shimmer">
                   Engines
                 </span>
               </h2>

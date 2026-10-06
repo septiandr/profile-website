@@ -419,9 +419,9 @@ export default function Stage02ExperienceWaypoints({
           <span>Shipped Digital Products & Enterprise Case Studies · 2022 — 2026</span>
         </div>
 
-        <h2 className="font-display font-light text-2xl sm:text-4xl md:text-5xl text-white tracking-tight uppercase">
+        <h2 className="font-display font-black text-3xl sm:text-5xl md:text-6xl lg:text-7xl text-white tracking-tight uppercase leading-tight">
           Shipped{" "}
-          <span className="font-serif italic font-normal text-transparent bg-clip-text bg-gradient-to-r from-champagne-300 via-amber-200 to-amber-400">
+          <span className="font-serif italic font-bold text-transparent bg-clip-text bg-gradient-to-r from-champagne-300 via-amber-200 to-amber-400">
             Products
           </span>
         </h2>
