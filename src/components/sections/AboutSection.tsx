@@ -94,7 +94,7 @@ export default function AboutSection() {
             {/* Editorial Agency Bio Card */}
             <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/10 relative overflow-hidden">
               <div className="flex items-center gap-4 mb-6">
-                <div className="relative h-14 w-14 rounded-2xl overflow-hidden border border-cyan-400/40 shrink-0">
+                <div className="relative h-20 w-20 rounded-2xl overflow-hidden border-2 border-cyan-400/40 shrink-0 shadow-lg">
                   <Image
                     src="/profile.jpg"
                     alt="Septian Dwi Risanggalih"
@@ -129,7 +129,7 @@ export default function AboutSection() {
                 <div>
                   <div className="text-[11px] font-mono text-slate-400 uppercase">Degree & Academic</div>
                   <div className="text-sm font-bold text-white">BINUS UNIVERSITY</div>
-                  <div className="text-xs text-cyan-300 font-mono mt-0.5">B.Comp.Sc (2022–2025) • GPA 3.56</div>
+                  <div className="text-xs text-cyan-300 font-mono mt-0.5">B.Comp.Sc (2022–2025)</div>
                 </div>
               </div>
 

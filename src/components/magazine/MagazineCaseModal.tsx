@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import Image from "next/image";
 import { X, CheckCircle2 } from "lucide-react";
 import { ExperienceWaypoint } from "@/journey/types";
+import PlateBlueprintGraphic from "./PlateBlueprintGraphic";
 
 interface CaseModalProps {
   waypoint: ExperienceWaypoint | null;
@@ -18,10 +19,16 @@ export default function MagazineCaseModal({ waypoint, onClose }: CaseModalProps)
     if (waypoint) {
       window.addEventListener("keydown", handleKeyDown);
       document.body.style.overflow = "hidden";
+      if (typeof window !== "undefined" && (window as any).__lenis) {
+        (window as any).__lenis.stop();
+      }
     }
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = "auto";
+      if (typeof window !== "undefined" && (window as any).__lenis) {
+        (window as any).__lenis.start();
+      }
     };
   }, [waypoint, onClose]);
 
@@ -76,21 +83,25 @@ export default function MagazineCaseModal({ waypoint, onClose }: CaseModalProps)
             </h2>
           </div>
 
-          {/* Large Photographic Image Plate */}
-          {waypoint.image && (
-            <div className="relative w-full h-64 sm:h-80 md:h-[400px] overflow-hidden bg-zinc-100 border border-zinc-950/20 shadow-sm rounded-xs">
-              <Image
-                src={waypoint.image}
-                alt={waypoint.domain}
-                fill
-                sizes="(max-width: 1024px) 100vw, 800px"
-                className="object-cover object-center"
-              />
-              <div className="absolute bottom-3 left-3 px-3 py-1 bg-white/95 backdrop-blur-md border border-zinc-200 font-sans text-[11px] font-bold uppercase tracking-wider text-zinc-800 rounded-xs shadow-xs">
-                CASE ARCHIVE // {waypoint.domain}
+          {/* Visual Presentation Plate */}
+          <div className="relative w-full overflow-hidden rounded-xs border border-zinc-950/20 shadow-sm">
+            {waypoint.image && !waypoint.image.endsWith(".svg") ? (
+              <div className="relative w-full h-64 sm:h-80 md:h-[400px]">
+                <Image
+                  src={waypoint.image}
+                  alt={waypoint.domain}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 800px"
+                  className="object-cover object-center"
+                />
+                <div className="absolute bottom-3 left-3 px-3 py-1 bg-white/95 backdrop-blur-md border border-zinc-200 font-sans text-[11px] font-bold uppercase tracking-wider text-zinc-800 rounded-xs shadow-xs">
+                  CASE ARCHIVE // {waypoint.domain}
+                </div>
               </div>
-            </div>
-          )}
+            ) : (
+              <PlateBlueprintGraphic waypoint={waypoint} />
+            )}
+          </div>
 
           {/* Editorial Executive Summary */}
           <div className="space-y-3">

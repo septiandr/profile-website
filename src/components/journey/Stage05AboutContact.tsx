@@ -39,7 +39,7 @@ export default function Stage05AboutContact() {
             </span>
           </div>
 
-          <h2 className="font-display font-black text-4xl sm:text-6xl md:text-7xl lg:text-8xl text-white tracking-[-0.03em] uppercase leading-[0.95] mb-4">
+          <h2 className="font-display font-black text-4xl sm:text-6xl md:text-7xl lg:text-8xl text-white tracking-tight uppercase leading-[0.98] mb-4">
             LET&apos;S BUILD <br />
             <span className="relative inline-block px-4 py-1 mx-2 text-black font-black bg-[#ccff00] rounded-sm transform -rotate-1 shadow-[0_0_40px_rgba(204,255,0,0.45)]">
               NEXT-GEN PRODUCTS

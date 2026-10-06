@@ -60,7 +60,7 @@ export interface ProfileData {
     institution: string;
     degree: string;
     period: string;
-    gpa: string;
+    gpa?: string;
   }[];
   languages: {
     language: string;

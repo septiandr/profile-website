@@ -27,10 +27,10 @@ const config: Config = {
         },
       },
       fontFamily: {
-        display: ["var(--font-display)", "Syne", "sans-serif"],
-        sans: ["var(--font-sans)", "Plus Jakarta Sans", "Inter", "sans-serif"],
-        serif: ["var(--font-serif)", "Playfair Display", "serif"],
-        mono: ["var(--font-sans)", "Plus Jakarta Sans", "sans-serif"],
+        display: ["var(--font-display)", "Plus Jakarta Sans", "Inter", "sans-serif"],
+        sans: ["var(--font-sans)", "Inter", "Plus Jakarta Sans", "system-ui", "sans-serif"],
+        serif: ["var(--font-serif)", "Lora", "Georgia", "serif"],
+        mono: ["var(--font-mono)", "JetBrains Mono", "ui-monospace", "monospace"],
       },
       animation: {
         "pulse-slow": "pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite",

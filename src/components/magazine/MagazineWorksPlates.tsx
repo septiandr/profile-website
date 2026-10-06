@@ -1,15 +1,10 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowUpRight, CheckCircle2, Compass, Layers } from "lucide-react";
+import { CheckCircle2, Compass, Layers, ShieldCheck } from "lucide-react";
 import { EXPERIENCE_WAYPOINTS, ExperienceWaypoint } from "@/journey/types";
-
-interface MagazineWorksProps {
-  onOpenCaseModal: (waypoint: ExperienceWaypoint) => void;
-}
 
 interface PlateTheme {
   barColor: string;
@@ -138,10 +133,12 @@ function getPlateTheme(domain: string, company: string): PlateTheme {
   };
 }
 
-export default function MagazineWorksPlates({ onOpenCaseModal }: MagazineWorksProps) {
+export default function MagazineWorksPlates() {
   const [filterType, setFilterType] = useState<string>("ALL");
   const [activePlateIdx, setActivePlateIdx] = useState<number>(0);
   const sectionRef = useRef<HTMLElement>(null);
+
+  const activePlateIdxRef = useRef<number>(0);
 
   const filteredWaypoints =
     filterType === "ALL"
@@ -160,24 +157,62 @@ export default function MagazineWorksPlates({ onOpenCaseModal }: MagazineWorksPr
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
+    let rafId: number | null = null;
+    let cardsCache: HTMLElement[] = [];
+
+    const calculateActivePlate = () => {
+      if (cardsCache.length === 0) {
+        cardsCache = Array.from(document.querySelectorAll<HTMLElement>(".mag-works-plate-card"));
+      }
+      if (cardsCache.length === 0) return;
+
+      const focalY = window.innerHeight * 0.45;
+      let closestIdx = 0;
+      let minDistance = Infinity;
+
+      for (let idx = 0; idx < cardsCache.length; idx++) {
+        const card = cardsCache[idx];
+        const rect = card.getBoundingClientRect();
+        const dist = Math.abs(rect.top - focalY);
+        if (dist < minDistance) {
+          minDistance = dist;
+          closestIdx = idx;
+        }
+      }
+
+      if (closestIdx !== activePlateIdxRef.current) {
+        activePlateIdxRef.current = closestIdx;
+        setActivePlateIdx(closestIdx);
+      }
+    };
+
+    const updateActivePlate = () => {
+      if (rafId !== null) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
+        calculateActivePlate();
+      });
+    };
+
     const ctx = gsap.context(() => {
+      // Continuous ScrollTrigger on Section 2 to track active focal card smoothly
+      if (sectionRef.current) {
+        ScrollTrigger.create({
+          trigger: sectionRef.current,
+          start: "top 80%",
+          end: "bottom 20%",
+          onUpdate: updateActivePlate,
+        });
+      }
+
       const plateCards = gsap.utils.toArray<HTMLElement>(".mag-works-plate-card");
 
-      plateCards.forEach((card, idx) => {
-        // 1. ScrollTrigger to track active focal card & update stationary background ornaments
-        ScrollTrigger.create({
-          trigger: card,
-          start: "top 65%",
-          end: "bottom 35%",
-          onEnter: () => setActivePlateIdx(idx),
-          onEnterBack: () => setActivePlateIdx(idx),
-        });
-
-        // 2. Individual Plate Entrance & Internal Kinetic Reveals
+      plateCards.forEach((card) => {
+        // Individual Plate Entrance & Internal Kinetic Reveals
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: card,
-            start: "top 85%",
+            start: "top 90%",
             toggleActions: "play none none reverse",
           },
         });
@@ -246,59 +281,33 @@ export default function MagazineWorksPlates({ onOpenCaseModal }: MagazineWorksPr
             "-=0.2"
           );
         }
-
-        // Button rise
-        const btn = card.querySelector(".mag-card-btn");
-        if (btn) {
-          tl.fromTo(
-            btn,
-            { y: 14, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.4, ease: "power2.out" },
-            "-=0.15"
-          );
-        }
-
-        // Image aperture
-        const imgBox = card.querySelector(".mag-card-img-box");
-        if (imgBox) {
-          tl.fromTo(
-            imgBox,
-            { opacity: 0, scale: 0.96 },
-            { opacity: 1, scale: 1, duration: 0.65, ease: "power3.out" },
-            "-=0.5"
-          );
-        }
-
-        // Depth Parallax Scrub on Image
-        const img = card.querySelector(".mag-works-img-parallax");
-        if (img) {
-          gsap.fromTo(
-            img,
-            { yPercent: -10 },
-            {
-              yPercent: 10,
-              ease: "none",
-              scrollTrigger: {
-                trigger: card,
-                start: "top bottom",
-                end: "bottom top",
-                scrub: true,
-              },
-            }
-          );
-        }
       });
     }, sectionRef);
 
-    ScrollTrigger.refresh();
+    updateActivePlate();
 
-    return () => ctx.revert();
+    return () => {
+      if (rafId !== null) cancelAnimationFrame(rafId);
+      ctx.revert();
+    };
   }, [filterType, filteredWaypoints.length]);
 
   const scrollToCard = (index: number) => {
     const cards = document.querySelectorAll<HTMLElement>(".mag-works-plate-card");
-    if (cards[index]) {
-      cards[index].scrollIntoView({ behavior: "smooth", block: "center" });
+    const targetCard = cards[index];
+    if (!targetCard) return;
+
+    activePlateIdxRef.current = index;
+    setActivePlateIdx(index);
+
+    const rect = targetCard.getBoundingClientRect();
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const targetY = scrollTop + rect.top - 90;
+
+    if (typeof window !== "undefined" && (window as any).__lenis) {
+      (window as any).__lenis.scrollTo(targetY, { duration: 1.0, immediate: false });
+    } else {
+      window.scrollTo({ top: targetY, behavior: "smooth" });
     }
   };
 
@@ -592,117 +601,84 @@ export default function MagazineWorksPlates({ onOpenCaseModal }: MagazineWorksPr
                         {theme.label}
                       </span>
                     </div>
-                    <div className="flex items-center gap-3 font-semibold">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3 font-semibold text-xs sm:text-sm">
                       <span>{wp.year}</span>
                       <span className="text-zinc-300">·</span>
-                      <span className="font-extrabold text-zinc-950">{wp.company}</span>
+                      <span className="font-extrabold text-zinc-950 break-words">{wp.company}</span>
                     </div>
                   </div>
 
-                  {/* Main Plate Layout: Two Large Columns (Editorial Text + Huge Image) */}
-                  <div
-                    className={`flex flex-col lg:flex-row items-center gap-8 lg:gap-14 ${
-                      isEven ? "" : "lg:flex-row-reverse"
-                    }`}
-                  >
-                    {/* Editorial Narrative */}
-                    <div className="flex-1 w-full space-y-6">
+                  {/* Editorial Layout: Clean Monograph Spread */}
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+                    {/* Left Column: Role, Headline, Editorial Quote & Tech Stack */}
+                    <div className="lg:col-span-7 space-y-5 min-w-0">
                       <div className="space-y-2">
-                        <div className="font-sans text-xs text-zinc-500 tracking-wider uppercase font-bold">
-                          {wp.role}
+                        <div className="font-sans text-xs text-zinc-500 tracking-wider uppercase font-bold flex items-center gap-2 break-words">
+                          <span className={`h-2 w-2 rounded-full ${theme.barColor} shrink-0`} />
+                          <span className="break-words">{wp.role}</span>
                         </div>
-                        <h3 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-zinc-950 uppercase tracking-tight leading-[1.0]">
+                        <h3 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-[2.6rem] xl:text-5xl font-black text-zinc-950 uppercase tracking-tight leading-[1.05] break-words">
                           {wp.domain.split(" ").map((word, wIdx) => (
-                            <span key={wIdx} className="overflow-hidden inline-block mr-2.5">
-                              <span className="mag-card-title-word inline-block">{word}</span>
+                            <span key={wIdx} className="overflow-hidden inline-block mr-2 max-w-full align-top">
+                              <span className="mag-card-title-word inline-block break-words">{word}</span>
                             </span>
                           ))}
                         </h3>
                       </div>
 
-                      <p className="mag-card-quote font-serif text-lg sm:text-xl text-zinc-800 italic font-normal leading-relaxed border-l-4 border-zinc-950 pl-4">
+                      <p className="mag-card-quote font-serif text-lg sm:text-xl text-zinc-800 italic font-normal leading-relaxed border-l-4 border-zinc-950 pl-4 py-0.5">
                         “{wp.description}”
                       </p>
 
-                      {/* Key Deliverables Bullet Points */}
-                      {wp.deliverables && wp.deliverables.length > 0 && (
-                        <div className="space-y-2.5 pt-2">
-                          {wp.deliverables.slice(0, 3).map((d, dIdx) => (
-                            <div
-                              key={dIdx}
-                              className="mag-card-deliverable flex items-start gap-2.5 text-xs sm:text-sm text-zinc-800 font-normal leading-relaxed"
+                      {/* Tech Stack Chips */}
+                      <div className="pt-2">
+                        <div className="font-sans text-[10px] uppercase font-extrabold tracking-widest text-zinc-400 mb-2">
+                          TECHNOLOGY STACK
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {wp.tech.map((t, tIdx) => (
+                            <span
+                              key={tIdx}
+                              className={`mag-card-tech-chip font-sans text-xs px-3 py-1 ${theme.pillBg} border ${theme.pillBorder} ${theme.pillText} font-bold uppercase rounded-sm shadow-2xs`}
                             >
-                              <CheckCircle2 className={`h-4 w-4 ${theme.bulletColor} shrink-0 mt-0.5`} />
-                              <span>{d}</span>
-                            </div>
+                              {t}
+                            </span>
                           ))}
                         </div>
-                      )}
-
-                      {/* Tech Stack Colorful Pill Chips */}
-                      <div className="pt-2 flex flex-wrap gap-2">
-                        {wp.tech.map((t, tIdx) => (
-                          <span
-                            key={tIdx}
-                            className={`mag-card-tech-chip font-sans text-xs px-3 py-1 ${theme.pillBg} border ${theme.pillBorder} ${theme.pillText} font-bold uppercase rounded-sm shadow-2xs`}
-                          >
-                            {t}
-                          </span>
-                        ))}
-                      </div>
-
-                      {/* Inspect Button with Custom Plate Color */}
-                      <div className="pt-4">
-                        <button
-                          onClick={() => onOpenCaseModal(wp)}
-                          data-cursor-text="INSPECT"
-                          className={`mag-card-btn group/btn inline-flex items-center gap-3 px-7 py-3.5 ${theme.btnBg} ${theme.btnHover} ${theme.btnShadow} text-white font-sans text-xs uppercase tracking-[0.16em] font-bold transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer rounded`}
-                        >
-                          <span>Inspect Architectural Dossier</span>
-                          <ArrowUpRight className="h-4 w-4 transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
-                        </button>
                       </div>
                     </div>
 
-                    {/* Massive Photographic Plate Image */}
-                    <div className="flex-1 w-full">
-                      <div
-                        onClick={() => onOpenCaseModal(wp)}
-                        data-cursor-text="VIEW"
-                        className="mag-card-img-box relative w-full h-72 sm:h-88 md:h-96 lg:h-[440px] xl:h-[480px] overflow-hidden bg-zinc-100 border border-zinc-950/20 cursor-pointer group/img shadow-md rounded-xs"
-                      >
-                        {wp.image ? (
-                          <div className="mag-works-img-parallax absolute inset-[-10%] w-[120%] h-[120%] will-change-transform">
-                            <Image
-                              src={wp.image}
-                              alt={wp.domain}
-                              fill
-                              sizes="(max-width: 1024px) 100vw, 50vw"
-                              className="object-cover object-center transform transition-transform duration-700 ease-out group-hover/img:scale-105"
-                            />
-                          </div>
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center font-sans text-xs font-bold text-zinc-400">
-                            PLATE PREVIEW
+                    {/* Right Column: Key Deliverables & Architecture Verification */}
+                    <div className="lg:col-span-5 bg-zinc-50/80 border border-zinc-200/90 rounded-sm p-6 sm:p-7 space-y-5">
+                      <div>
+                        <div className="font-sans text-[10px] uppercase font-extrabold tracking-widest text-zinc-500 mb-3 flex items-center gap-2">
+                          <Layers className="h-3.5 w-3.5 text-zinc-600" />
+                          <span>KEY PRODUCTION DELIVERABLES</span>
+                        </div>
+                        {wp.deliverables && wp.deliverables.length > 0 && (
+                          <div className="space-y-3">
+                            {wp.deliverables.map((d, dIdx) => (
+                              <div
+                                key={dIdx}
+                                className="mag-card-deliverable flex items-start gap-2.5 text-xs sm:text-sm text-zinc-800 font-normal leading-relaxed"
+                              >
+                                <CheckCircle2 className={`h-4 w-4 ${theme.bulletColor} shrink-0 mt-0.5`} />
+                                <span>{d}</span>
+                              </div>
+                            ))}
                           </div>
                         )}
+                      </div>
 
-                        {/* Corner Registration Marks */}
-                        <div className="absolute top-3 left-3 w-3 h-3 border-t-2 border-l-2 border-zinc-950 pointer-events-none" />
-                        <div className="absolute top-3 right-3 w-3 h-3 border-t-2 border-r-2 border-zinc-950 pointer-events-none" />
-                        <div className="absolute bottom-3 left-3 w-3 h-3 border-b-2 border-l-2 border-zinc-950 pointer-events-none" />
-                        <div className="absolute bottom-3 right-3 w-3 h-3 border-b-2 border-r-2 border-zinc-950 pointer-events-none" />
-
-                        {/* Floating bottom label with color indicator */}
-                        <div className="absolute bottom-3 left-3 right-3 px-3 py-1.5 bg-white/95 backdrop-blur-md border border-zinc-950/15 flex items-center justify-between font-sans text-[11px] uppercase tracking-wider text-zinc-800 rounded-xs shadow-sm">
-                          <span className="font-extrabold flex items-center gap-2">
-                            <span className={`h-2 w-2 rounded-full ${theme.barColor}`} />
-                            <span>{wp.company}</span>
-                          </span>
-                          <span className="font-bold text-[10px] text-zinc-600">
-                            CLICK TO EXPAND DOSSIER
-                          </span>
+                      {/* Architecture Verification Badge */}
+                      <div className="pt-3 border-t border-zinc-200 flex items-center justify-between">
+                        <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-zinc-200 rounded text-xs font-sans font-bold text-zinc-800 shadow-2xs">
+                          <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                          <span>PRODUCTION SHIPPED</span>
                         </div>
+                        <span className="font-mono text-[11px] font-bold text-zinc-500 uppercase">
+                          VERIFIED SLA
+                        </span>
                       </div>
                     </div>
                   </div>

@@ -6,26 +6,32 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { Zap } from "lucide-react";
 
 const SPEECH_LINES = [
-  "⚡ Senior Frontend Architect at your service!",
-  "🎨 Crafting 60fps digital experiences & enterprise SaaS!",
-  "🚀 Specializing in React, Three.js, React Native & Golang!",
-  "🏆 Binus University Computer Science (GPA 3.56)!",
-  "🔋 Casion EV: 99.8% crash-free IoT charging telemetry!",
-  "🏦 CIMB Niaga Octo Clicks: mission-critical banking security!",
-  "💼 Ready for select enterprise commissions in 2026!",
+  "💼 Available for Enterprise System, Website, Mobile App & Bot Engineering!",
+  "🖥️ Need an Enterprise System, Analytics Dashboard, or ERP? Let's connect!",
+  "🌐 Modern reactive websites, 60fps landing pages & 3D WebGL ready to build!",
+  "📱 High-performance cross-platform Android & iOS React Native apps!",
+  "🤖 Automated 24/7 Telegram & WhatsApp bots for your business workflow!",
+  "🔋 Casion EV: 99.8% crash-free IoT charging telemetry architecture!",
+  "🏦 CIMB Niaga Octo Clicks: mission-critical financial transaction security!",
+  "⚡ Click or drag me to see dance, wave & jump animations!",
 ];
 
 const RUNNING_TICKER_ITEMS = [
   "★ RISANGGALIH · INDEPENDENT STUDIO",
-  "⚡ SENIOR FRONTEND ARCHITECT",
-  "🚀 60FPS THREE.JS & WEBGL EXPERIENCES",
-  "🏆 BINUS UNIVERSITY CS (GPA 3.56)",
-  "💼 10+ ENTERPRISE PLATFORMS SHIPPED",
-  "🔋 CASION EV (99.8% STABILITY SLA)",
-  "🏦 CIMB NIAGA OCTO CLICKS BANKING SECURITY",
-  "💎 BEHAVE.ID MULTI-TIER REWARD ENGINES",
-  "⚡ CLICK 3D MASCOT TO INTERACT",
+  "💼 AVAILABLE FOR COMMISSIONS: SYSTEM · WEBSITE · APP · BOT",
+  "🖥️ ENTERPRISE SYSTEMS & DASHBOARDS (GOLANG · NODE · POSTGRES)",
+  "🌐 MODERN WEBSITES & 3D WEBGL (NEXT.JS 15 · THREE.JS · GSAP)",
+  "📱 MOBILE APPS ANDROID & IOS (REACT NATIVE · IOT TELEMETRY)",
+  "🤖 24/7 AUTOMATION BOTS (TELEGRAM · WHATSAPP · DISCORD · AI)",
+  "⚡ 99.8% PRODUCTION SLA · 60FPS CERTIFIED",
+  "🏆 BINUS UNIVERSITY COMPUTER SCIENCE GRADUATE",
+  "💬 WHATSAPP INQUIRY: +62 856-4644-4805",
 ];
+
+// Three.js Orthographic Camera & Stage Configuration
+const ROBOT_CANVAS_HEIGHT = 260; // Elevated canvas height for generous vertical headroom
+const ROBOT_VISIBLE_HEIGHT = 2.8; // Vertical span in Three.js world units
+const ROBOT_CENTER_Y = 0.72; // Lower camera center raises the robot ground (y=0) well above the bottom line
 
 export default function MagazineWalkingRobot() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -35,22 +41,30 @@ export default function MagazineWalkingRobot() {
   const [speechText, setSpeechText] = useState<string | null>(null);
   const [currentActionName, setCurrentActionName] = useState<string>("Walking");
   const [isSpeedRun, setIsSpeedRun] = useState<boolean>(false);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [isHovering, setIsHovering] = useState<boolean>(false);
 
   // References for Three.js state
   const sceneRef = useRef<THREE.Scene | null>(null);
-  const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
+  const cameraRef = useRef<THREE.OrthographicCamera | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const mixerRef = useRef<THREE.AnimationMixer | null>(null);
   const actionsRef = useRef<{ [name: string]: THREE.AnimationAction }>({});
   const robotModelRef = useRef<THREE.Group | null>(null);
 
   // Motion physics and stable refs
-  const posXRef = useRef<number>(-0.8);
+  const posXRef = useRef<number>(-0.5);
+  const posYRef = useRef<number>(0);
+  const velYRef = useRef<number>(0);
   const directionRef = useRef<number>(1); // 1 = right, -1 = left
   const targetRotationYRef = useRef<number>(Math.PI / 2);
   const isInteractingRef = useRef<boolean>(false);
   const isSpeedRunRef = useRef<boolean>(false);
   const isScrollingRef = useRef<boolean>(false);
+  const isDraggingRef = useRef<boolean>(false);
+  const hasDraggedRef = useRef<boolean>(false);
+  const dragStartScreenRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const dragOffsetRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const currentActionNameRef = useRef<string>("Walking");
   const speechIndexRef = useRef<number>(0);
   const resumeTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -108,29 +122,174 @@ export default function MagazineWalkingRobot() {
     }, 4500);
   }, [playClip]);
 
+  // Coordinate helper: translates client pixels into Three.js Orthographic world space
+  const getWorldCoords = useCallback((clientX: number, clientY: number) => {
+    if (!containerRef.current) return { worldX: 0, worldY: 0, halfWidth: 2 };
+    const rect = containerRef.current.getBoundingClientRect();
+    const width = rect.width || window.innerWidth;
+    const height = rect.height || ROBOT_CANVAS_HEIGHT;
+    const aspect = width / height;
+    const visibleWidth = ROBOT_VISIBLE_HEIGHT * aspect;
+    const halfWidth = visibleWidth / 2;
+    const top = ROBOT_CENTER_Y + ROBOT_VISIBLE_HEIGHT / 2;
+
+    const pointerX = clientX - rect.left;
+    const pointerY = clientY - rect.top;
+
+    const worldX = (pointerX / width - 0.5) * visibleWidth;
+    const worldY = top - (pointerY / height) * ROBOT_VISIBLE_HEIGHT;
+
+    return { worldX, worldY, halfWidth };
+  }, []);
+
+  // Hit-test whether client pointer is hovering over/touching the robot
+  const isOverRobot = useCallback((clientX: number, clientY: number) => {
+    const { worldX, worldY } = getWorldCoords(clientX, clientY);
+    const rx = posXRef.current;
+    const ry = posYRef.current;
+    const dx = Math.abs(worldX - rx);
+    const dy = worldY - ry;
+    // Comfortable hit box around robot body
+    return dx <= 0.65 && dy >= -0.25 && dy <= 1.85;
+  }, [getWorldCoords]);
+
+  // Start grabbing robot
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isOverRobot(e.clientX, e.clientY)) return;
+
+    e.preventDefault();
+    const { worldX, worldY } = getWorldCoords(e.clientX, e.clientY);
+    isDraggingRef.current = true;
+    setIsDragging(true);
+    hasDraggedRef.current = false;
+    dragStartScreenRef.current = { x: e.clientX, y: e.clientY };
+    dragOffsetRef.current = {
+      x: worldX - posXRef.current,
+      y: worldY - posYRef.current,
+    };
+    velYRef.current = 0;
+
+    if (containerRef.current) {
+      try {
+        containerRef.current.setPointerCapture(e.pointerId);
+      } catch {
+        // ignore
+      }
+    }
+
+    targetRotationYRef.current = 0;
+    playClip("Jump", 0.15);
+
+    const grabQuotes = [
+      "Whoaaa! Lift off! 🪂",
+      "Wheee! Where are we heading? 🚀",
+      "Hold on tight, don't drop me! 🤖",
+      "Hooray, flying high in zero-g! ✨",
+      "Look at me float! 😄",
+    ];
+    setSpeechText(grabQuotes[Math.floor(Math.random() * grabQuotes.length)]);
+    if (speechTimerRef.current) clearTimeout(speechTimerRef.current);
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+  };
+
+  // Move robot while grabbing or track hover state
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (isDraggingRef.current) {
+      const dist = Math.hypot(
+        e.clientX - dragStartScreenRef.current.x,
+        e.clientY - dragStartScreenRef.current.y
+      );
+      if (dist > 5) {
+        hasDraggedRef.current = true;
+      }
+
+      const { worldX, worldY, halfWidth } = getWorldCoords(e.clientX, e.clientY);
+      const isDesktop = (containerRef.current?.clientWidth || window.innerWidth) >= 640;
+      const rightMargin = isDesktop ? 3.0 : 0.8;
+      const leftMargin = isDesktop ? 0.9 : 0.7;
+      const limitRight = Math.max(0.35, halfWidth - rightMargin);
+      const limitLeft = -Math.max(0.35, halfWidth - leftMargin);
+
+      const targetX = worldX - dragOffsetRef.current.x;
+      const targetY = worldY - dragOffsetRef.current.y;
+
+      posXRef.current = Math.max(limitLeft, Math.min(limitRight, targetX));
+      // Clamp vertical lift: minimum 0.0 (ground), maximum 1.75 (top of canvas)
+      posYRef.current = Math.max(0.0, Math.min(1.75, targetY));
+      velYRef.current = 0;
+    } else {
+      const over = isOverRobot(e.clientX, e.clientY);
+      if (over !== isHovering) {
+        setIsHovering(over);
+      }
+    }
+  };
+
+  // Release grab: let gravity drop the robot with physics
+  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDraggingRef.current) return;
+    isDraggingRef.current = false;
+    setIsDragging(false);
+
+    if (containerRef.current) {
+      try {
+        if (containerRef.current.hasPointerCapture(e.pointerId)) {
+          containerRef.current.releasePointerCapture(e.pointerId);
+        }
+      } catch {
+        // ignore
+      }
+    }
+
+    // If barely moved and near floor, count as click interaction
+    if (!hasDraggedRef.current && posYRef.current <= 0.05) {
+      triggerReaction();
+      return;
+    }
+
+    // If released mid-air: initiate free fall with gravity!
+    if (posYRef.current > 0.05) {
+      velYRef.current = -0.5;
+      playClip("Jump", 0.1);
+    }
+  };
+
   useEffect(() => {
     if (!containerRef.current) return;
     const container = containerRef.current;
     let isDisposed = false;
 
-    const CANVAS_HEIGHT = 225;
     let width = container.clientWidth || window.innerWidth;
-    let height = CANVAS_HEIGHT;
+    let height = ROBOT_CANVAS_HEIGHT;
 
     const scene = new THREE.Scene();
     sceneRef.current = scene;
 
-    // Eye-level camera looking straight ahead with full vertical clearance for waving hands
-    const camera = new THREE.PerspectiveCamera(32, width / height, 0.1, 100);
-    camera.position.set(0, 0.90, 4.8);
-    camera.lookAt(0, 0.90, 0);
+    // Distortion-free Orthographic camera: parallel projection guarantees robot width & height remain 100% constant across entire screen width
+    const aspect = width / height;
+    const halfWidth = (ROBOT_VISIBLE_HEIGHT * aspect) / 2;
+    const halfHeight = ROBOT_VISIBLE_HEIGHT / 2;
+    const camera = new THREE.OrthographicCamera(
+      -halfWidth,
+      halfWidth,
+      ROBOT_CENTER_Y + halfHeight,
+      ROBOT_CENTER_Y - halfHeight,
+      0.1,
+      100
+    );
+    camera.position.set(0, ROBOT_CENTER_Y, 10);
+    camera.lookAt(0, ROBOT_CENTER_Y, 0);
     cameraRef.current = camera;
 
     let renderer: THREE.WebGLRenderer;
     try {
-      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        alpha: true,
+        powerPreference: "high-performance",
+      });
       renderer.setSize(width, height);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
       renderer.outputColorSpace = THREE.SRGBColorSpace;
       container.appendChild(renderer.domElement);
       rendererRef.current = renderer;
@@ -156,7 +315,7 @@ export default function MagazineWalkingRobot() {
     scene.add(rimAmber);
 
     // Soft drop shadow plane beneath robot
-    const shadowGeo = new THREE.PlaneGeometry(1.6, 0.8);
+    const shadowGeo = new THREE.PlaneGeometry(1.4, 0.7);
     const canvas = document.createElement("canvas");
     canvas.width = 128;
     canvas.height = 128;
@@ -238,18 +397,17 @@ export default function MagazineWalkingRobot() {
     };
 
     window.addEventListener("scroll", onScrollActivity, { passive: true });
-    window.addEventListener("wheel", onScrollActivity, { passive: true });
-    window.addEventListener("touchmove", onScrollActivity, { passive: true });
 
     // Load 3D Robot
     const loader = new GLTFLoader();
-    loader.load(
+    loader.load(  
       "/models/RobotExpressive.glb",
       (gltf) => {
         if (isDisposed) return;
         const model = gltf.scene;
-        // Uniform scale: fits full body and raised waving arms comfortably inside canvas
-        model.scale.set(0.30, 0.30, 0.30);
+        // Natural uniform scale: perfectly proportional without squashing or head clipping
+        const ROBOT_SCALE = 0.33;
+        model.scale.set(ROBOT_SCALE, ROBOT_SCALE, ROBOT_SCALE);
         model.position.set(posXRef.current, 0, 0);
         model.rotation.y = 0; // Face front initially
         scene.add(model);
@@ -290,9 +448,16 @@ export default function MagazineWalkingRobot() {
     const handleResize = () => {
       if (!containerRef.current || !rendererRef.current || !cameraRef.current) return;
       width = containerRef.current.clientWidth || window.innerWidth;
-      height = CANVAS_HEIGHT;
+      height = ROBOT_CANVAS_HEIGHT;
       rendererRef.current.setSize(width, height);
-      cameraRef.current.aspect = width / height;
+
+      const aspect = width / height;
+      const halfW = (ROBOT_VISIBLE_HEIGHT * aspect) / 2;
+      const halfH = ROBOT_VISIBLE_HEIGHT / 2;
+      cameraRef.current.left = -halfW;
+      cameraRef.current.right = halfW;
+      cameraRef.current.top = ROBOT_CENTER_Y + halfH;
+      cameraRef.current.bottom = ROBOT_CENTER_Y - halfH;
       cameraRef.current.updateProjectionMatrix();
     };
     window.addEventListener("resize", handleResize);
@@ -303,7 +468,7 @@ export default function MagazineWalkingRobot() {
 
     const animate = () => {
       animId = requestAnimationFrame(animate);
-      const delta = clock.getDelta();
+      const delta = Math.min(clock.getDelta(), 0.05);
 
       if (mixerRef.current) {
         mixerRef.current.update(delta);
@@ -311,50 +476,101 @@ export default function MagazineWalkingRobot() {
 
       const model = robotModelRef.current;
       if (model && cameraRef.current) {
-        // Calculate dynamic horizontal bounds from camera frustum at z=0
-        const vFov = (cameraRef.current.fov * Math.PI) / 180;
-        const visibleHeight = 2 * Math.tan(vFov / 2) * cameraRef.current.position.z;
-        const visibleWidth = visibleHeight * cameraRef.current.aspect;
-        const limitX = Math.max(1.6, visibleWidth / 2 - 1.2);
+        // In Orthographic projection, cameraRef.current.right is exact halfWidth in world units
+        const halfWidth = cameraRef.current.right;
 
-        // ONLY advance position when user is actively scrolling or speed-running
-        if (isScrolling && !isInteractingRef.current) {
+        // Keep strictly inside container with safe margins on all viewports
+        const isDesktop = width >= 640;
+        const rightMargin = isDesktop ? 3.0 : 0.8;
+        const leftMargin = isDesktop ? 0.9 : 0.7;
+        const limitRight = Math.max(0.35, halfWidth - rightMargin);
+        const limitLeft = -Math.max(0.35, halfWidth - leftMargin);
+
+        // Clamp position so robot never gets stuck outside container
+        posXRef.current = Math.max(limitLeft, Math.min(limitRight, posXRef.current));
+
+        // ONLY advance horizontal position when user is actively scrolling or speed-running (and NOT dragging or airborne)
+        const isAirborne = posYRef.current > 0.001;
+        if (isScrolling && !isInteractingRef.current && !isDraggingRef.current && !isAirborne) {
           const moveSpeed = isSpeedRunRef.current ? 2.4 : 1.5;
           posXRef.current += directionRef.current * moveSpeed * delta;
 
-          // Check right boundary
-          if (posXRef.current >= limitX) {
-            posXRef.current = limitX;
+          // Turn around cleanly inside container before colliding with edge or dock
+          if (posXRef.current >= limitRight) {
+            posXRef.current = limitRight;
             directionRef.current = -1;
             targetRotationYRef.current = -Math.PI / 2;
-          }
-          // Check left boundary
-          else if (posXRef.current <= -limitX) {
-            posXRef.current = -limitX;
+          } else if (posXRef.current <= limitLeft) {
+            posXRef.current = limitLeft;
             directionRef.current = 1;
             targetRotationYRef.current = Math.PI / 2;
           }
         }
 
-        // Apply position
-        model.position.x = posXRef.current;
-        shadowMesh.position.x = posXRef.current;
+        // Gravity & impact physics when not being held
+        if (!isDraggingRef.current) {
+          if (posYRef.current > 0 || velYRef.current !== 0) {
+            const GRAVITY = 16.0;
+            velYRef.current -= GRAVITY * delta;
+            posYRef.current += velYRef.current * delta;
 
-        // Smoothly interpolate rotation
+            if (posYRef.current <= 0) {
+              posYRef.current = 0;
+
+              // Elastic bounce on impact
+              if (velYRef.current < -1.8) {
+                velYRef.current = -velYRef.current * 0.35;
+                const landingQuotes = [
+                  "Thud! Safe landing! 🎯",
+                  "Ouch! Bouncy robot legs! ⚡",
+                  "Perfect touchdown! Ready to roll! 🚀",
+                ];
+                setSpeechText(landingQuotes[Math.floor(Math.random() * landingQuotes.length)]);
+                if (speechTimerRef.current) clearTimeout(speechTimerRef.current);
+                speechTimerRef.current = setTimeout(() => setSpeechText(null), 3000);
+              } else {
+                velYRef.current = 0;
+                if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+                resumeTimerRef.current = setTimeout(() => {
+                  if (!isScrollingRef.current) {
+                    targetRotationYRef.current = 0;
+                    playClip("Wave", 0.3);
+                  }
+                }, 1200);
+              }
+            }
+          }
+        }
+
+        // Apply 3D model position
+        model.position.x = posXRef.current;
+        model.position.y = posYRef.current;
+
+        // Dynamic floor shadow that scales and softens as robot is lifted
+        shadowMesh.position.x = posXRef.current;
+        shadowMesh.position.y = 0.01;
+        const heightRatio = Math.min(1, posYRef.current / 1.5);
+        const shadowScale = THREE.MathUtils.lerp(1.0, 0.42, heightRatio);
+        shadowMesh.scale.set(shadowScale, shadowScale, shadowScale);
+        (shadowMat as THREE.MeshBasicMaterial).opacity = THREE.MathUtils.lerp(0.38, 0.06, heightRatio);
+
+        // Smoothly interpolate rotation (turn to front if grabbed or airborne)
+        const desiredRotation = isDraggingRef.current || isAirborne ? 0 : targetRotationYRef.current;
         model.rotation.y = THREE.MathUtils.lerp(
           model.rotation.y,
-          targetRotationYRef.current,
+          desiredRotation,
           delta * 9
         );
 
-        // Update position of HTML speech bubble
+        // Update position of HTML speech bubble hovering above the robot head
         if (speechBubbleRef.current && cameraRef.current) {
-          const headPos = new THREE.Vector3(posXRef.current, 1.48, 0);
+          const headPos = new THREE.Vector3(posXRef.current, posYRef.current + 1.68, 0);
           headPos.project(cameraRef.current);
           const rawScreenX = ((headPos.x + 1) * width) / 2;
-          const screenX = Math.max(140, Math.min(width - 140, rawScreenX));
+          const bubblePadding = Math.min(140, Math.max(80, width * 0.35));
+          const screenX = Math.max(bubblePadding, Math.min(width - bubblePadding, rawScreenX));
           const rawScreenY = ((-headPos.y + 1) * height) / 2;
-          const screenY = Math.max(10, Math.min(height - 20, rawScreenY));
+          const screenY = Math.max(16, Math.min(height - 24, rawScreenY));
           speechBubbleRef.current.style.transform = `translate(${screenX}px, ${screenY}px) translate(-50%, -100%)`;
         }
       }
@@ -369,8 +585,6 @@ export default function MagazineWalkingRobot() {
       cancelAnimationFrame(animId);
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("scroll", onScrollActivity);
-      window.removeEventListener("wheel", onScrollActivity);
-      window.removeEventListener("touchmove", onScrollActivity);
       if (scrollStopTimer) clearTimeout(scrollStopTimer);
       if (gestureCycleTimer) clearTimeout(gestureCycleTimer);
       if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
@@ -395,35 +609,44 @@ export default function MagazineWalkingRobot() {
   return (
     <aside
       aria-label="Interactive 3D Agency Robot Mascot"
-      className="fixed bottom-0 left-0 right-0 h-64 sm:h-72 z-40 pointer-events-none select-none flex flex-col justify-end overflow-visible"
+      className="fixed bottom-0 left-0 right-0 z-40 pointer-events-none select-none flex flex-col justify-end overflow-visible"
     >
-      {/* Floating Dynamic Speech Bubble */}
+      {/* 3D WebGL Canvas Layer with Grab & Physics Interaction */}
       <div
-        ref={speechBubbleRef}
-        className={`absolute top-0 left-0 pointer-events-auto transition-opacity duration-300 z-50 ${
-          speechText ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
+        ref={containerRef}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
+        data-cursor-text={isDragging ? "HOLDING" : isHovering ? "GRAB ME" : "ROBOT"}
+        className={`relative w-full h-[260px] pointer-events-auto overflow-visible touch-none select-none ${
+          isDragging
+            ? "cursor-grabbing"
+            : isHovering
+            ? "cursor-grab"
+            : "cursor-default"
         }`}
+        title="Click or grab and throw the robot!"
       >
-        <div className="bg-zinc-950 text-white px-4 py-2 rounded-lg shadow-[0_12px_30px_rgba(0,0,0,0.3)] border border-zinc-800 text-xs font-sans max-w-xs sm:max-w-sm flex items-center gap-2.5">
-          <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-          <span className="font-semibold text-[11px] sm:text-xs leading-snug">
-            {speechText}
-          </span>
-          <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-x-6 border-x-transparent border-t-6 border-t-zinc-950" />
+        {/* Floating Dynamic Speech Bubble (anchored relative to canvas) */}
+        <div
+          ref={speechBubbleRef}
+          className={`absolute top-0 left-0 pointer-events-auto transition-opacity duration-300 z-50 ${
+            speechText ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
+          }`}
+        >
+          <div className="bg-zinc-950 text-white px-4 py-2 rounded-lg shadow-[0_12px_30px_rgba(0,0,0,0.3)] border border-zinc-800 text-xs font-sans max-w-xs sm:max-w-sm flex items-center gap-2.5 whitespace-nowrap sm:whitespace-normal">
+            <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+            <span className="font-semibold text-[11px] sm:text-xs leading-snug">
+              {speechText}
+            </span>
+            <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-x-6 border-x-transparent border-t-6 border-t-zinc-950" />
+          </div>
         </div>
       </div>
 
-      {/* 3D WebGL Canvas Layer */}
-      <div
-        ref={containerRef}
-        onClick={() => triggerReaction()}
-        data-cursor-text="SAY HI"
-        className="w-full h-[225px] pointer-events-auto cursor-pointer"
-        title="Click the robot to interact!"
-      />
-
-      {/* Floating Action Buttons Dock (Above the running text) */}
-      <div className="absolute bottom-11 right-6 pointer-events-auto hidden sm:flex items-center gap-1.5 p-1 bg-white/95 backdrop-blur-md border border-zinc-950/15 rounded-full shadow-[0_4px_16px_rgba(0,0,0,0.1)]">
+      {/* Floating Action Buttons Dock (Positioned in bottom-right corner) */}
+      <div className="absolute bottom-11 right-4 sm:right-6 pointer-events-auto hidden sm:flex items-center gap-1.5 p-1 bg-white/95 backdrop-blur-md border border-zinc-950/15 rounded-full shadow-[0_4px_16px_rgba(0,0,0,0.1)] z-50">
         <button
           onClick={() => triggerReaction("Wave")}
           data-cursor-text="WAVE"
@@ -467,7 +690,7 @@ export default function MagazineWalkingRobot() {
       </div>
 
       {/* Mobile Interaction Hint Badge */}
-      <div className="absolute bottom-11 left-4 pointer-events-auto sm:hidden">
+      <div className="absolute bottom-11 left-4 pointer-events-auto sm:hidden z-50">
         <button
           onClick={() => triggerReaction()}
           className="px-3 py-1 bg-white/90 backdrop-blur-md border border-zinc-950/15 rounded-full text-[10px] font-sans font-bold text-zinc-800 shadow-sm flex items-center gap-1.5"
@@ -477,7 +700,7 @@ export default function MagazineWalkingRobot() {
         </button>
       </div>
 
-      {/* Continuous Bottom Running Marquee Text Track ("tulisan berjalan") */}
+      {/* Continuous Bottom Running Marquee Text Track */}
       <div className="w-full bg-zinc-950 text-white border-t-2 border-yellow-400 py-2 overflow-hidden shadow-2xl pointer-events-auto select-none z-30">
         <div className="flex w-max animate-marquee-agency text-[11px] sm:text-xs font-sans font-black tracking-wider uppercase">
           {[...RUNNING_TICKER_ITEMS, ...RUNNING_TICKER_ITEMS].map((item, idx) => (

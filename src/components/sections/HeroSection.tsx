@@ -69,7 +69,7 @@ export default function HeroSection() {
     { label: "EXPERIENCE", val: "4+ YRS", detail: "Senior Engineering" },
     { label: "DELIVERIES", val: "10+", detail: "Enterprise & Web Apps" },
     { label: "DOMAINS", val: "EV & FIN", detail: "Loyalty, EdTech, Food" },
-    { label: "ACADEMIC", val: "3.56", detail: "BINUS Comp. Sci" },
+    { label: "ACADEMIC", val: "S.KOM", detail: "BINUS Comp. Sci" },
   ];
 
   const marqueeItems = [

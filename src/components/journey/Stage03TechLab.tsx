@@ -427,7 +427,7 @@ export default function Stage03TechLab({
                 </span>
               </div>
 
-              <h2 className="font-display font-black text-4xl sm:text-6xl lg:text-7xl xl:text-8xl text-white tracking-[-0.03em] uppercase leading-[0.95] mb-3">
+              <h2 className="font-display font-black text-4xl sm:text-6xl lg:text-7xl xl:text-8xl text-white tracking-tight uppercase leading-[0.98] mb-3">
                 CAPABILITY{" "}
                 <span className="relative inline-block px-3.5 py-0.5 mx-1.5 text-black font-black bg-[#00f0ff] rounded-sm transform rotate-1 shadow-[0_0_35px_rgba(0,240,255,0.45)]">
                   ENGINES

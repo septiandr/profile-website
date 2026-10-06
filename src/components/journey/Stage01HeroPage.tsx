@@ -189,7 +189,7 @@ export default function Stage01HeroPage({ onEngineHover }: Stage01HeroProps) {
             </div>
 
             {/* Massive Magazine Headline with Animated Flipping Italic Serif Word */}
-            <h1 className="font-display text-4xl sm:text-6xl md:text-7xl lg:text-[4.6rem] xl:text-[5.4rem] font-black text-zinc-950 tracking-[-0.035em] leading-[0.92] mb-5 uppercase">
+            <h1 className="font-display text-4xl sm:text-6xl md:text-7xl lg:text-[4.6rem] xl:text-[5.4rem] font-black text-zinc-950 tracking-tight leading-[0.98] mb-5 uppercase">
               <div className="overflow-hidden">
                 <span className="mag-split-line block">
                   ARCHITECTING
@@ -224,7 +224,7 @@ export default function Stage01HeroPage({ onEngineHover }: Stage01HeroProps) {
                 Led by <strong className="text-zinc-950 font-bold">Septian Dwi Risanggalih</strong>, specializing in fintech transactional engines (CIMB Niaga Octo Clicks), live IoT charging ecosystems (Casion EV), and high-concurrency microservices.
               </p>
               <div className="font-mono text-xs text-zinc-500 tracking-wider flex flex-wrap items-center gap-2 pt-1">
-                <span className="text-zinc-900 font-semibold">BINUS UNIVERSITY · GPA 3.56</span>
+                <span className="text-zinc-900 font-semibold">BINUS UNIVERSITY COMPUTER SCIENCE</span>
                 <span>·</span>
                 <span>4+ YEARS PRODUCTION LEADERSHIP</span>
                 <span>·</span>
@@ -278,7 +278,7 @@ export default function Stage01HeroPage({ onEngineHover }: Stage01HeroProps) {
                 onTouchMove={handlePhotoTouchMove}
                 onTouchStart={() => setIsHoveringPhoto(true)}
                 onTouchEnd={() => setIsHoveringPhoto(false)}
-                className="relative w-64 sm:w-72 md:w-80 lg:w-88 xl:w-96 h-80 sm:h-96 md:h-[420px] lg:h-[460px] xl:h-[510px] overflow-hidden bg-zinc-950 cursor-crosshair group/photo"
+                className="relative w-72 sm:w-84 md:w-96 lg:w-[440px] xl:w-[500px] h-96 sm:h-[480px] md:h-[540px] lg:h-[600px] xl:h-[680px] overflow-hidden bg-zinc-950 cursor-crosshair group/photo"
               >
                 {/* Base Image: Film Noir Monochromatic Tone */}
                 <Image
@@ -286,7 +286,7 @@ export default function Stage01HeroPage({ onEngineHover }: Stage01HeroProps) {
                   alt="Septian Dwi Risanggalih - Studio Director (Monograph Plate)"
                   fill
                   priority
-                  sizes="(max-width: 768px) 320px, 420px"
+                  sizes="(max-width: 768px) 500px, 700px"
                   className="object-cover object-top contrast-125 brightness-95 filter grayscale select-none pointer-events-none transition-transform duration-700 ease-out group-hover/photo:scale-105"
                 />
 
@@ -296,10 +296,10 @@ export default function Stage01HeroPage({ onEngineHover }: Stage01HeroProps) {
                   style={{
                     opacity: isHoveringPhoto ? 1 : 0.08,
                     maskImage: isHoveringPhoto
-                      ? `radial-gradient(circle 140px at ${cursorPos.x}px ${cursorPos.y}px, black 35%, transparent 75%)`
+                      ? `radial-gradient(circle 220px at ${cursorPos.x}px ${cursorPos.y}px, black 35%, transparent 75%)`
                       : "none",
                     WebkitMaskImage: isHoveringPhoto
-                      ? `radial-gradient(circle 140px at ${cursorPos.x}px ${cursorPos.y}px, black 35%, transparent 75%)`
+                      ? `radial-gradient(circle 220px at ${cursorPos.x}px ${cursorPos.y}px, black 35%, transparent 75%)`
                       : "none",
                   }}
                 >

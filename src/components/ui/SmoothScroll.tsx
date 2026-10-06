@@ -12,16 +12,20 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     gsap.registerPlugin(ScrollTrigger);
 
     const lenis = new Lenis({
-      duration: 1.5,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      duration: 1.6,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -8 * t)),
       orientation: "vertical",
       gestureOrientation: "vertical",
       smoothWheel: true,
-      wheelMultiplier: 0.95,
-      touchMultiplier: 1.5,
+      wheelMultiplier: 0.58,
+      touchMultiplier: 0.85,
+      syncTouch: false,
     });
 
     lenisRef.current = lenis;
+    if (typeof window !== "undefined") {
+      (window as any).__lenis = lenis;
+    }
 
     // Sync Lenis scroll with GSAP ScrollTrigger
     lenis.on("scroll", ScrollTrigger.update);
@@ -31,9 +35,12 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     };
 
     gsap.ticker.add(updateTicker);
-    gsap.ticker.lagSmoothing(0);
+    gsap.ticker.lagSmoothing(500, 33);
 
     return () => {
+      if (typeof window !== "undefined") {
+        delete (window as any).__lenis;
+      }
       gsap.ticker.remove(updateTicker);
       lenis.destroy();
     };

@@ -8,11 +8,11 @@ import { ArrowDown, ArrowUpRight } from "lucide-react";
 
 // Curated Editorial Words for Animated Kinetic Typography with Rich Agency Colors
 const MAGAZINE_WORDS = [
-  { text: "DIGITAL CRAFT", style: "bg-blue-600 text-white px-3 sm:px-4 py-0.5 sm:py-1 rounded shadow-md not-italic font-display font-black" },
-  { text: "FINTECH ENGINES", style: "bg-emerald-600 text-white px-3 sm:px-4 py-0.5 sm:py-1 rounded shadow-md not-italic font-display font-black" },
-  { text: "INTERACTIVE 3D", style: "bg-purple-600 text-white px-3 sm:px-4 py-0.5 sm:py-1 rounded shadow-md not-italic font-display font-black" },
-  { text: "ENTERPRISE SAAS", style: "bg-orange-600 text-white px-3 sm:px-4 py-0.5 sm:py-1 rounded shadow-md not-italic font-display font-black" },
-  { text: "MISSION-CRITICAL APPS", style: "bg-rose-600 text-white px-3 sm:px-4 py-0.5 sm:py-1 rounded shadow-md not-italic font-display font-black" },
+  { text: "DIGITAL CRAFT", style: "bg-blue-600 text-white px-3 sm:px-4 py-0.5 sm:py-1 rounded shadow-md not-italic font-display font-black text-2xl sm:text-4xl md:text-5xl lg:text-6xl" },
+  { text: "FINTECH ENGINES", style: "bg-emerald-600 text-white px-3 sm:px-4 py-0.5 sm:py-1 rounded shadow-md not-italic font-display font-black text-2xl sm:text-4xl md:text-5xl lg:text-6xl" },
+  { text: "INTERACTIVE 3D", style: "bg-purple-600 text-white px-3 sm:px-4 py-0.5 sm:py-1 rounded shadow-md not-italic font-display font-black text-2xl sm:text-4xl md:text-5xl lg:text-6xl" },
+  { text: "ENTERPRISE SAAS", style: "bg-orange-600 text-white px-3 sm:px-4 py-0.5 sm:py-1 rounded shadow-md not-italic font-display font-black text-2xl sm:text-4xl md:text-5xl lg:text-6xl" },
+  { text: "MISSION-CRITICAL APPS", style: "bg-rose-600 text-white px-3 sm:px-4 py-0.5 sm:py-1 rounded shadow-md not-italic font-display font-black text-xl sm:text-3xl md:text-4xl lg:text-5xl" },
 ];
 
 export default function MagazineCoverHero() {
@@ -31,7 +31,7 @@ export default function MagazineCoverHero() {
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveWordIndex((prev) => (prev + 1) % MAGAZINE_WORDS.length);
-    }, 2400);
+    }, 4200);
     return () => clearInterval(interval);
   }, []);
 
@@ -114,7 +114,7 @@ export default function MagazineCoverHero() {
           trigger: containerRef.current,
           start: "top top",
           end: "bottom top",
-          scrub: 1,
+          scrub: 1.0,
         },
       });
 
@@ -126,7 +126,7 @@ export default function MagazineCoverHero() {
           trigger: containerRef.current,
           start: "top top",
           end: "bottom top",
-          scrub: 1.2,
+          scrub: 1.0,
         },
       });
 
@@ -137,7 +137,7 @@ export default function MagazineCoverHero() {
           trigger: containerRef.current,
           start: "top top",
           end: "bottom top",
-          scrub: 1,
+          scrub: 1.0,
         },
       });
     }, containerRef);
@@ -148,7 +148,11 @@ export default function MagazineCoverHero() {
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
+      if (typeof window !== "undefined" && (window as any).__lenis) {
+        (window as any).__lenis.scrollTo(el, { duration: 1.0 });
+      } else {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
     }
   };
 
@@ -160,10 +164,10 @@ export default function MagazineCoverHero() {
       ref={containerRef}
       className="relative min-h-screen w-full bg-[#faf9f6] text-zinc-950 font-sans border-b border-zinc-950/15 select-none"
     >
-      <div className="max-w-7xl mx-auto px-6 sm:px-10 py-10 sm:py-14 flex flex-col justify-between min-h-[calc(100vh-60px)]">
+      <div className="max-w-[1720px] 2xl:max-w-[1840px] mx-auto px-6 sm:px-10 py-8 sm:py-12 flex flex-col justify-between min-h-[calc(100vh-60px)]">
         
         {/* Top Folio Bar */}
-        <div className="mag-folio-line border-b border-zinc-950/15 pb-3 flex items-center justify-between font-sans text-xs tracking-[0.16em] uppercase text-zinc-600 mb-8 sm:mb-12">
+        <div className="mag-folio-line border-b border-zinc-950/15 pb-3 flex items-center justify-between font-sans text-xs tracking-[0.16em] uppercase text-zinc-600 mb-6 sm:mb-10">
           <span className="font-semibold">MONOGRAPH NO. 04 · ESSAY 01</span>
           <span className="hidden sm:inline font-bold text-zinc-950">SEPTIAN RISANGGALIH · ARCHIVE</span>
           <span className="px-2 py-0.5 bg-blue-100 text-blue-900 rounded font-bold text-[10px]">P. 01 / COVER STORY</span>
@@ -172,10 +176,10 @@ export default function MagazineCoverHero() {
         {/* Two-Page Feature Spread */}
         <div
           ref={contentRef}
-          className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-10 lg:gap-16 my-auto"
+          className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 xl:gap-12 items-center my-auto w-full"
         >
           {/* Left Column: Lead Headline & Monograph Statement */}
-          <div className="flex-1 w-full max-w-2xl xl:max-w-3xl flex flex-col items-center lg:items-start text-center lg:text-left">
+          <div className="lg:col-span-7 xl:col-span-7 2xl:col-span-7 w-full flex flex-col items-center lg:items-start text-center lg:text-left min-w-0 z-10">
             
             <div className="font-sans text-xs tracking-[0.14em] uppercase font-bold mb-4 flex items-center gap-2">
               <span className="px-3 py-1 bg-amber-100 text-amber-950 border border-amber-300 rounded-full flex items-center gap-1.5 shadow-sm">
@@ -185,7 +189,7 @@ export default function MagazineCoverHero() {
             </div>
 
             {/* Massive Editorial Headline with Animated Flipping Colored Ribbon Badge */}
-            <h1 className="mag-hero-headline font-display text-4xl sm:text-6xl md:text-7xl lg:text-[4.6rem] xl:text-[5.4rem] font-black text-zinc-950 tracking-[-0.035em] leading-[0.92] mb-6 uppercase">
+            <h1 className="mag-hero-headline font-display text-3xl sm:text-4xl md:text-5xl lg:text-[2.75rem] xl:text-[3.65rem] 2xl:text-[4.4rem] font-black text-zinc-950 tracking-tight leading-[1.02] mb-5 sm:mb-6 uppercase break-words max-w-full">
               <div className="overflow-hidden">
                 <span className="mag-split-line block">
                   ARCHITECTING
@@ -210,58 +214,68 @@ export default function MagazineCoverHero() {
             </h1>
 
             {/* Magazine Pull Quote with Electric Blue Accent Bar */}
-            <p className="mag-deck font-serif text-lg sm:text-xl md:text-2xl text-zinc-800 italic font-normal leading-relaxed max-w-xl my-4 sm:my-6 border-l-4 border-blue-600 pl-4 sm:pl-5 text-left">
+            <p className="mag-deck font-serif text-base sm:text-lg md:text-xl text-zinc-800 italic font-normal leading-relaxed max-w-xl my-3 sm:my-5 border-l-4 border-blue-600 pl-4 sm:pl-5 text-left">
               “A disciplined synthesis of high-throughput software architecture, tactile interaction craft, and mission-critical engineering for enterprise flagships.”
             </p>
 
             {/* Monograph Narrative & Credentials */}
-            <div className="mag-deck font-sans text-sm sm:text-base text-zinc-600 font-normal leading-relaxed max-w-xl mb-8 space-y-3 text-left">
+            <div className="mag-deck font-sans text-xs sm:text-sm md:text-base text-zinc-600 font-normal leading-relaxed max-w-xl mb-6 sm:mb-8 space-y-3 text-left">
               <p>
                 Led by <strong className="text-zinc-950 font-bold">Septian Dwi Risanggalih</strong>, specializing in fintech transactional engines (CIMB Niaga Octo Clicks), live IoT charging ecosystems (Casion EV), and high-concurrency microservices.
               </p>
               <div className="font-sans text-xs tracking-wide flex flex-wrap items-center gap-2 pt-1">
-                <span className="px-3 py-1 bg-amber-100 text-amber-950 border border-amber-300 rounded-full font-bold shadow-xs">
-                  BINUS UNIVERSITY · GPA 3.56
+                <span className="px-3 py-1 bg-purple-100 text-purple-950 border border-purple-300 rounded-full font-bold shadow-xs flex items-center gap-1.5">
+                  <span className="h-2 w-2 rounded-full bg-purple-600 animate-pulse" />
+                  <span>SERVICES: SYSTEM · WEBSITE · APP · BOT</span>
                 </span>
                 <span className="px-3 py-1 bg-blue-100 text-blue-950 border border-blue-200 rounded-full font-bold shadow-xs">
-                  4+ YEARS LEADERSHIP
+                  4+ YEARS EXPERIENCE
                 </span>
-                <span className="px-3 py-1 bg-emerald-100 text-emerald-950 border border-emerald-200 rounded-full font-bold shadow-xs">
-                  10+ SHIPPED SYSTEMS
+                <span className="px-3 py-1 bg-amber-100 text-amber-950 border border-amber-300 rounded-full font-bold shadow-xs">
+                  BINUS UNIVERSITY CS
                 </span>
               </div>
             </div>
 
             {/* Editorial Action Buttons */}
-            <div className="mag-deck flex flex-wrap items-center justify-center lg:justify-start gap-4 w-full">
+            <div className="mag-deck flex flex-wrap items-center justify-center lg:justify-start gap-3 sm:gap-4 w-full">
+              <button
+                onClick={() => scrollTo("mag-services")}
+                data-cursor-text="SERVICES"
+                className="inline-flex items-center gap-2.5 sm:gap-3 px-5 sm:px-7 py-3.5 sm:py-4 bg-blue-600 hover:bg-blue-700 text-white font-sans text-xs sm:text-sm font-bold uppercase tracking-[0.14em] shadow-[0_10px_25px_rgba(37,99,235,0.3)] transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer rounded"
+              >
+                <span>Services: System, Web, App & Bot</span>
+                <ArrowDown className="h-4 w-4" />
+              </button>
+
               <button
                 onClick={() => scrollTo("mag-works")}
-                data-cursor-text="READ"
-                className="inline-flex items-center gap-3 px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-sans text-xs sm:text-sm font-bold uppercase tracking-[0.14em] shadow-[0_10px_25px_rgba(37,99,235,0.3)] transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer rounded"
+                data-cursor-text="PORTFOLIO"
+                className="inline-flex items-center gap-2.5 sm:gap-3 px-5 sm:px-7 py-3.5 sm:py-4 border-2 border-zinc-950 bg-white hover:bg-zinc-950 hover:text-white text-zinc-950 font-sans text-xs sm:text-sm font-bold uppercase tracking-[0.14em] transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer rounded"
               >
-                <span>Read Shipped Case Studies</span>
+                <span>Works & Portfolio</span>
                 <ArrowDown className="h-4 w-4" />
               </button>
 
               <button
                 onClick={() => scrollTo("mag-colophon")}
-                data-cursor-text="CONTACT"
-                className="inline-flex items-center gap-3 px-8 py-4 border-2 border-zinc-950 bg-white hover:bg-zinc-950 hover:text-white text-zinc-950 font-sans text-xs sm:text-sm font-bold uppercase tracking-[0.14em] transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer rounded"
+                data-cursor-text="ORDER"
+                className="inline-flex items-center gap-2 px-5 sm:px-6 py-3.5 sm:py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-sans text-xs sm:text-sm font-bold uppercase tracking-[0.14em] transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer rounded shadow-xs"
               >
-                <span>Commission The Studio</span>
+                <span>Project Consultation</span>
                 <ArrowUpRight className="h-4 w-4" />
               </button>
             </div>
           </div>
 
-          {/* Right Column: Large Photographic Cover Plate */}
-          <div className="mag-plate-frame relative shrink-0 flex flex-col items-center lg:items-end">
-            <div className="relative p-3 sm:p-4 bg-white border border-zinc-950/20 shadow-[0_25px_60px_rgba(0,0,0,0.14)]">
+          {/* Right Column: Studio Director Photographic Monograph Plate */}
+          <div className="mag-plate-frame lg:col-span-5 xl:col-span-5 2xl:col-span-5 w-full flex flex-col items-center lg:items-end min-w-0 z-0">
+            <div className="relative w-full max-w-[460px] sm:max-w-[520px] md:max-w-[560px] lg:max-w-full p-3.5 sm:p-5 lg:p-6 bg-white border-2 border-zinc-950/25 shadow-[0_30px_70px_rgba(0,0,0,0.16)]">
               
               {/* Header plate label with colorful issue pill */}
               <div className="flex items-center justify-between pb-2.5 font-sans text-xs tracking-wider uppercase text-zinc-600 border-b border-zinc-200 mb-3 font-bold">
                 <span className="flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-blue-600" />
+                  <span className="h-2 w-2 rounded-full bg-blue-600 shadow-[0_0_8px_rgba(37,99,235,0.6)]" />
                   <span>PLATE NO. 01.0</span>
                 </span>
                 <span className="px-2 py-0.5 bg-yellow-400 text-zinc-950 rounded text-[10px] font-black tracking-wider">
@@ -269,7 +283,7 @@ export default function MagazineCoverHero() {
                 </span>
               </div>
 
-              {/* Large Image Frame with Interactive Cursor Spotlight */}
+              {/* Massive Image Frame with Interactive Cursor Spotlight */}
               <div
                 ref={photoRef}
                 data-cursor-text="INSPECT"
@@ -279,7 +293,7 @@ export default function MagazineCoverHero() {
                 onTouchMove={handlePhotoTouchMove}
                 onTouchStart={() => setIsHoveringPhoto(true)}
                 onTouchEnd={() => setIsHoveringPhoto(false)}
-                className="relative w-64 sm:w-72 md:w-80 lg:w-88 xl:w-96 h-80 sm:h-96 md:h-[440px] lg:h-[480px] xl:h-[540px] overflow-hidden bg-zinc-950 cursor-crosshair group/photo rounded-xs"
+                className="relative w-full aspect-[4/5] min-h-[380px] sm:min-h-[440px] md:min-h-[480px] lg:min-h-[500px] xl:min-h-[580px] 2xl:min-h-[640px] max-h-[720px] overflow-hidden bg-zinc-950 cursor-crosshair group/photo rounded-xs"
               >
                 {/* Base Image: Film Noir Monochromatic Tone */}
                 <Image
@@ -287,7 +301,7 @@ export default function MagazineCoverHero() {
                   alt="Septian Dwi Risanggalih - Studio Director (Monograph Plate)"
                   fill
                   priority
-                  sizes="(max-width: 768px) 320px, 440px"
+                  sizes="(max-width: 768px) 720px, (max-width: 1200px) 1000px, 1400px"
                   className="object-cover object-top contrast-125 brightness-95 filter grayscale select-none pointer-events-none transition-transform duration-700 ease-out group-hover/photo:scale-105"
                 />
 
@@ -297,10 +311,10 @@ export default function MagazineCoverHero() {
                   style={{
                     opacity: isHoveringPhoto ? 1 : 0.08,
                     maskImage: isHoveringPhoto
-                      ? `radial-gradient(circle 140px at ${cursorPos.x}px ${cursorPos.y}px, black 35%, transparent 75%)`
+                      ? `radial-gradient(circle 480px at ${cursorPos.x}px ${cursorPos.y}px, black 35%, transparent 75%)`
                       : "none",
                     WebkitMaskImage: isHoveringPhoto
-                      ? `radial-gradient(circle 140px at ${cursorPos.x}px ${cursorPos.y}px, black 35%, transparent 75%)`
+                      ? `radial-gradient(circle 480px at ${cursorPos.x}px ${cursorPos.y}px, black 35%, transparent 75%)`
                       : "none",
                   }}
                 >
@@ -308,7 +322,7 @@ export default function MagazineCoverHero() {
                     src="/profile.jpg"
                     alt="Septian Dwi Risanggalih - Studio Director (Color Spotlight)"
                     fill
-                    sizes="(max-width: 768px) 320px, 440px"
+                    sizes="(max-width: 768px) 720px, (max-width: 1200px) 1000px, 1400px"
                     className="object-cover object-top contrast-110 saturate-125 select-none pointer-events-none"
                   />
                 </div>

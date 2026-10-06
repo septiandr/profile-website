@@ -94,7 +94,7 @@
       "period": "2024 – Present",
       "description": "Software development company delivering digital products across EV services, loyalty platforms, and enterprise applications.",
       "keyResponsibilities": [
-        "Lead frontend development for production web and mobile applications using React.js, React Native, JavaScript, and TypeScript.",
+        "frontend development for production web and mobile applications using React.js, React Native, JavaScript, and TypeScript.",
         "Own frontend feature development from requirements analysis and UI implementation through API integration, debugging, optimization, and production delivery.",
         "Design and maintain reusable components, shared UI patterns, and scalable frontend architecture.",
         "Integrate frontend applications with RESTful backend services and collaborate with backend engineers on API contracts and application data flows.",
@@ -343,7 +343,7 @@
       ]
     },
     {
-      "name": "Web Order System – Steak Restaurant",
+      "name": "Web Order System – Waroeng Steak Restaurant",
       "role": "Fullstack Developer",
       "technologies": [
         "React.js",
@@ -399,8 +399,7 @@
     {
       "institution": "BINUS UNIVERSITY",
       "degree": "Bachelor of Computer Science",
-      "period": "2022 – 2025",
-      "gpa": "3.56 / 4.00"
+      "period": "2022 – 2025"
     }
   ],
   "languages": [

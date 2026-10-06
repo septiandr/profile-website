@@ -41,7 +41,11 @@ export default function MagazineHeader() {
     e.preventDefault();
     const el = document.getElementById(id);
     if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
+      if (typeof window !== "undefined" && (window as any).__lenis) {
+        (window as any).__lenis.scrollTo(el, { duration: 1.0 });
+      } else {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
     }
   };
 
@@ -81,25 +85,32 @@ export default function MagazineHeader() {
             02. WORKS
           </a>
           <a
+            href="#mag-services"
+            onClick={(e) => scrollTo("mag-services", e)}
+            className="hover:text-blue-600 transition-colors"
+          >
+            03. SERVICES
+          </a>
+          <a
             href="#mag-capabilities"
             onClick={(e) => scrollTo("mag-capabilities", e)}
             className="hover:text-purple-600 transition-colors"
           >
-            03. CAPABILITIES
+            04. SKILLS
           </a>
           <a
             href="#mag-dossier"
             onClick={(e) => scrollTo("mag-dossier", e)}
             className="hover:text-orange-600 transition-colors"
           >
-            04. RECORD
+            05. RECORD
           </a>
           <a
             href="#mag-colophon"
             onClick={(e) => scrollTo("mag-colophon", e)}
             className="hover:text-rose-600 transition-colors"
           >
-            05. CONTACT
+            06. ORDER & CONTACT
           </a>
         </nav>
 
