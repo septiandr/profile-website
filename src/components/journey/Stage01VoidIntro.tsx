@@ -140,24 +140,26 @@ export default function Stage01VoidIntro({
           ref={headlineRef}
           className="text-center max-w-4xl mx-auto z-10 pointer-events-auto"
         >
-          <div className="font-sans text-[11px] sm:text-xs tracking-[0.3em] uppercase text-amber-300 font-semibold mb-3 flex items-center justify-center gap-2.5">
-            <span className="inline-block w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_10px_#f59e0b] animate-ping" />
-            <span className="bg-amber-400/10 px-3 py-1 rounded-full border border-amber-400/30">
-              Interactive 3D Portfolio · Page 01: Intro
+          <div className="font-mono text-[11px] sm:text-xs tracking-[0.3em] uppercase text-[#00f0ff] font-bold mb-3 flex items-center justify-center gap-2.5">
+            <span className="inline-block w-2 h-2 rounded-full bg-[#ccff00] shadow-[0_0_10px_#ccff00] animate-ping" />
+            <span className="bg-[#ccff00]/10 px-3.5 py-1 rounded-full border border-[#ccff00]/30 text-white font-mono">
+              Studio Prologue // Creative Engineering · 2026
             </span>
           </div>
 
-          <h1 className="font-display font-medium tracking-tight text-4xl sm:text-6xl md:text-7xl lg:text-[5.5rem] text-white leading-[0.94] mb-3">
-            <span className="kinetic-text-line block font-black tracking-tight">
-              WELCOME TO THE
+          <h1 className="font-display font-black tracking-tight text-4xl sm:text-6xl md:text-7xl lg:text-[5.5rem] text-white leading-[0.92] mb-4 uppercase">
+            <span className="kinetic-text-line block tracking-tight">
+              THE CREATIVE
             </span>
-            <span className="kinetic-text-line block font-serif italic font-normal text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-rose-300 via-amber-300 to-cyan-300 drop-shadow-[0_0_35px_rgba(245,158,11,0.3)] mt-1 animate-shimmer">
-              Digital Cosmos
+            <span className="kinetic-text-line block mt-1">
+              <span className="relative inline-block px-4 py-0.5 text-black font-black bg-[#ccff00] rounded-sm transform -rotate-1 shadow-[0_0_35px_rgba(204,255,0,0.45)]">
+                ENGINEERING STUDIO
+              </span>
             </span>
           </h1>
 
-          <p className="void-sub font-sans text-xs sm:text-sm text-zinc-300 font-light tracking-[0.2em] uppercase">
-            3D Autonomous Companion Online · Choose a Stance or Scroll to Meet the Architect
+          <p className="void-sub font-mono text-xs sm:text-sm text-zinc-300 font-light tracking-[0.2em] uppercase">
+            3D Autonomous Companion Online · Choose a Stance or Scroll Down to Studio Command
           </p>
         </div>
 
@@ -172,9 +174,9 @@ export default function Stage01VoidIntro({
           {/* Interactive Companion Gesture Selector Dock */}
           <div className="flex flex-col items-center gap-2 w-full">
             <div className="flex items-center gap-2 font-mono text-[10px] tracking-[0.25em] uppercase text-zinc-400">
-              <Bot className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+              <Bot className="w-3.5 h-3.5 text-[#ccff00] animate-pulse" />
               <span>Companion Stance Control</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_6px_#f59e0b]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#ccff00] shadow-[0_0_6px_#ccff00]" />
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 p-1.5 rounded-2xl sm:rounded-full bg-zinc-950/70 backdrop-blur-2xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.65)]">
@@ -184,20 +186,21 @@ export default function Stage01VoidIntro({
                   <button
                     key={gesture.id}
                     onClick={() => onSelectAction?.(gesture.id)}
+                    data-cursor-text="STANCE"
                     className={`relative group px-3 sm:px-3.5 py-1.5 rounded-full text-xs font-mono tracking-wider transition-all duration-300 flex items-center gap-1.5 ${
                       isActive
-                        ? "bg-gradient-to-r from-amber-500/25 to-amber-400/20 text-amber-200 border border-amber-400/60 shadow-[0_0_16px_rgba(245,158,11,0.35)] scale-105"
-                        : "text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.06] border border-transparent hover:border-white/10"
+                        ? "bg-[#ccff00] text-black font-black border border-white shadow-[0_0_16px_rgba(204,255,0,0.5)] scale-105"
+                        : "text-zinc-400 hover:text-white hover:bg-white/[0.08] border border-transparent hover:border-white/10"
                     }`}
                   >
                     <span className="text-sm select-none transition-transform group-hover:scale-125 duration-200">
                       {gesture.icon}
                     </span>
-                    <span className="text-[11px] font-medium uppercase tracking-[0.14em]">
+                    <span className="text-[11px] font-bold uppercase tracking-[0.14em]">
                       {gesture.label}
                     </span>
                     {isActive && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_6px_#f59e0b] animate-pulse ml-0.5" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-black ml-0.5" />
                     )}
                   </button>
                 );
@@ -207,17 +210,18 @@ export default function Stage01VoidIntro({
 
           <button
             onClick={handleEnter}
+            data-cursor-text="ENTER"
             onMouseEnter={() => onEngineHover?.(true)}
             onMouseLeave={() => onEngineHover?.(false)}
-            className="group relative flex items-center gap-3.5 border border-white/15 bg-white/[0.04] backdrop-blur-xl px-9 py-3.5 rounded-full font-sans text-xs tracking-[0.22em] uppercase text-zinc-200 hover:text-white hover:border-amber-400/60 hover:bg-amber-400/10 transition-all duration-500 shadow-[0_15px_35px_rgba(0,0,0,0.6)]"
+            className="group relative flex items-center gap-3.5 border border-[#ccff00]/40 bg-[#ccff00]/10 hover:bg-[#ccff00] hover:text-black backdrop-blur-xl px-9 py-3.5 rounded-full font-mono text-xs tracking-[0.22em] uppercase text-white font-black transition-all duration-300 shadow-[0_15px_35px_rgba(0,0,0,0.6),0_0_20px_rgba(204,255,0,0.25)] hover:scale-105 active:scale-95"
           >
-            <span className="h-1.5 w-1.5 rounded-full bg-amber-400 group-hover:scale-125 transition-transform" />
-            <span>Enter Portfolio · Meet The Architect</span>
-            <ArrowDown className="h-3.5 w-3.5 text-amber-300 group-hover:translate-y-1 transition-transform" />
+            <span className="h-2 w-2 rounded-full bg-[#ccff00] group-hover:bg-black transition-colors" />
+            <span>Enter Studio · Command Console</span>
+            <ArrowDown className="h-4 w-4 transform group-hover:translate-y-1 transition-transform" />
           </button>
 
-          <div className="flex items-center gap-2 font-sans text-[11px] text-zinc-400 tracking-[0.18em] uppercase">
-            <span>Choose stance or click companion · Scroll down to Hero</span>
+          <div className="flex items-center gap-2 font-mono text-[10px] text-zinc-500 tracking-[0.2em] uppercase">
+            <span>Scroll Down to Inspect Shipped Products</span>
           </div>
         </div>
       </div>

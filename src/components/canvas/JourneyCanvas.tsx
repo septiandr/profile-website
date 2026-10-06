@@ -660,7 +660,7 @@ export default function JourneyCanvas({
       },
     });
 
-    // 1B. HERO STAGE (Page 02: Robot on the RIGHT margin, facing left towards the Hero Architect headline)
+    // 1B. HERO STAGE (Page 02: Robot on the RIGHT margin, facing left towards the White Hero Architect headline)
     addTrigger({
       trigger: "#zone-hero",
       start: "top top",
@@ -680,21 +680,23 @@ export default function JourneyCanvas({
         robotTargetScale.current = isMobile ? 0.95 : 1.45;
         robotTargetRotY.current = -0.55;
 
+        // Hide starfield over white background hero for pristine clarity
+        if (starfieldRef.current) {
+          starfieldRef.current.points.visible = false;
+        }
+
         if (p > 0.60) {
           switchRobotAction("Walking");
-          if (starfieldRef.current) {
-            starfieldRef.current.setWarp(1.0 + Math.sin(((p - 0.60) / 0.40) * Math.PI) * 8.0);
-          }
         } else {
           switchRobotAction(robotActionRef.current || "ThumbsUp");
-          if (starfieldRef.current) {
-            starfieldRef.current.setWarp(1.0);
-          }
         }
       },
       onEnter: () => {
         if (isModalOpenRef.current) return;
         onStageChange?.("take-off", 0.5);
+        if (starfieldRef.current) {
+          starfieldRef.current.points.visible = false;
+        }
         robotTargetPos.current = {
           x: isMobile ? 1.35 : 3.30,
           y: isMobile ? -0.75 : -0.50,
@@ -705,6 +707,17 @@ export default function JourneyCanvas({
         switchRobotAction(robotActionRef.current || "ThumbsUp");
       },
       onLeaveBack: () => {
+        if (starfieldRef.current) {
+          starfieldRef.current.points.visible = true;
+          starfieldRef.current.setWarp(1.0);
+        }
+        if (!isModalOpenRef.current) switchRobotAction("Walking");
+      },
+      onLeave: () => {
+        if (starfieldRef.current) {
+          starfieldRef.current.points.visible = true;
+          starfieldRef.current.setWarp(1.0);
+        }
         if (!isModalOpenRef.current) switchRobotAction("Walking");
       },
     });
@@ -967,7 +980,7 @@ export default function JourneyCanvas({
     <div
       ref={containerRef}
       aria-hidden="true"
-      className="fixed inset-0 z-0 overflow-hidden pointer-events-none"
+      className="fixed inset-0 z-20 overflow-hidden pointer-events-none"
     />
   );
 }

@@ -85,14 +85,14 @@ export default function HUDMissionControl({ currentStage }: HUDMissionControlPro
           <a
             href="#zone-void"
             onClick={(e) => scrollToZone("zone-void", e)}
-            className="font-display text-xs tracking-[0.2em] font-bold text-white hover:text-amber-300 transition-colors flex items-center gap-2"
+            className="font-mono text-xs tracking-[0.2em] font-black text-white hover:text-[#ccff00] transition-colors flex items-center gap-2"
           >
-            <span className="h-1.5 w-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b]" />
-            <span>RISANGGALIH</span>
+            <span className="h-2 w-2 rounded-full bg-[#ccff00] shadow-[0_0_10px_#ccff00] animate-pulse" />
+            <span>RISANG STUDIO</span>
           </a>
           <span className="hidden sm:inline text-zinc-700">·</span>
-          <div className="hidden sm:flex items-center gap-2 font-sans text-xs text-zinc-400">
-            <span className="text-amber-300/90 font-medium tracking-wide">
+          <div className="hidden sm:flex items-center gap-2 font-mono text-xs text-zinc-400">
+            <span className="text-[#00f0ff] font-bold tracking-wide">
               {stageTitles[currentStage]}
             </span>
           </div>
@@ -105,7 +105,7 @@ export default function HUDMissionControl({ currentStage }: HUDMissionControlPro
               key={link.id}
               href={`#${link.id}`}
               onClick={(e) => scrollToZone(link.id, e)}
-              className="font-sans text-xs tracking-wider text-zinc-400 hover:text-amber-300 transition-colors"
+              className="font-mono text-xs tracking-wider text-zinc-400 hover:text-[#ccff00] transition-colors font-bold"
             >
               {link.label}
             </a>
@@ -114,9 +114,9 @@ export default function HUDMissionControl({ currentStage }: HUDMissionControlPro
 
         {/* Clock & Audio */}
         <div className="flex items-center gap-4">
-          <div className="hidden lg:flex items-center gap-2 font-sans text-xs text-zinc-400">
-            <span className="text-zinc-500">JKT</span>
-            <span className="text-amber-300 font-medium">{timeStr}</span>
+          <div className="hidden lg:flex items-center gap-2 font-mono text-xs text-zinc-400">
+            <span className="text-zinc-500 font-bold">JKT</span>
+            <span className="text-[#ccff00] font-black">{timeStr}</span>
           </div>
           <AudioController />
         </div>

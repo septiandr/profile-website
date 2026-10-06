@@ -187,44 +187,44 @@ const SKILL_BUBBLES: SkillBubbleItem[] = [
 
 const CATEGORY_STYLES = {
   Frontend: {
-    color: "#06b6d4",
+    color: "#00f0ff",
     name: "Frontend",
-    border: "border-cyan-400/40 hover:border-cyan-300",
-    bg: "radial-gradient(circle at 32% 28%, rgba(6,182,212,0.18) 0%, rgba(6,182,212,0.04) 55%, rgba(0,0,0,0.10) 90%)",
-    shadow: "0 0 25px rgba(6,182,212,0.15), inset 0 0 22px rgba(6,182,212,0.18), inset 0 1px 2px rgba(255,255,255,0.4)",
-    hoverShadow: "0 0 45px rgba(6,182,212,0.5), inset 0 0 30px rgba(6,182,212,0.35), inset 0 1px 3px rgba(255,255,255,0.6)",
-    text: "text-white font-extrabold tracking-wider drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] drop-shadow-[0_0_16px_rgba(6,182,212,0.8)]",
-    badge: "bg-cyan-500/20 text-cyan-200 border-cyan-400/40",
+    border: "border-[#00f0ff]/50 hover:border-[#00f0ff]",
+    bg: "radial-gradient(circle at 32% 28%, rgba(0,240,255,0.22) 0%, rgba(0,240,255,0.05) 55%, rgba(0,0,0,0.12) 90%)",
+    shadow: "0 0 25px rgba(0,240,255,0.2), inset 0 0 22px rgba(0,240,255,0.25), inset 0 1px 2px rgba(255,255,255,0.5)",
+    hoverShadow: "0 0 50px rgba(0,240,255,0.65), inset 0 0 30px rgba(0,240,255,0.45), inset 0 1px 3px rgba(255,255,255,0.8)",
+    text: "text-white font-black tracking-wider drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] drop-shadow-[0_0_16px_rgba(0,240,255,0.9)]",
+    badge: "bg-[#00f0ff]/20 text-[#00f0ff] border-[#00f0ff]/50",
   },
   Backend: {
-    color: "#f59e0b",
+    color: "#ccff00",
     name: "Backend",
-    border: "border-amber-400/40 hover:border-amber-300",
-    bg: "radial-gradient(circle at 32% 28%, rgba(245,158,11,0.18) 0%, rgba(245,158,11,0.04) 55%, rgba(0,0,0,0.10) 90%)",
-    shadow: "0 0 25px rgba(245,158,11,0.15), inset 0 0 22px rgba(245,158,11,0.18), inset 0 1px 2px rgba(255,255,255,0.4)",
-    hoverShadow: "0 0 45px rgba(245,158,11,0.5), inset 0 0 30px rgba(245,158,11,0.35), inset 0 1px 3px rgba(255,255,255,0.6)",
-    text: "text-white font-extrabold tracking-wider drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] drop-shadow-[0_0_16px_rgba(245,158,11,0.8)]",
-    badge: "bg-amber-500/20 text-amber-200 border-amber-400/40",
+    border: "border-[#ccff00]/50 hover:border-[#ccff00]",
+    bg: "radial-gradient(circle at 32% 28%, rgba(204,255,0,0.22) 0%, rgba(204,255,0,0.05) 55%, rgba(0,0,0,0.12) 90%)",
+    shadow: "0 0 25px rgba(204,255,0,0.2), inset 0 0 22px rgba(204,255,0,0.25), inset 0 1px 2px rgba(255,255,255,0.5)",
+    hoverShadow: "0 0 50px rgba(204,255,0,0.65), inset 0 0 30px rgba(204,255,0,0.45), inset 0 1px 3px rgba(255,255,255,0.8)",
+    text: "text-white font-black tracking-wider drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] drop-shadow-[0_0_16px_rgba(204,255,0,0.9)]",
+    badge: "bg-[#ccff00]/20 text-[#ccff00] border-[#ccff00]/50",
   },
   Database: {
     color: "#10b981",
     name: "Database",
-    border: "border-emerald-400/40 hover:border-emerald-300",
-    bg: "radial-gradient(circle at 32% 28%, rgba(16,185,129,0.18) 0%, rgba(16,185,129,0.04) 55%, rgba(0,0,0,0.10) 90%)",
-    shadow: "0 0 25px rgba(16,185,129,0.15), inset 0 0 22px rgba(16,185,129,0.18), inset 0 1px 2px rgba(255,255,255,0.4)",
-    hoverShadow: "0 0 45px rgba(16,185,129,0.5), inset 0 0 30px rgba(16,185,129,0.35), inset 0 1px 3px rgba(255,255,255,0.6)",
-    text: "text-white font-extrabold tracking-wider drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] drop-shadow-[0_0_16px_rgba(16,185,129,0.8)]",
-    badge: "bg-emerald-500/20 text-emerald-200 border-emerald-400/40",
+    border: "border-emerald-400/50 hover:border-emerald-300",
+    bg: "radial-gradient(circle at 32% 28%, rgba(16,185,129,0.22) 0%, rgba(16,185,129,0.05) 55%, rgba(0,0,0,0.12) 90%)",
+    shadow: "0 0 25px rgba(16,185,129,0.2), inset 0 0 22px rgba(16,185,129,0.25), inset 0 1px 2px rgba(255,255,255,0.5)",
+    hoverShadow: "0 0 50px rgba(16,185,129,0.65), inset 0 0 30px rgba(16,185,129,0.45), inset 0 1px 3px rgba(255,255,255,0.8)",
+    text: "text-white font-black tracking-wider drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] drop-shadow-[0_0_16px_rgba(16,185,129,0.9)]",
+    badge: "bg-emerald-500/20 text-emerald-200 border-emerald-400/50",
   },
   Mobile: {
-    color: "#a855f7",
+    color: "#8b5cf6",
     name: "Mobile",
-    border: "border-purple-400/40 hover:border-purple-300",
-    bg: "radial-gradient(circle at 32% 28%, rgba(168,85,247,0.18) 0%, rgba(168,85,247,0.04) 55%, rgba(0,0,0,0.10) 90%)",
-    shadow: "0 0 25px rgba(168,85,247,0.15), inset 0 0 22px rgba(168,85,247,0.18), inset 0 1px 2px rgba(255,255,255,0.4)",
-    hoverShadow: "0 0 45px rgba(168,85,247,0.5), inset 0 0 30px rgba(168,85,247,0.35), inset 0 1px 3px rgba(255,255,255,0.6)",
-    text: "text-white font-extrabold tracking-wider drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] drop-shadow-[0_0_16px_rgba(168,85,247,0.8)]",
-    badge: "bg-purple-500/20 text-purple-200 border-purple-400/40",
+    border: "border-[#8b5cf6]/50 hover:border-[#8b5cf6]",
+    bg: "radial-gradient(circle at 32% 28%, rgba(139,92,246,0.22) 0%, rgba(139,92,246,0.05) 55%, rgba(0,0,0,0.12) 90%)",
+    shadow: "0 0 25px rgba(139,92,246,0.2), inset 0 0 22px rgba(139,92,246,0.25), inset 0 1px 2px rgba(255,255,255,0.5)",
+    hoverShadow: "0 0 50px rgba(139,92,246,0.65), inset 0 0 30px rgba(139,92,246,0.45), inset 0 1px 3px rgba(255,255,255,0.8)",
+    text: "text-white font-black tracking-wider drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] drop-shadow-[0_0_16px_rgba(139,92,246,0.9)]",
+    badge: "bg-[#8b5cf6]/20 text-[#8b5cf6] border-[#8b5cf6]/50",
   },
 };
 
@@ -419,23 +419,23 @@ export default function Stage03TechLab({
           <div className="flex-1 w-full max-w-5xl xl:max-w-6xl">
             {/* Minimal Environmental Header */}
             <div className="mb-6 text-center lg:text-left skills-header-block">
-              <div className="font-sans text-xs sm:text-sm tracking-[0.25em] uppercase text-amber-300 font-semibold mb-2 flex items-center justify-center lg:justify-start gap-2.5">
-                <span className="h-2 w-2 rounded-full bg-amber-400 shadow-[0_0_12px_#f59e0b] animate-ping" />
-                <span className="bg-amber-400/10 px-3.5 py-1 rounded-full border border-amber-400/30 flex items-center gap-2">
-                  <Cpu className="h-4 w-4 text-amber-400" />
+              <div className="font-mono text-xs sm:text-sm tracking-[0.25em] uppercase text-[#00f0ff] font-bold mb-2 flex items-center justify-center lg:justify-start gap-2.5">
+                <span className="h-2 w-2 rounded-full bg-[#ccff00] shadow-[0_0_12px_#ccff00] animate-pulse" />
+                <span className="bg-[#ccff00]/10 px-3.5 py-1 rounded-full border border-[#ccff00]/30 flex items-center gap-2 text-white">
+                  <Cpu className="h-4 w-4 text-[#ccff00]" />
                   Sector 03 · Production Capability Engines
                 </span>
               </div>
 
-              <h2 className="font-display font-black text-4xl sm:text-6xl lg:text-7xl text-white tracking-tight uppercase leading-[1.05] mb-2">
-                Capability{" "}
-                <span className="font-serif italic font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-amber-300 to-purple-400 drop-shadow-[0_0_35px_rgba(245,158,11,0.35)] animate-shimmer">
-                  Engines
+              <h2 className="font-display font-black text-4xl sm:text-6xl lg:text-7xl xl:text-8xl text-white tracking-[-0.03em] uppercase leading-[0.95] mb-3">
+                CAPABILITY{" "}
+                <span className="relative inline-block px-3.5 py-0.5 mx-1.5 text-black font-black bg-[#00f0ff] rounded-sm transform rotate-1 shadow-[0_0_35px_rgba(0,240,255,0.45)]">
+                  ENGINES
                 </span>
               </h2>
 
-              <p className="font-sans text-xs sm:text-sm text-zinc-300 tracking-[0.16em] uppercase font-light max-w-2xl mb-5">
-                The core architectural frameworks, language runtimes & client engineering engines in active production.
+              <p className="font-sans text-sm sm:text-base text-zinc-300 font-light leading-relaxed max-w-2xl mb-5">
+                The core architectural frameworks, language runtimes & client engineering engines deployed in high-concurrency production.
               </p>
 
               {/* Minimal Category Color Legend & Filter Tabs */}
@@ -526,6 +526,7 @@ export default function Stage03TechLab({
                     {/* Inner Sphere: Pronounced zero-gravity continuous floating drift */}
                     <div
                       onClick={() => handleBubbleClick(skill, idx)}
+                      data-cursor-text="INSPECT"
                       onMouseEnter={() => {
                         onHoverTechNode?.(idx);
                         playBubblePopSound(

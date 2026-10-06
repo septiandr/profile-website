@@ -10,41 +10,27 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        obsidian: {
-          950: "#070811",
-          900: "#0b0e1b",
-          850: "#101426",
-          800: "#151b30",
-          700: "#222a4d",
+        paper: {
+          50: "#ffffff",
+          100: "#faf9f6",
+          200: "#f4f1ea",
+          300: "#eae5d9",
         },
-        astral: {
-          void: "#070811",
-          deep: "#0a0d1e",
-          card: "#0e1224",
-          surface: "#141932",
-        },
-        solar: {
-          50: "#fffbeb",
-          100: "#fef3c7",
-          200: "#fde68a",
-          300: "#fcd34d",
-          400: "#fbbf24",
-          500: "#f59e0b",
-          600: "#d97706",
-        },
-        champagne: {
-          100: "#fdfbf7",
-          200: "#f9f4ea",
-          300: "#f3e8d2",
-          400: "#ebd8b6",
-          500: "#dfc495",
+        electric: {
+          blue: "#2563eb",
+          cyan: "#06b6d4",
+          lime: "#84cc16",
+          purple: "#7c3aed",
+          coral: "#f97316",
+          rose: "#e11d48",
+          amber: "#f59e0b",
         },
       },
       fontFamily: {
         display: ["var(--font-display)", "Syne", "sans-serif"],
         sans: ["var(--font-sans)", "Plus Jakarta Sans", "Inter", "sans-serif"],
         serif: ["var(--font-serif)", "Playfair Display", "serif"],
-        mono: ["var(--font-mono)", "JetBrains Mono", "monospace"],
+        mono: ["var(--font-sans)", "Plus Jakarta Sans", "sans-serif"],
       },
       animation: {
         "pulse-slow": "pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite",

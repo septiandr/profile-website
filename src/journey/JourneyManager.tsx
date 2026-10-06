@@ -1,144 +1,79 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import dynamic from "next/dynamic";
-import { JourneyStage } from "./types";
-import HUDMissionControl from "@/components/journey/HUDMissionControl";
-import Stage01VoidIntro from "@/components/journey/Stage01VoidIntro";
-import Stage01HeroPage from "@/components/journey/Stage01HeroPage";
-import Stage02ExperienceWaypoints from "@/components/journey/Stage02ExperienceWaypoints";
-import Stage03TechLab from "@/components/journey/Stage03TechLab";
-import Stage05AboutContact from "@/components/journey/Stage05AboutContact";
-import Stage06DepartureEnd from "@/components/journey/Stage06DepartureEnd";
+import { ExperienceWaypoint } from "@/journey/types";
 
-const JourneyCanvas = dynamic(
-  () => import("@/components/canvas/JourneyCanvas"),
+import MagazineHeader from "@/components/magazine/MagazineHeader";
+import MagazineCoverHero from "@/components/magazine/MagazineCoverHero";
+import MagazineAgencyTicker from "@/components/magazine/MagazineAgencyTicker";
+import MagazineMetricsStrip from "@/components/magazine/MagazineMetricsStrip";
+import MagazineWorksPlates from "@/components/magazine/MagazineWorksPlates";
+import MagazineCapabilities from "@/components/magazine/MagazineCapabilities";
+import MagazineTimelineDossier from "@/components/magazine/MagazineTimelineDossier";
+import MagazineColophonContact from "@/components/magazine/MagazineColophonContact";
+import MagazineCaseModal from "@/components/magazine/MagazineCaseModal";
+
+import ErrorBoundary from "@/components/ui/ErrorBoundary";
+
+const MagazineWalkingRobot = dynamic(
+  () => import("@/components/magazine/MagazineWalkingRobot"),
   { ssr: false }
 );
 
 export default function JourneyManager() {
-  const [currentStage, setCurrentStage] = useState<JourneyStage>("the-void");
-  const [activeWaypointIndex, setActiveWaypointIndex] = useState<number>(0);
-  const [activeProjectIndex, setActiveProjectIndex] = useState<number>(0);
-  const [activeTechNode, setActiveTechNode] = useState<number | null>(null);
-  const [isEngineHot, setIsEngineHot] = useState<boolean>(false);
-  const [robotAction, setRobotAction] = useState<string>("Wave");
-  const [actionTriggerId, setActionTriggerId] = useState<number>(0);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [selectedWaypoint, setSelectedWaypoint] = useState<ExperienceWaypoint | null>(null);
 
-  const handleStageChange = useCallback((stage: JourneyStage) => {
-    setCurrentStage(stage);
-  }, []);
+  const handleOpenCaseModal = (waypoint: ExperienceWaypoint) => {
+    setSelectedWaypoint(waypoint);
+  };
 
-  const handleActiveWaypointChange = useCallback((index: number) => {
-    setActiveWaypointIndex(index);
-  }, []);
-
-  const handleActiveProjectChange = useCallback((index: number) => {
-    setActiveProjectIndex(index);
-  }, []);
-
-  const handleHoverTechNode = useCallback((index: number | null) => {
-    setActiveTechNode(index);
-  }, []);
-
-  const handleSelectRobotAction = useCallback((action: string) => {
-    setRobotAction(action);
-    setActionTriggerId((prev) => prev + 1);
-  }, []);
-
-  const handleRobotActionChange = useCallback((action: string) => {
-    setRobotAction(action);
-  }, []);
-
-  const handleModalOpenChange = useCallback((isOpen: boolean) => {
-    setIsModalOpen(isOpen);
-  }, []);
-
-  const handleRestart = useCallback(() => {
-    setCurrentStage("the-void");
-    setActiveWaypointIndex(0);
-    setActiveProjectIndex(0);
-    setActiveTechNode(null);
-    setRobotAction("Wave");
-    setActionTriggerId((prev) => prev + 1);
-    setIsModalOpen(false);
-  }, []);
+  const handleCloseCaseModal = () => {
+    setSelectedWaypoint(null);
+  };
 
   return (
-    <div className="relative min-h-screen bg-[#060709] text-zinc-100 overflow-x-hidden">
-      {/* Three.js Continuous Cinematic Canvas (Rocket Orbit & Protagonist Robot) */}
-      <JourneyCanvas
-        onStageChange={handleStageChange}
-        onActiveWaypointChange={handleActiveWaypointChange}
-        onActiveProjectChange={handleActiveProjectChange}
-        activeTechNode={activeTechNode}
-        onHoverTechNode={handleHoverTechNode}
-        isEngineHot={isEngineHot}
-        robotAction={robotAction}
-        actionTriggerId={actionTriggerId}
-        onRobotActionChange={handleRobotActionChange}
-        isModalOpen={isModalOpen}
+    <div className="relative min-h-screen bg-[#faf9f6] text-zinc-950 font-sans selection:bg-blue-600 selection:text-white">
+      {/* 1. Masthead & Monograph Navigation Bar */}
+      <MagazineHeader />
+
+      {/* 2. Main Magazine Publication Spread */}
+      <main className="relative z-10 w-full pb-28">
+        {/* Cover / Feature Essay 01 */}
+        <MagazineCoverHero />
+
+        {/* Dynamic Agency Ticker Marquee Ribbon */}
+        <MagazineAgencyTicker />
+
+        {/* Agency Benchmarks & Audited Metrics Strip */}
+        <MagazineMetricsStrip />
+
+        {/* Section 02: Selected Shipped Digital Products */}
+        <MagazineWorksPlates onOpenCaseModal={handleOpenCaseModal} />
+
+        {/* Dynamic Agency Ticker Marquee Ribbon */}
+        <MagazineAgencyTicker />
+
+        {/* Section 03: Technical Capabilities & Creative Disciplines */}
+        <MagazineCapabilities />
+
+        {/* Section 04: Career Chronology & Service Record */}
+        <MagazineTimelineDossier />
+
+        {/* Section 05: Colophon & Inquiries / Back Cover */}
+        <MagazineColophonContact />
+      </main>
+
+      {/* 3. Deep-Dive Case Study Dossier Modal */}
+      <MagazineCaseModal
+        waypoint={selectedWaypoint}
+        onClose={handleCloseCaseModal}
       />
 
-      {/* Mission Control Minimal HUD (Hidden on void/first screen, appears on scroll) */}
-      <HUDMissionControl currentStage={currentStage} />
-
-      {/* The Sequential Narrative Zones */}
-      <main className="relative z-10">
-        {/* Zone 1: The Void & Robot Welcome */}
-        <Stage01VoidIntro
-          currentAction={robotAction}
-          onSelectAction={handleSelectRobotAction}
-          onEngineHover={setIsEngineHot}
-          onEnterJourney={() => {
-            setIsEngineHot(true);
-          }}
-        />
-
-        {/* Zone 1B: Dedicated Hero Page (The Architect Identity) */}
-        <Stage01HeroPage onEngineHover={setIsEngineHot} />
-
-        {/* Zone 2: Robot-guided Experience & Featured Projects Waypoints */}
-        <Stage02ExperienceWaypoints
-          activeWaypointIndex={activeWaypointIndex}
-          onModalOpenChange={handleModalOpenChange}
-        />
-
-        {/* Transit Corridor 01: Deep Space Traversing from Experience to Arsenal */}
-        <div
-          id="zone-transit-01"
-          className="relative h-[25vh] sm:h-[30vh] w-full pointer-events-none select-none overflow-hidden"
-          aria-hidden="true"
-        />
-
-        {/* Zone 3: Architectural Tech Lab & Robot Diagnostics */}
-        <Stage03TechLab
-          onHoverTechNode={handleHoverTechNode}
-          activeTechNode={activeTechNode}
-        />
-
-        {/* Transit Corridor 02: Deep Space Traversing from Arsenal to Contact */}
-        <div
-          id="zone-transit-02"
-          className="relative h-[25vh] sm:h-[30vh] w-full pointer-events-none select-none overflow-hidden"
-          aria-hidden="true"
-        />
-
-        {/* Zone 4: Personnel Dossier & Contact */}
-        <Stage05AboutContact />
-
-        {/* Transit Corridor 03: Deep Space Traversing from Contact to Departure */}
-        <div
-          id="zone-transit-03"
-          className="relative h-[25vh] sm:h-[30vh] w-full pointer-events-none select-none overflow-hidden"
-          aria-hidden="true"
-        />
-
-        {/* Zone 5: Final Departure & End Screen */}
-        <Stage06DepartureEnd onRestart={handleRestart} />
-      </main>
+      {/* 4. Interactive 3D Robot Mascot Walking Back and Forth across Bottom */}
+      <ErrorBoundary fallback={null}>
+        <MagazineWalkingRobot />
+      </ErrorBoundary>
     </div>
   );
 }
-

@@ -31,24 +31,23 @@ export default function Stage05AboutContact() {
         />
 
         {/* Top Section: Invitation with Shimmering Gradient */}
-        <div className="text-center max-w-3xl mx-auto z-20 pointer-events-auto">
-          <div className="font-sans text-[10px] sm:text-xs tracking-[0.25em] uppercase text-amber-300 font-semibold mb-3 flex items-center justify-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-amber-400 shadow-[0_0_10px_#f59e0b] animate-ping" />
-            <span className="bg-amber-400/10 px-3 py-1 rounded-full border border-amber-400/30">
-              Inquiries · Collaboration · Opportunities
+        <div className="text-center max-w-4xl mx-auto z-20 pointer-events-auto">
+          <div className="font-mono text-xs sm:text-sm tracking-[0.25em] uppercase text-[#00f0ff] font-bold mb-3 flex items-center justify-center gap-2">
+            <span className="h-2 w-2 rounded-full bg-[#ccff00] shadow-[0_0_10px_#ccff00] animate-ping" />
+            <span className="bg-[#ccff00]/10 px-3.5 py-1 rounded-full border border-[#ccff00]/30 text-white font-mono">
+              Commission Studio // Inquiries & Collaborations
             </span>
           </div>
 
-          <h2 className="font-display font-medium text-4xl sm:text-6xl md:text-7xl text-white tracking-tight leading-[1.05] mb-3">
-            Let&apos;s Build{" "}
-            <span className="font-serif italic font-normal text-transparent bg-clip-text bg-gradient-to-r from-champagne-200 via-amber-200 via-rose-300 via-cyan-300 to-amber-400 drop-shadow-[0_0_30px_rgba(245,158,11,0.4)] animate-shimmer">
-              Something
-            </span>{" "}
-            Exceptional.
+          <h2 className="font-display font-black text-4xl sm:text-6xl md:text-7xl lg:text-8xl text-white tracking-[-0.03em] uppercase leading-[0.95] mb-4">
+            LET&apos;S BUILD <br />
+            <span className="relative inline-block px-4 py-1 mx-2 text-black font-black bg-[#ccff00] rounded-sm transform -rotate-1 shadow-[0_0_40px_rgba(204,255,0,0.45)]">
+              NEXT-GEN PRODUCTS
+            </span>
           </h2>
 
-          <div className="font-sans text-xs sm:text-sm text-zinc-300 tracking-[0.2em] uppercase font-light">
-            Available for select senior engineering, architectural consulting & contract leadership
+          <div className="font-mono text-xs sm:text-sm text-zinc-300 tracking-[0.2em] uppercase font-light">
+            Available for select enterprise architecture, fractional leadership & high-scale digital flagships
           </div>
         </div>
 
@@ -57,56 +56,59 @@ export default function Stage05AboutContact() {
 
         {/* Bottom Action Links with 3D Tilt & Vibrant Holographic Glow */}
         <div className="z-20 pointer-events-auto flex flex-col items-center gap-8 pb-4 w-full max-w-4xl">
-          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 font-sans text-xs sm:text-sm">
-            {/* Email Pod - Radiant Amber */}
+          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 font-mono text-xs sm:text-sm">
+            {/* Email Pod - Radiant Acid Lime */}
             <TiltSpotlightCard
-              spotlightColor="rgba(245, 158, 11, 0.5)"
-              borderColor="rgba(245, 158, 11, 0.85)"
-              className="border border-amber-400/60 bg-gradient-to-r from-amber-500/25 via-amber-400/15 to-orange-500/25 px-7 py-4 rounded-full shadow-[0_15px_35px_rgba(245,158,11,0.3)] hover:border-amber-300 hover:scale-105 transition-all duration-300 backdrop-blur-xl"
+              spotlightColor="rgba(204, 255, 0, 0.45)"
+              borderColor="rgba(204, 255, 0, 0.85)"
+              className="border border-[#ccff00]/60 bg-gradient-to-r from-[#ccff00]/20 via-[#ccff00]/10 to-[#00f0ff]/15 px-8 py-4 rounded-full shadow-[0_15px_35px_rgba(204,255,0,0.25)] hover:border-[#ccff00] hover:scale-105 transition-all duration-300 backdrop-blur-xl"
             >
               <a
                 href={`mailto:${profileData.personalInfo.email}`}
-                className="flex items-center gap-3 text-amber-100 hover:text-white font-semibold tracking-wide"
+                data-cursor-text="EMAIL"
+                className="flex items-center gap-3 text-white hover:text-[#ccff00] font-black tracking-wider"
               >
-                <Mail className="h-4 w-4 text-amber-400 shrink-0" />
+                <Mail className="h-4 w-4 text-[#ccff00] shrink-0" />
                 <span>{profileData.personalInfo.email}</span>
-                <ArrowUpRight className="h-4 w-4 text-amber-300 shrink-0" />
+                <ArrowUpRight className="h-4 w-4 text-[#ccff00] shrink-0" />
               </a>
             </TiltSpotlightCard>
 
             {/* GitHub Pod - Vivid Cyan */}
             <TiltSpotlightCard
-              spotlightColor="rgba(6, 182, 212, 0.45)"
-              borderColor="rgba(6, 182, 212, 0.8)"
-              className="border border-cyan-400/50 bg-gradient-to-r from-cyan-500/25 via-sky-500/15 to-blue-500/25 px-6 py-4 rounded-full shadow-[0_15px_35px_rgba(6,182,212,0.25)] hover:border-cyan-300 hover:scale-105 transition-all duration-300 backdrop-blur-xl"
+              spotlightColor="rgba(0, 240, 255, 0.45)"
+              borderColor="rgba(0, 240, 255, 0.8)"
+              className="border border-[#00f0ff]/50 bg-gradient-to-r from-[#00f0ff]/20 via-[#00f0ff]/10 to-[#8b5cf6]/15 px-7 py-4 rounded-full shadow-[0_15px_35px_rgba(0,240,255,0.2)] hover:border-[#00f0ff] hover:scale-105 transition-all duration-300 backdrop-blur-xl"
             >
               <a
                 href="https://github.com/sdwirisanggalih"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2.5 text-cyan-100 hover:text-white tracking-wide font-medium"
+                data-cursor-text="GITHUB"
+                className="flex items-center gap-2.5 text-white hover:text-[#00f0ff] tracking-wider font-bold"
               >
-                <Globe className="h-4 w-4 text-cyan-400 shrink-0" />
-                <span>GitHub</span>
-                <ExternalLink className="h-3.5 w-3.5 text-cyan-300 shrink-0" />
+                <Globe className="h-4 w-4 text-[#00f0ff] shrink-0" />
+                <span>GITHUB</span>
+                <ExternalLink className="h-3.5 w-3.5 text-[#00f0ff] shrink-0" />
               </a>
             </TiltSpotlightCard>
 
             {/* LinkedIn Pod - Vibrant Purple */}
             <TiltSpotlightCard
-              spotlightColor="rgba(168, 85, 247, 0.45)"
-              borderColor="rgba(168, 85, 247, 0.8)"
-              className="border border-purple-400/50 bg-gradient-to-r from-purple-500/25 via-indigo-500/15 to-violet-500/25 px-6 py-4 rounded-full shadow-[0_15px_35px_rgba(168,85,247,0.25)] hover:border-purple-300 hover:scale-105 transition-all duration-300 backdrop-blur-xl"
+              spotlightColor="rgba(139, 92, 246, 0.45)"
+              borderColor="rgba(139, 92, 246, 0.8)"
+              className="border border-[#8b5cf6]/50 bg-gradient-to-r from-[#8b5cf6]/20 via-[#8b5cf6]/10 to-[#00f0ff]/15 px-7 py-4 rounded-full shadow-[0_15px_35px_rgba(139,92,246,0.2)] hover:border-[#8b5cf6] hover:scale-105 transition-all duration-300 backdrop-blur-xl"
             >
               <a
                 href="https://linkedin.com/in/sdwirisanggalih"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2.5 text-purple-100 hover:text-white tracking-wide font-medium"
+                data-cursor-text="LINKEDIN"
+                className="flex items-center gap-2.5 text-white hover:text-[#8b5cf6] tracking-wider font-bold"
               >
-                <Globe className="h-4 w-4 text-purple-400 shrink-0" />
-                <span>LinkedIn</span>
-                <ExternalLink className="h-3.5 w-3.5 text-purple-300 shrink-0" />
+                <Globe className="h-4 w-4 text-[#8b5cf6] shrink-0" />
+                <span>LINKEDIN</span>
+                <ExternalLink className="h-3.5 w-3.5 text-[#8b5cf6] shrink-0" />
               </a>
             </TiltSpotlightCard>
           </div>
