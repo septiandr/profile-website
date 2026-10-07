@@ -33,10 +33,10 @@ const config: Config = {
         mono: ["var(--font-mono)", "JetBrains Mono", "ui-monospace", "monospace"],
       },
       animation: {
-        "pulse-slow": "pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-        "spin-slow": "spin 25s linear infinite",
-        float: "float 6s ease-in-out infinite",
-        marquee: "marquee 35s linear infinite",
+        "pulse-slow": "pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        "spin-slow": "spin 45s linear infinite",
+        float: "float 10s ease-in-out infinite",
+        marquee: "marquee 70s linear infinite",
       },
       keyframes: {
         float: {

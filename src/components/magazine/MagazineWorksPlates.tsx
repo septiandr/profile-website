@@ -217,68 +217,68 @@ export default function MagazineWorksPlates() {
           },
         });
 
-        // Top accent bar sweep
+        // Top accent bar sweep - perlahan
         const accentBar = card.querySelector(".mag-card-accent-bar");
         if (accentBar) {
           tl.fromTo(
             accentBar,
             { scaleX: 0 },
-            { scaleX: 1, duration: 0.6, ease: "power3.inOut" }
+            { scaleX: 1, duration: 1.0, ease: "power3.inOut" }
           );
         }
 
-        // Folio top bar
+        // Folio top bar - perlahan
         const folio = card.querySelector(".mag-card-folio");
         if (folio) {
           tl.fromTo(
             folio,
             { y: -10, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.45, ease: "power2.out" },
-            "-=0.4"
+            { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" },
+            "-=0.6"
           );
         }
 
-        // Split headline words slide up
+        // Split headline words slide up - perlahan
         const titleWords = card.querySelectorAll(".mag-card-title-word");
         if (titleWords.length > 0) {
           tl.fromTo(
             titleWords,
             { y: "115%", opacity: 0 },
-            { y: "0%", opacity: 1, duration: 0.6, stagger: 0.04, ease: "power4.out" },
-            "-=0.3"
+            { y: "0%", opacity: 1, duration: 1.0, stagger: 0.07, ease: "power4.out" },
+            "-=0.5"
           );
         }
 
-        // Quote
+        // Quote - perlahan
         const quote = card.querySelector(".mag-card-quote");
         if (quote) {
           tl.fromTo(
             quote,
             { x: -16, opacity: 0 },
-            { x: 0, opacity: 1, duration: 0.45, ease: "power2.out" },
-            "-=0.3"
+            { x: 0, opacity: 1, duration: 0.8, ease: "power2.out" },
+            "-=0.5"
           );
         }
 
-        // Deliverables
+        // Deliverables - perlahan
         const deliverables = card.querySelectorAll(".mag-card-deliverable");
         if (deliverables.length > 0) {
           tl.fromTo(
             deliverables,
             { x: -12, opacity: 0 },
-            { x: 0, opacity: 1, duration: 0.35, stagger: 0.05, ease: "power2.out" },
-            "-=0.25"
+            { x: 0, opacity: 1, duration: 0.6, stagger: 0.08, ease: "power2.out" },
+            "-=0.4"
           );
         }
 
-        // Tech chips pop
+        // Tech chips pop - perlahan
         const techChips = card.querySelectorAll(".mag-card-tech-chip");
         if (techChips.length > 0) {
           tl.fromTo(
             techChips,
             { scale: 0.65, opacity: 0, y: 8 },
-            { scale: 1, opacity: 1, y: 0, duration: 0.35, stagger: 0.03, ease: "back.out(2)" },
-            "-=0.2"
+            { scale: 1, opacity: 1, y: 0, duration: 0.6, stagger: 0.05, ease: "back.out(1.4)" },
+            "-=0.3"
           );
         }
       });
@@ -305,10 +305,10 @@ export default function MagazineWorksPlates() {
     const targetY = scrollTop + rect.top - 90;
 
     if (typeof window !== "undefined" && (window as any).__lenis) {
-      (window as any).__lenis.scrollTo(targetY, { duration: 1.0, immediate: false });
-    } else {
-      window.scrollTo({ top: targetY, behavior: "smooth" });
-    }
+        (window as any).__lenis.scrollTo(targetY, { duration: 1.8, immediate: false, easing: (t: number) => 1 - Math.pow(1 - t, 3) });
+      } else {
+        window.scrollTo({ top: targetY, behavior: "smooth" });
+      }
   };
 
   return (
@@ -571,7 +571,7 @@ export default function MagazineWorksPlates() {
         {/* Stacking Architectural Plates Deck
             Each card docks with sticky positioning; previous cards stay anchored
             and peek out like architectural folder tabs */}
-        <div className="space-y-[40vh] sm:space-y-[45vh] pb-[35vh]">
+        <div className="space-y-[22vh] sm:space-y-[26vh] pb-[20vh]">
           {filteredWaypoints.map((wp, idx) => {
             const isEven = idx % 2 === 0;
             const theme = getPlateTheme(wp.domain, wp.company);

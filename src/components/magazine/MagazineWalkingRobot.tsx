@@ -3,17 +3,21 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { Zap } from "lucide-react";
+import { Zap, Sparkles, Palette, Code2, Heart, Brush, Stars, Wand2 } from "lucide-react";
 
 const SPEECH_LINES = [
-  "💼 Available for Enterprise System, Website, Mobile App & Bot Engineering!",
-  "🖥️ Need an Enterprise System, Analytics Dashboard, or ERP? Let's connect!",
-  "🌐 Modern reactive websites, 60fps landing pages & 3D WebGL ready to build!",
-  "📱 High-performance cross-platform Android & iOS React Native apps!",
-  "🤖 Automated 24/7 Telegram & WhatsApp bots for your business workflow!",
-  "🔋 Casion EV: 99.8% crash-free IoT charging telemetry architecture!",
-  "🏦 CIMB Niaga Octo Clicks: mission-critical financial transaction security!",
-  "⚡ Click or drag me to see dance, wave & jump animations!",
+  "🎨 Crafting pixel-perfect worlds — one component at a time! ✨",
+  "💡 Got an idea? I turn caffeine into enterprise architecture!",
+  "🚀 60fps or it didn't happen — GSAP + Three.js magic!",
+  "🤖 Beep boop! Your Creative Tech Companion is online!",
+  "💼 System · Website · App · Bot — what's your next flagship?",
+  "🔋 Casion EV: IoT telemetry that never sleeps!",
+  "🏦 Octo Clicks: banking-grade precision, fintech soul!",
+  "⚡ Drag me, tap me, toss me — I love the spotlight!",
+  "🎭 Psst... I know 8 dance moves. Try them all!",
+  "🌈 Every great product starts with a crazy sketch — show me yours!",
+  "🧪 Built with React 19, Next 15 & a lot of love!",
+  "💬 Tap the sparkle — let's create something iconic!",
 ];
 
 const RUNNING_TICKER_ITEMS = [
@@ -36,6 +40,8 @@ const ROBOT_CENTER_Y = 0.72; // Lower camera center raises the robot ground (y=0
 export default function MagazineWalkingRobot() {
   const containerRef = useRef<HTMLDivElement>(null);
   const speechBubbleRef = useRef<HTMLDivElement>(null);
+  const auraRef = useRef<HTMLDivElement>(null);
+  const orbitRef = useRef<HTMLDivElement>(null);
 
   // Dialog State
   const [speechText, setSpeechText] = useState<string | null>(null);
@@ -43,6 +49,8 @@ export default function MagazineWalkingRobot() {
   const [isSpeedRun, setIsSpeedRun] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [isHovering, setIsHovering] = useState<boolean>(false);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [creativePulse, setCreativePulse] = useState(0);
 
   // References for Three.js state
   const sceneRef = useRef<THREE.Scene | null>(null);
@@ -85,7 +93,7 @@ export default function MagazineWalkingRobot() {
     setCurrentActionName(clipName);
   }, []);
 
-  // Trigger special reaction on click
+  // Trigger special reaction on click — now with confetti & pulse
   const triggerReaction = useCallback((forcedAction?: string) => {
     isInteractingRef.current = true;
     if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
@@ -97,6 +105,9 @@ export default function MagazineWalkingRobot() {
       gestures[Math.floor(Math.random() * gestures.length)];
 
     playClip(chosen, 0.2);
+    setCreativePulse((p) => p + 1);
+    setShowConfetti(true);
+    setTimeout(() => setShowConfetti(false), 900);
 
     // Show speech line
     const text = SPEECH_LINES[speechIndexRef.current % SPEECH_LINES.length];
@@ -339,6 +350,24 @@ export default function MagazineWalkingRobot() {
     shadowMesh.position.y = 0.01;
     scene.add(shadowMesh);
 
+    // Creative hologram aura light that follows robot - color shifts with action
+    const auraLight = new THREE.PointLight(0x8b5cf6, 2.2, 4);
+    auraLight.position.set(posXRef.current, 0.6, 0.8);
+    scene.add(auraLight);
+
+    // Ground neon runway - subtle creative stage floor
+    const runwayGeo = new THREE.PlaneGeometry(40, 0.04);
+    const runwayMat = new THREE.MeshBasicMaterial({ 
+      color: 0x8b5cf6, 
+      transparent: true, 
+      opacity: 0.35,
+    });
+    const runwayMesh = new THREE.Mesh(runwayGeo, runwayMat);
+    runwayMesh.rotation.x = -Math.PI / 2;
+    runwayMesh.position.y = 0.015;
+    runwayMesh.position.z = 0.2;
+    scene.add(runwayMesh);
+
     // State for Scroll-Driven Movement & Alternate Wave / Dance on Stop
     let isScrolling = false;
     let scrollStopTimer: NodeJS.Timeout | null = null;
@@ -562,6 +591,21 @@ export default function MagazineWalkingRobot() {
           delta * 9
         );
 
+        // Aura light follows robot & color shifts by action
+        auraLight.position.x = posXRef.current;
+        auraLight.position.y = posYRef.current + 0.45;
+        const action = currentActionNameRef.current;
+        if (action === "Dance") auraLight.color.setHex(0xec4899);
+        else if (action === "Jump") auraLight.color.setHex(0x06b6d4);
+        else if (action === "Wave") auraLight.color.setHex(0x8b5cf6);
+        else if (action === "Running") auraLight.color.setHex(0xf59e0b);
+        else auraLight.color.setHex(0x8b5cf6);
+        // Pulse intensity with airborne height
+        auraLight.intensity = THREE.MathUtils.lerp(1.8, 3.2, Math.min(1, posYRef.current / 1.2)) + Math.sin(Date.now()*0.004)*0.3;
+
+        // Runway sparkle opacity pulses
+        runwayMat.opacity = 0.22 + Math.sin(Date.now()*0.003)*0.08;
+
         // Update position of HTML speech bubble hovering above the robot head
         if (speechBubbleRef.current && cameraRef.current) {
           const headPos = new THREE.Vector3(posXRef.current, posYRef.current + 1.68, 0);
@@ -572,6 +616,22 @@ export default function MagazineWalkingRobot() {
           const rawScreenY = ((-headPos.y + 1) * height) / 2;
           const screenY = Math.max(16, Math.min(height - 24, rawScreenY));
           speechBubbleRef.current.style.transform = `translate(${screenX}px, ${screenY}px) translate(-50%, -100%)`;
+        }
+        // HTML holographic aura & orbit follow robot
+        if (auraRef.current && cameraRef.current) {
+          const footPos = new THREE.Vector3(posXRef.current, 0.05, 0);
+          footPos.project(cameraRef.current);
+          const ax = ((footPos.x + 1) * width) / 2;
+          const ay = ((-footPos.y + 1) * height) / 2;
+          auraRef.current.style.transform = `translate(${ax}px, ${ay}px) translate(-50%, -50%)`;
+          auraRef.current.style.opacity = posYRef.current > 0.15 ? "0.35" : "0.85";
+        }
+        if (orbitRef.current && cameraRef.current) {
+          const headPos2 = new THREE.Vector3(posXRef.current, posYRef.current + 1.15, 0);
+          headPos2.project(cameraRef.current);
+          const ox = ((headPos2.x + 1) * width) / 2;
+          const oy = ((-headPos2.y + 1) * height) / 2;
+          orbitRef.current.style.transform = `translate(${ox}px, ${oy}px) translate(-50%, -50%)`;
         }
       }
 
@@ -608,7 +668,7 @@ export default function MagazineWalkingRobot() {
 
   return (
     <aside
-      aria-label="Interactive 3D Agency Robot Mascot"
+      aria-label="Interactive 3D Creative Robot Companion"
       className="fixed bottom-0 left-0 right-0 z-40 pointer-events-none select-none flex flex-col justify-end overflow-visible"
     >
       {/* 3D WebGL Canvas Layer with Grab & Physics Interaction */}
@@ -618,7 +678,7 @@ export default function MagazineWalkingRobot() {
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
-        data-cursor-text={isDragging ? "HOLDING" : isHovering ? "GRAB ME" : "ROBOT"}
+        data-cursor-text={isDragging ? "HOLDING" : isHovering ? "GRAB ME ✨" : "ROBOT"}
         className={`relative w-full h-[260px] pointer-events-auto overflow-visible touch-none select-none ${
           isDragging
             ? "cursor-grabbing"
@@ -626,91 +686,179 @@ export default function MagazineWalkingRobot() {
             ? "cursor-grab"
             : "cursor-default"
         }`}
-        title="Click or grab and throw the robot!"
+        title="Click or drag — I'm your creative companion!"
       >
-        {/* Floating Dynamic Speech Bubble (anchored relative to canvas) */}
+        {/* Holographic aura that follows robot feet */}
+        <div
+          ref={auraRef}
+          className="absolute top-0 left-0 pointer-events-none z-10 transition-opacity duration-300"
+          style={{ transform: "translate(-50%, -50%)" }}
+        >
+          <div className="w-[160px] h-[48px] -mb-8 rounded-full bg-gradient-to-r from-violet-500 via-fuchsia-500 to-cyan-400 blur-[22px] opacity-60 animate-pulse" />
+          <div className="w-[110px] h-[22px] mx-auto -mt-6 rounded-full bg-gradient-to-r from-purple-600 to-blue-500 blur-[14px] opacity-50" />
+        </div>
+
+        {/* Orbiting creative badges around robot head */}
+        <div
+          ref={orbitRef}
+          className="absolute top-0 left-0 pointer-events-none z-20 w-[140px] h-[140px] -ml-[70px] -mt-[70px]"
+        >
+          <div className="absolute inset-0 animate-[spin_6s_linear_infinite]">
+            <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-7 h-7 rounded-full bg-white border border-violet-200 shadow-[0_4px_14px_rgba(139,92,246,0.35)] flex items-center justify-center">
+              <Code2 className="w-3.5 h-3.5 text-violet-600" />
+            </div>
+            <div className="absolute top-1/2 -right-1 -translate-y-1/2 w-7 h-7 rounded-full bg-white border border-cyan-200 shadow-[0_4px_14px_rgba(6,182,214,0.35)] flex items-center justify-center">
+              <Palette className="w-3.5 h-3.5 text-cyan-600" />
+            </div>
+            <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-7 h-7 rounded-full bg-white border border-amber-200 shadow-[0_4px_14px_rgba(245,158,11,0.35)] flex items-center justify-center">
+              <Brush className="w-3.5 h-3.5 text-amber-600" />
+            </div>
+          </div>
+          {/* Inner pulse ring */}
+          <div className="absolute inset-[28px] rounded-full border border-violet-300/30 animate-[ping_2.2s_cubic-bezier(0,0,0.2,1)_infinite]" />
+        </div>
+
+        {/* Creative ground grid - subtle stage */}
+        <div className="absolute bottom-[34px] left-0 right-0 h-[48px] pointer-events-none opacity-25">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(139,92,246,0.25)_1px,transparent_1px),linear-gradient(to_bottom,rgba(139,92,246,0.18)_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:linear-gradient(to_bottom,transparent,black_40%,black)]" />
+        </div>
+
+        {/* Confetti burst on interaction */}
+        {showConfetti && (
+          <div className="absolute inset-0 pointer-events-none z-30 overflow-hidden">
+            {[...Array(14)].map((_, i) => (
+              <span
+                key={i}
+                className="absolute text-[11px] animate-[confetti_0.9s_cubic-bezier(0.16,1,0.3,1)_forwards]"
+                style={{
+                  left: `${46 + (Math.random() * 8 - 4)}%`,
+                  top: `44%`,
+                  transform: `translate(${(Math.random() * 120 - 60)}px, 0)`,
+                  animationDelay: `${i * 22}ms`,
+                }}
+              >
+                {["✨","💫","🎨","⚡","💜","🌟","🚀"][i % 7]}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* Floating Dynamic Speech Bubble - more creative glass */}
         <div
           ref={speechBubbleRef}
-          className={`absolute top-0 left-0 pointer-events-auto transition-opacity duration-300 z-50 ${
-            speechText ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
+          className={`absolute top-0 left-0 pointer-events-auto transition-all duration-300 z-50 ${
+            speechText ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 translate-y-2 pointer-events-none"
           }`}
         >
-          <div className="bg-zinc-950 text-white px-4 py-2 rounded-lg shadow-[0_12px_30px_rgba(0,0,0,0.3)] border border-zinc-800 text-xs font-sans max-w-xs sm:max-w-sm flex items-center gap-2.5 whitespace-nowrap sm:whitespace-normal">
-            <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+          <div className="relative bg-zinc-950/95 backdrop-blur-xl text-white px-4 py-2.5 rounded-2xl shadow-[0_16px_40px_rgba(0,0,0,0.35),0_0_20px_rgba(139,92,246,0.25)] border border-white/10 text-xs font-sans max-w-xs sm:max-w-sm flex items-center gap-2.5 whitespace-nowrap sm:whitespace-normal overflow-hidden">
+            {/* Gradient top accent */}
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-violet-500 via-fuchsia-500 to-cyan-400" />
+            <span className="relative h-7 w-7 rounded-full bg-gradient-to-br from-violet-600 to-cyan-500 flex items-center justify-center shrink-0 shadow-[0_4px_12px_rgba(139,92,246,0.4)]">
+              <Wand2 className="w-3.5 h-3.5 text-white" />
+            </span>
             <span className="font-semibold text-[11px] sm:text-xs leading-snug">
               {speechText}
             </span>
-            <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-x-6 border-x-transparent border-t-6 border-t-zinc-950" />
+            <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-x-[6px] border-x-transparent border-t-[6px] border-t-zinc-950" />
           </div>
+        </div>
+
+        {/* Creative label pill hovering above ground when idle */}
+        <div className="absolute bottom-[46px] left-1/2 -translate-x-1/2 pointer-events-none hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 backdrop-blur border border-zinc-200 shadow-[0_4px_14px_rgba(0,0,0,0.08)] text-[10px] font-bold tracking-wider uppercase">
+          <Stars className="w-3 h-3 text-violet-600" />
+          <span className="bg-gradient-to-r from-violet-600 to-cyan-600 bg-clip-text text-transparent">Creative Companion</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="text-zinc-500">{currentActionName}</span>
         </div>
       </div>
 
-      {/* Floating Action Buttons Dock (Positioned in bottom-right corner) */}
-      <div className="absolute bottom-11 right-4 sm:right-6 pointer-events-auto hidden sm:flex items-center gap-1.5 p-1 bg-white/95 backdrop-blur-md border border-zinc-950/15 rounded-full shadow-[0_4px_16px_rgba(0,0,0,0.1)] z-50">
+      {/* Floating Action Buttons Dock — creative glass */}
+      <div className="absolute bottom-11 right-4 sm:right-6 pointer-events-auto hidden sm:flex items-center gap-1 p-1.5 bg-white/90 backdrop-blur-xl border border-zinc-200 shadow-[0_8px_28px_rgba(0,0,0,0.12),0_0_0_1px_rgba(139,92,246,0.08)] rounded-full z-50">
+        <div className="px-2.5 py-1 rounded-full bg-gradient-to-r from-violet-600 to-cyan-500 text-white text-[10px] font-black tracking-wider flex items-center gap-1.5 shadow-[0_4px_12px_rgba(139,92,246,0.3)]">
+          <Sparkles className="w-3 h-3" />
+          <span>PLAY</span>
+        </div>
         <button
           onClick={() => triggerReaction("Wave")}
           data-cursor-text="WAVE"
-          className="px-2.5 py-1 text-[10px] font-sans font-bold uppercase tracking-wider text-zinc-700 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-all flex items-center gap-1 cursor-pointer"
+          className="px-3 py-1.5 text-[10px] font-sans font-bold uppercase tracking-wider text-zinc-700 hover:text-violet-700 hover:bg-violet-50 rounded-full transition-all flex items-center gap-1 cursor-pointer border border-transparent hover:border-violet-200"
           title="Make robot wave"
         >
-          <span>👋 Wave</span>
+          <span>👋</span> Wave
         </button>
 
         <button
           onClick={() => triggerReaction("Dance")}
           data-cursor-text="DANCE"
-          className="px-2.5 py-1 text-[10px] font-sans font-bold uppercase tracking-wider text-zinc-700 hover:text-purple-600 hover:bg-purple-50 rounded-full transition-all flex items-center gap-1 cursor-pointer"
+          className="px-3 py-1.5 text-[10px] font-sans font-bold uppercase tracking-wider text-zinc-700 hover:text-fuchsia-700 hover:bg-fuchsia-50 rounded-full transition-all flex items-center gap-1 cursor-pointer border border-transparent hover:border-fuchsia-200"
           title="Make robot dance"
         >
-          <span>🕺 Dance</span>
+          <span>🕺</span> Dance
         </button>
 
         <button
           onClick={() => triggerReaction("Jump")}
           data-cursor-text="JUMP"
-          className="px-2.5 py-1 text-[10px] font-sans font-bold uppercase tracking-wider text-zinc-700 hover:text-emerald-600 hover:bg-emerald-50 rounded-full transition-all flex items-center gap-1 cursor-pointer"
+          className="px-3 py-1.5 text-[10px] font-sans font-bold uppercase tracking-wider text-zinc-700 hover:text-cyan-700 hover:bg-cyan-50 rounded-full transition-all flex items-center gap-1 cursor-pointer border border-transparent hover:border-cyan-200"
           title="Make robot jump"
         >
-          <span>⚡ Jump</span>
+          <span>⚡</span> Jump
         </button>
+
+        <div className="w-px h-5 bg-zinc-200 mx-1" />
 
         <button
           onClick={toggleRunSpeed}
           data-cursor-text={isSpeedRun ? "WALK" : "SPRINT"}
-          className={`px-2.5 py-1 text-[10px] font-sans font-extrabold uppercase tracking-wider rounded-full transition-all flex items-center gap-1 cursor-pointer ${
+          className={`px-3 py-1.5 text-[10px] font-sans font-extrabold uppercase tracking-wider rounded-full transition-all flex items-center gap-1 cursor-pointer border ${
             isSpeedRun
-              ? "bg-orange-500 text-white shadow-xs"
-              : "text-zinc-700 hover:bg-zinc-100"
+              ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white border-orange-300 shadow-[0_4px_12px_rgba(249,115,22,0.35)]"
+              : "bg-zinc-900 text-white hover:bg-zinc-800 border-zinc-800"
           }`}
           title="Toggle walk or run speed"
         >
           <Zap className="h-3 w-3" />
-          <span>{isSpeedRun ? "Running" : "Walk"}</span>
+          <span>{isSpeedRun ? "Sprint" : "Run"}</span>
+        </button>
+        <button
+          onClick={() => triggerReaction("ThumbsUp")}
+          className="w-7 h-7 rounded-full bg-gradient-to-br from-pink-500 to-rose-500 text-white flex items-center justify-center hover:scale-110 transition-transform cursor-pointer shadow-[0_4px_10px_rgba(236,72,153,0.35)]"
+          title="Love it!"
+        >
+          <Heart className="w-3.5 h-3.5 fill-white" />
         </button>
       </div>
 
-      {/* Mobile Interaction Hint Badge */}
-      <div className="absolute bottom-11 left-4 pointer-events-auto sm:hidden z-50">
+      {/* Mobile Interaction Hint — more creative */}
+      <div className="absolute bottom-11 left-4 pointer-events-auto sm:hidden z-50 flex items-center gap-2">
         <button
           onClick={() => triggerReaction()}
-          className="px-3 py-1 bg-white/90 backdrop-blur-md border border-zinc-950/15 rounded-full text-[10px] font-sans font-bold text-zinc-800 shadow-sm flex items-center gap-1.5"
+          className="px-3.5 py-1.5 bg-white/95 backdrop-blur-xl border border-zinc-200 rounded-full text-[10px] font-sans font-black text-zinc-800 shadow-[0_4px_14px_rgba(0,0,0,0.08)] flex items-center gap-1.5"
         >
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-          <span>Tap 3D Robot</span>
+          <span className="w-6 h-6 rounded-full bg-gradient-to-br from-violet-600 to-cyan-500 flex items-center justify-center">
+            <Sparkles className="w-3 h-3 text-white" />
+          </span>
+          <span>Tap Me ✨</span>
         </button>
+        <span className="px-2 py-1 rounded-full bg-zinc-900 text-white text-[9px] font-bold hidden xs:flex items-center gap-1">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          {currentActionName}
+        </span>
       </div>
 
-      {/* Continuous Bottom Running Marquee Text Track */}
-      <div className="w-full bg-zinc-950 text-white border-t-2 border-yellow-400 py-2 overflow-hidden shadow-2xl pointer-events-auto select-none z-30">
+      {/* Continuous Bottom Running Marquee — more creative */}
+      <div className="w-full bg-zinc-950 text-white border-t border-violet-500/30 py-2.5 overflow-hidden shadow-2xl pointer-events-auto select-none z-30 relative">
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-violet-600 via-fuchsia-500 to-cyan-400" />
         <div className="flex w-max animate-marquee-agency text-[11px] sm:text-xs font-sans font-black tracking-wider uppercase">
           {[...RUNNING_TICKER_ITEMS, ...RUNNING_TICKER_ITEMS].map((item, idx) => (
             <span key={idx} className="inline-flex items-center gap-6 px-6">
-              <span className="text-yellow-400 font-extrabold">●</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-br from-violet-500 to-cyan-400 animate-pulse" />
               <span>{item}</span>
             </span>
           ))}
         </div>
       </div>
+      <style>{`@keyframes confetti { 0%{transform:translateY(0) translateX(0) scale(0.6) rotate(0deg); opacity:1} 100%{transform:translateY(-68px) translateX(var(--tw-translate-x,0)) scale(1.2) rotate(180deg); opacity:0} } @keyframes confetti{0%{transform:translate(0,0) scale(0.7); opacity:1} 100%{transform:translate(var(--tx,0px), -72px) scale(1.1) rotate(20deg); opacity:0}}`}</style>
     </aside>
   );
 }

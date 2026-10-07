@@ -72,7 +72,7 @@ export default function MagazineCoverHero() {
       tl.fromTo(
         ".mag-folio-line",
         { opacity: 0, y: -20 },
-        { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }
+        { opacity: 1, y: 0, duration: 1.4, ease: "power2.out" }
       )
         .fromTo(
           ".mag-split-line",
@@ -80,32 +80,32 @@ export default function MagazineCoverHero() {
           {
             y: "0%",
             opacity: 1,
-            duration: 1.1,
-            stagger: 0.12,
+            duration: 1.8,
+            stagger: 0.18,
             ease: "power4.out",
           },
-          "-=0.4"
+          "-=0.6"
         )
         .fromTo(
           ".mag-deck",
           { opacity: 0, y: 25 },
-          { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" },
-          "-=0.6"
+          { opacity: 1, y: 0, duration: 1.4, ease: "power3.out" },
+          "-=0.8"
         )
         .fromTo(
           ".mag-plate-frame",
           { opacity: 0, scale: 0.95, y: 35 },
-          { opacity: 1, scale: 1, y: 0, duration: 1.2, ease: "power3.out" },
-          "-=0.7"
+          { opacity: 1, scale: 1, y: 0, duration: 1.8, ease: "power3.out" },
+          "-=1.0"
         )
         .fromTo(
           ".mag-footer-folio",
           { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" },
-          "-=0.4"
+          { opacity: 1, y: 0, duration: 1.4, ease: "power2.out" },
+          "-=0.6"
         );
 
-      // Visceral OnScroll Kinetic Scrub (Noticeable parallax response)
+      // Visceral OnScroll Kinetic Scrub - perlahan (slow parallax response)
       gsap.to(".mag-hero-headline", {
         y: -50,
         opacity: 0.75,
@@ -114,7 +114,7 @@ export default function MagazineCoverHero() {
           trigger: containerRef.current,
           start: "top top",
           end: "bottom top",
-          scrub: 1.0,
+          scrub: 1.8,
         },
       });
 
@@ -126,7 +126,7 @@ export default function MagazineCoverHero() {
           trigger: containerRef.current,
           start: "top top",
           end: "bottom top",
-          scrub: 1.0,
+          scrub: 1.8,
         },
       });
 
@@ -137,7 +137,7 @@ export default function MagazineCoverHero() {
           trigger: containerRef.current,
           start: "top top",
           end: "bottom top",
-          scrub: 1.0,
+          scrub: 1.8,
         },
       });
     }, containerRef);
@@ -149,7 +149,7 @@ export default function MagazineCoverHero() {
     const el = document.getElementById(id);
     if (el) {
       if (typeof window !== "undefined" && (window as any).__lenis) {
-        (window as any).__lenis.scrollTo(el, { duration: 1.0 });
+        (window as any).__lenis.scrollTo(el, { duration: 2.0, easing: (t: number) => 1 - Math.pow(1 - t, 3) });
       } else {
         el.scrollIntoView({ behavior: "smooth" });
       }

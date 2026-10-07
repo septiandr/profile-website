@@ -487,10 +487,10 @@ export default function MagazineServicesOfferings() {
     const targetScroll = st.start + (st.end - st.start) * targetProgress;
 
     if (typeof window !== "undefined" && (window as any).__lenis) {
-      (window as any).__lenis.scrollTo(targetScroll, { duration: 1.0 });
-    } else {
-      window.scrollTo({ top: targetScroll, behavior: "smooth" });
-    }
+        (window as any).__lenis.scrollTo(targetScroll, { duration: 2.0, easing: (t: number) => 1 - Math.pow(1 - t, 3) });
+      } else {
+        window.scrollTo({ top: targetScroll, behavior: "smooth" });
+      }
   };
 
   useEffect(() => {
@@ -530,24 +530,25 @@ export default function MagazineServicesOfferings() {
         });
       }
 
-      // Smooth, responsive GSAP Timeline without fighting Lenis
+      // Optimized: tiap scroll ada gerakan, transisi tetap pelan
       const tl = gsap.timeline({
         scrollTrigger: {
           id: "section03-repetitive-showcase",
           trigger: section,
           start: "top top",
-          end: "+=2200",
+          end: "+=2400",
           pin: true,
-          scrub: 0.6,
+          scrub: 0.85,
           anticipatePin: 1,
           onUpdate: (self) => {
             const p = self.progress;
+            // Even split: tiap ~25% scroll langsung ganti card - tidak perlu banyak scroll
             let nextIndex = 0;
-            if (p < 0.18) {
+            if (p < 0.25) {
               nextIndex = 0;
-            } else if (p < 0.46) {
+            } else if (p < 0.50) {
               nextIndex = 1;
-            } else if (p < 0.72) {
+            } else if (p < 0.75) {
               nextIndex = 2;
             } else {
               nextIndex = 3;
@@ -562,10 +563,10 @@ export default function MagazineServicesOfferings() {
 
       scrollTriggerInstanceRef.current = tl.scrollTrigger as ScrollTrigger;
 
-      // Card 0 Hold in Center Zoom (Longer, comfortable dwell)
-      tl.to({}, { duration: 0.8 });
+      // Card 0 Hold - dipersingkat agar tidak perlu banyak scroll untuk ganti
+      tl.to({}, { duration: 0.6 });
 
-      // Step 0 -> 1: Card 0 moves to exit position, Card 1 enters to Center Zoom (Slower 0.85s transition)
+      // Step 0 -> 1: Card 0 moves to exit position, Card 1 enters to Center Zoom (Perlahan 1.4s)
       tl.to(
         cards[0],
         {
@@ -573,7 +574,7 @@ export default function MagazineServicesOfferings() {
           scale: 0.82,
           opacity: 0,
           filter: "blur(16px)",
-          duration: 0.85,
+          duration: 1.4,
           ease: "power2.inOut",
           onStart: () => {
             cards[0].style.pointerEvents = "none";
@@ -589,7 +590,7 @@ export default function MagazineServicesOfferings() {
           scale: 1.10,
           opacity: 1,
           filter: "blur(0px)",
-          duration: 0.85,
+          duration: 1.4,
           ease: "power2.inOut",
           onStart: () => {
             cards[1].style.pointerEvents = "auto";
@@ -599,10 +600,10 @@ export default function MagazineServicesOfferings() {
         "step0to1"
       );
 
-      // Card 1 Hold in Center Zoom
-      tl.to({}, { duration: 0.8 });
+      // Card 1 Hold - dipersingkat
+      tl.to({}, { duration: 0.6 });
 
-      // Step 1 -> 2: Card 1 moves to exit position, Card 2 enters to Center Zoom (Slower 0.85s transition)
+      // Step 1 -> 2: Card 1 moves to exit position, Card 2 enters to Center Zoom (tetap pelan 1.4s)
       tl.to(
         cards[1],
         {
@@ -610,7 +611,7 @@ export default function MagazineServicesOfferings() {
           scale: 0.82,
           opacity: 0,
           filter: "blur(16px)",
-          duration: 0.85,
+          duration: 1.4,
           ease: "power2.inOut",
           onStart: () => {
             cards[1].style.pointerEvents = "none";
@@ -626,7 +627,7 @@ export default function MagazineServicesOfferings() {
           scale: 1.10,
           opacity: 1,
           filter: "blur(0px)",
-          duration: 0.85,
+          duration: 1.4,
           ease: "power2.inOut",
           onStart: () => {
             cards[2].style.pointerEvents = "auto";
@@ -636,10 +637,10 @@ export default function MagazineServicesOfferings() {
         "step1to2"
       );
 
-      // Card 2 Hold in Center Zoom
-      tl.to({}, { duration: 0.8 });
+      // Card 2 Hold - dipersingkat
+      tl.to({}, { duration: 0.6 });
 
-      // Step 2 -> 3: Card 2 moves to exit position, Card 3 enters to Center Zoom (Slower 0.85s transition)
+      // Step 2 -> 3: Card 2 moves to exit position, Card 3 enters to Center Zoom (Perlahan 1.4s)
       tl.to(
         cards[2],
         {
@@ -647,7 +648,7 @@ export default function MagazineServicesOfferings() {
           scale: 0.82,
           opacity: 0,
           filter: "blur(16px)",
-          duration: 0.85,
+          duration: 1.4,
           ease: "power2.inOut",
           onStart: () => {
             cards[2].style.pointerEvents = "none";
@@ -663,7 +664,7 @@ export default function MagazineServicesOfferings() {
           scale: 1.10,
           opacity: 1,
           filter: "blur(0px)",
-          duration: 0.85,
+          duration: 1.4,
           ease: "power2.inOut",
           onStart: () => {
             cards[3].style.pointerEvents = "auto";
@@ -673,8 +674,8 @@ export default function MagazineServicesOfferings() {
         "step2to3"
       );
 
-      // Card 3 Hold in Center Zoom
-      tl.to({}, { duration: 1.2 });
+      // Card 3 Hold - dipersingkat
+      tl.to({}, { duration: 0.9 });
     }, sectionRef);
 
     return () => ctx.revert();

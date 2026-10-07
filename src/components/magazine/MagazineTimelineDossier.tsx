@@ -156,10 +156,10 @@ export default function MagazineTimelineDossier() {
     }
 
     if (typeof window !== "undefined" && (window as any).__lenis) {
-      (window as any).__lenis.scrollTo(targetScroll, { duration: 1.0 });
-    } else {
-      window.scrollTo({ top: targetScroll, behavior: "smooth" });
-    }
+        (window as any).__lenis.scrollTo(targetScroll, { duration: 2.0, easing: (t: number) => 1 - Math.pow(1 - t, 3) });
+      } else {
+        window.scrollTo({ top: targetScroll, behavior: "smooth" });
+      }
   };
 
   useEffect(() => {
@@ -185,15 +185,15 @@ export default function MagazineTimelineDossier() {
       if (shadow2Front) gsap.set(shadow2Front, { opacity: 0 });
       if (shadow2Back) gsap.set(shadow2Back, { opacity: 0 });
 
-      // Smooth, responsive 3D Magazine Page Flip Timeline
+      // Optimized: tiap scroll ada gerakan page flip, tetap pelan
       const tl = gsap.timeline({
         scrollTrigger: {
           id: "section04-magazine-page-turner",
           trigger: section,
           start: "top top",
-          end: "+=3200",
+          end: "+=2600",
           pin: true,
-          scrub: 1.1,
+          scrub: 0.85,
           anticipatePin: 1,
           onUpdate: (self) => {
             const p = self.progress;
@@ -209,10 +209,11 @@ export default function MagazineTimelineDossier() {
               }
             }
 
+            // Even split: tiap ~33% scroll langsung ganti spread
             let nextSpread = 0;
-            if (p < 0.25) {
+            if (p < 0.33) {
               nextSpread = 0;
-            } else if (p < 0.75) {
+            } else if (p < 0.66) {
               nextSpread = 1;
             } else {
               nextSpread = 2;
@@ -227,60 +228,60 @@ export default function MagazineTimelineDossier() {
 
       scrollTriggerInstanceRef.current = tl.scrollTrigger as ScrollTrigger;
 
-      // SPREAD 01 DWELL HOLD (Longer, comfortable read)
-      tl.to({}, { duration: 0.7 });
+      // SPREAD 01 DWELL - dipersingkat agar tidak perlu banyak scroll
+      tl.to({}, { duration: 0.55 });
 
-      // PAGE TURN 01: Leaf 1 flips from 0deg to -180deg
+      // PAGE TURN 01: Leaf 1 flips from 0deg to -180deg - perlahan
       tl.to(
         leaf1,
         {
           rotateY: -180,
-          duration: 1.5,
+          duration: 2.2,
           ease: "power2.inOut",
           onStart: () => playPageFlipAudio(),
         },
         "turn1"
       );
 
-      // Realistic Dynamic Paper Crease Lighting & Shadows for Turn 1
+      // Realistic Dynamic Paper Crease Lighting & Shadows for Turn 1 - perlahan
       if (shadow1Front) {
-        tl.to(shadow1Front, { opacity: 0.35, duration: 0.75, ease: "power1.in" }, "turn1");
-        tl.to(shadow1Front, { opacity: 0, duration: 0.75, ease: "power1.out" }, "turn1+=0.75");
+        tl.to(shadow1Front, { opacity: 0.35, duration: 1.1, ease: "power1.in" }, "turn1");
+        tl.to(shadow1Front, { opacity: 0, duration: 1.1, ease: "power1.out" }, "turn1+=1.1");
       }
       if (shadow1Back) {
-        tl.fromTo(shadow1Back, { opacity: 0.35 }, { opacity: 0, duration: 0.75, ease: "power1.out" }, "turn1+=0.75");
+        tl.fromTo(shadow1Back, { opacity: 0.35 }, { opacity: 0, duration: 1.1, ease: "power1.out" }, "turn1+=1.1");
       }
 
-      // SPREAD 02 DWELL HOLD (Longer, comfortable read)
-      tl.to({}, { duration: 0.7 });
+      // SPREAD 02 DWELL - dipersingkat
+      tl.to({}, { duration: 0.55 });
 
-      // PAGE TURN 02: Leaf 2 flips from 0deg to -180deg
+      // PAGE TURN 02: Leaf 2 flips from 0deg to -180deg - perlahan
       tl.to(
         leaf2,
         {
           rotateY: -180,
-          duration: 1.5,
+          duration: 2.2,
           ease: "power2.inOut",
           onStart: () => playPageFlipAudio(),
         },
         "turn2"
       );
 
-      // Halfway through turn 2 (crossing the spine), raise leaf2 zIndex to 30 and tuck leaf1 away so Spread 03 Left (Infosys) is 100% visible!
-      tl.set(leaf2, { zIndex: 30 }, "turn2+=0.75");
-      tl.set(leaf1, { autoAlpha: 0 }, "turn2+=0.85");
+      // Halfway through turn 2 (crossing the spine), raise leaf2 zIndex to 30 and tuck leaf1 away so Spread 03 Left (Infosys) is 100% visible! - perlahan
+      tl.set(leaf2, { zIndex: 30 }, "turn2+=1.1");
+      tl.set(leaf1, { autoAlpha: 0 }, "turn2+=1.3");
 
-      // Realistic Dynamic Paper Crease Lighting & Shadows for Turn 2
+      // Realistic Dynamic Paper Crease Lighting & Shadows for Turn 2 - perlahan
       if (shadow2Front) {
-        tl.to(shadow2Front, { opacity: 0.35, duration: 0.75, ease: "power1.in" }, "turn2");
-        tl.to(shadow2Front, { opacity: 0, duration: 0.75, ease: "power1.out" }, "turn2+=0.75");
+        tl.to(shadow2Front, { opacity: 0.35, duration: 1.1, ease: "power1.in" }, "turn2");
+        tl.to(shadow2Front, { opacity: 0, duration: 1.1, ease: "power1.out" }, "turn2+=1.1");
       }
       if (shadow2Back) {
-        tl.fromTo(shadow2Back, { opacity: 0.35 }, { opacity: 0, duration: 0.75, ease: "power1.out" }, "turn2+=0.75");
+        tl.fromTo(shadow2Back, { opacity: 0.35 }, { opacity: 0, duration: 1.1, ease: "power1.out" }, "turn2+=1.1");
       }
 
-      // SPREAD 03 DWELL HOLD
-      tl.to({}, { duration: 1.2 });
+      // SPREAD 03 DWELL - dipersingkat
+      tl.to({}, { duration: 0.85 });
     }, sectionRef);
 
     return () => ctx.revert();

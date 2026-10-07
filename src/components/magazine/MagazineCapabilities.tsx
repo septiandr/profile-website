@@ -154,6 +154,7 @@ export default function MagazineCapabilities() {
   const activeIndexRef = useRef<number>(0);
 
   const sectionRef = useRef<HTMLElement>(null);
+  const progressRef = useRef<HTMLDivElement>(null);
   const scrollTriggerInstanceRef = useRef<ScrollTrigger | null>(null);
 
   // Dwell centers corresponding to the 4 pillars in the timeline
@@ -183,15 +184,15 @@ export default function MagazineCapabilities() {
       const section = sectionRef.current;
       if (!section) return;
 
-      // Real GSAP timeline with scrub: 1.0 for genuine physics damping & buttery scroll inertia
+      // Fix: kurangi scroll yang dibutuhkan tapi tetap pelan - tidak merusak layout
       const tl = gsap.timeline({
         scrollTrigger: {
           id: "section-disciplines-accordion-workstation",
           trigger: section,
           start: "top top",
-          end: "+=4800", // Generous, relaxed scroll runway so each discipline can be read comfortably
+          end: "+=3000", // 4800 → 3000: -37% scroll, tetap cukup untuk animasi pelan
           pin: true,
-          scrub: 1.0, // 1.0s momentum smoothing
+          scrub: 1.0, // tetap buttery 1.0s
           anticipatePin: 1,
           onUpdate: (self) => {
             const p = self.progress;
@@ -224,8 +225,12 @@ export default function MagazineCapabilities() {
         },
       });
 
-      // Dummy tween spanning the timeline so ScrollTrigger scrub has a real timeline to smooth
-      tl.to({}, { duration: 10 });
+      // Progress bar scrub - tiap scroll ada gerakan visual, animasi tetap pelan
+      if (progressRef.current) {
+        tl.to(progressRef.current, { width: "100%", duration: 7, ease: "none" }, 0);
+      } else {
+        tl.to({}, { duration: 7 });
+      }
 
       scrollTriggerInstanceRef.current = tl.scrollTrigger as ScrollTrigger;
     }, sectionRef);
@@ -242,7 +247,7 @@ export default function MagazineCapabilities() {
       className="relative w-full h-screen min-h-[640px] max-h-screen bg-[#faf9f6] text-zinc-950 font-sans border-b border-zinc-950/15 overflow-hidden flex flex-col justify-between select-none"
     >
       {/* 1. Compact Editorial Header Monograph */}
-      <div className="w-full max-w-7xl mx-auto px-6 sm:px-10 pt-5 sm:pt-6 pb-3 border-b border-zinc-950/10 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 shrink-0 z-30">
+      <div className="w-full max-w-7xl mx-auto px-6 sm:px-10 pt-5 sm:pt-6 pb-3 border-b border-zinc-950/10 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 shrink-0 z-30 relative">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="px-2.5 py-0.5 bg-purple-100 text-purple-950 border border-purple-300 rounded-full text-[10px] font-extrabold uppercase tracking-wider flex items-center gap-1.5 shadow-2xs">
@@ -300,6 +305,10 @@ export default function MagazineCapabilities() {
               <ArrowRight className="h-3.5 w-3.5" />
             </button>
           </div>
+        </div>
+        {/* Progress - tiap scroll ada gerakan pelan, di bawah border header */}
+        <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-zinc-200/60">
+          <div ref={progressRef} className="h-full w-0 bg-purple-600 will-change-[width]" />
         </div>
       </div>
 
